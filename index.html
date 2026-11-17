@@ -79,7 +79,7 @@
       color: var(--success);
     }
 
-    /* Navegação Inferior para Mobile / Abas */
+    /* Navegação Inferior */
     .main-nav {
       position: fixed;
       bottom: 0;
@@ -111,7 +111,7 @@
     /* Área de Conteúdo */
     .content-area {
       padding: 16px;
-      padding-bottom: 76px; /* espaço da nav fixa */
+      padding-bottom: 76px;
       max-width: 800px;
       margin: 0 auto;
       width: 100%;
@@ -121,7 +121,7 @@
     .view.active { display: block; animation: fadeIn 0.2s ease; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    /* Cards e Containers */
+    /* Cards */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -138,7 +138,7 @@
       justify-content: space-between;
     }
     
-    /* Botões Padrão */
+    /* Botões */
     .btn {
       background: var(--primary);
       color: #fff;
@@ -158,10 +158,9 @@
       border: 1px solid var(--border);
       color: var(--text-main);
     }
-    .btn-danger { background: var(--danger); }
     .btn-success { background: var(--success); }
 
-    /* Prontuário do Paciente */
+    /* Prontuário */
     .patient-vitals {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -186,13 +185,12 @@
       text-align: left;
       color: var(--text-main);
       transition: border-color 0.2s;
+      width: 100%;
     }
     .protocol-option:hover { border-color: var(--primary); }
     .protocol-option.correct { border-color: var(--success); background: rgba(16, 185, 129, 0.1); }
     .protocol-option.incorrect { border-color: var(--danger); background: rgba(239, 68, 68, 0.1); }
 
-    /* Estoque e Laboratório de Prescrições */
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .stock-item, .proc-item {
       background: var(--surface-card);
       border: 1px solid var(--border);
@@ -201,7 +199,6 @@
       margin-bottom: 10px;
     }
 
-    /* Modais e Alertas de Punição */
     .feedback-box {
       margin-top: 10px;
       padding: 10px;
@@ -237,7 +234,6 @@
 <body>
 
   <div class="app-shell">
-    <!-- Topbar Clínica -->
     <header class="topbar">
       <div class="brand-title">
         <span>🩺</span> NutriClínica <span>Pro</span>
@@ -248,13 +244,10 @@
       </div>
     </header>
 
-    <!-- Notificação Flutuante -->
-    <div id="toast" class="toast">Mensagem do sistema</div>
+    <div id="toast" class="toast">Notificação do sistema</div>
 
-    <!-- Conteúdo Principal -->
     <main class="content-area">
-
-      <!-- ABAS: 1. PRONTUÁRIO / CASO ATUAL -->
+      <!-- PRONTUÁRIO -->
       <section class="view active" id="view-cases">
         <div class="card">
           <div class="card-title">
@@ -264,14 +257,10 @@
           <h2 id="patientName" style="font-size:16px; margin:4px 0 8px 0; color:#fff;">Carregando paciente...</h2>
           <p id="patientComplaint" style="color:var(--text-muted); font-size:12px; margin:0 0 12px 0;"></p>
           
-          <div class="patient-vitals" id="patientVitals">
-            <!-- Preenchido via JS -->
-          </div>
+          <div class="patient-vitals" id="patientVitals"></div>
 
           <div style="font-weight:600; margin-bottom:8px; font-size:12px; color:var(--text-main);">Selecione a Conduta Terapêutica Adequada:</div>
-          <div class="option-list" id="protocolOptions">
-            <!-- Opções geradas via JS -->
-          </div>
+          <div class="option-list" id="protocolOptions"></div>
 
           <div id="caseFeedback" class="feedback-box"></div>
 
@@ -281,51 +270,41 @@
         </div>
       </section>
 
-      <!-- ABAS: 2. FARMÁCIA / SUPLEMENTOS E DIETAS -->
+      <!-- FARMÁCIA -->
       <section class="view" id="view-pharmacy">
         <div class="card">
           <div class="card-title"><span>📋</span> Prescrições e Insumos Metabólicos</div>
-          <p style="color:var(--text-muted); font-size:12px; margin-bottom:12px;">Manipule dietas, suplementos e protocolos de emagrecimento para alta performance clínica.</p>
-          <div id="pharmacyList">
-            <!-- Gerado via JS -->
-          </div>
+          <p style="color:var(--text-muted); font-size:12px; margin-bottom:12px;">Adquira insumos para compor seu portfólio clínico.</p>
+          <div id="pharmacyList"></div>
         </div>
       </section>
 
-      <!-- ABAS: 3. ESTOQUE CLÍNICO -->
+      <!-- ESTOQUE -->
       <section class="view" id="view-stock">
         <div class="card">
           <div class="card-title"><span>📦</span> Estoque de Insumos & Fórmulas</div>
-          <div id="stockList">
-            <!-- Gerado via JS -->
-          </div>
+          <div id="stockList"></div>
         </div>
       </section>
 
-      <!-- ABAS: 4. MERCADO & RECEITAS -->
+      <!-- CAIXA / MERCADO -->
       <section class="view" id="view-market">
         <div class="card">
-          <div class="card-title"><span>📈</span> Monetização de Consultas & Projetos</div>
-          <p style="color:var(--text-muted); font-size:12px; margin-bottom:12px;">Comercialize protocolos de emagrecimento para reverter o saldo da clínica.</p>
-          <div id="marketList">
-            <!-- Gerado via JS -->
-          </div>
+          <div class="card-title"><span>📈</span> Monetização de Consultas & Protocolos</div>
+          <p style="color:var(--text-muted); font-size:12px; margin-bottom:12px;">Comercialize protocolos de emagrecimento para gerar receita para a clínica.</p>
+          <div id="marketList"></div>
         </div>
       </section>
 
-      <!-- ABAS: 5. DIRETRIZES & UPGRADES -->
+      <!-- EQUIPAMENTOS / CLÍNICA -->
       <section class="view" id="view-upgrades">
         <div class="card">
           <div class="card-title"><span>⚙️</span> Tecnologia & Equipamentos do Consultório</div>
-          <div id="upgradeList">
-            <!-- Gerado via JS -->
-          </div>
+          <div id="upgradeList"></div>
         </div>
       </section>
-
     </main>
 
-    <!-- Navegação Inferior -->
     <nav class="main-nav">
       <button class="nav-btn active" onclick="switchView('cases', this)"><span class="icon">🩺</span>Prontuário</button>
       <button class="nav-btn" onclick="switchView('pharmacy', this)"><span class="icon">📋</span>Protocolos</button>
@@ -336,7 +315,6 @@
   </div>
 
 <script>
-  // Banco de Dados de Insumos Clínicos
   const ITEMS = {
     food_in_natura: { name: "Alimentos In Natura", icon: "🥗", price: 100, unit: "un." },
     fiber: { name: "Fibras Solúveis (Psyllium)", icon: "🌾", price: 250, unit: "un." },
@@ -352,7 +330,6 @@
     longevity: { name: "Programa Vida Plena & Longevidade", icon: "🧬", price: 8000, unit: "un." }
   };
 
-  // 20 Casos Clínicos Detalhados com Perfis de Pacientes Reais
   const CASES = [
     {
       title: "Caso 01: Sobrepeso e Sedentarismo Inicial",
@@ -365,7 +342,7 @@
         "Sugerir dieta altamente restritiva à base de líquidos e jejum prolongado de 36 horas.",
         "Indicar bariátrica imediata sem tentativa de tratamento conservador."
       ],
-      explanation: "Correto! Para sobrepeso sem comorbidades graves, a primeira linha é reeducação com alimentos in natura, garantindo adesão sustentável."
+      explanation: "Correto! Para sobrepeso sem comorbidades graves, a primeira linha é reeducação com alimentos in natura."
     },
     {
       title: "Caso 02: Obesidade Grau I com Resistência Insulínica",
@@ -378,20 +355,20 @@
         "Aplicar protocolo de restrição de carboidratos de baixo índice glicêmico aliado ao aumento de fibras solúveis.",
         "Liberar dieta livre em finais de semana para compensar o estresse metabólico."
       ],
-      explanation: "Correto! O quadro de resistência insulínica exige controle glicêmico estrito com baixo IG e suporte de fibras para modular a absorção de glicose."
+      explanation: "Correto! O quadro de resistência insulínica exige controle glicêmico estrito com baixo IG e fibras."
     },
     {
       title: "Caso 03: Esteatose Hepática e Dislipidemia",
       patient: "Roberto Alves, 51 anos",
       complaint: "Exames de rotina com TGP alterada e triglicerídeos elevados.",
-      vitals: { imc: "35.8 kg/m²", triglic.: "240 mg/dL", tgp: "64 U/L" },
+      vitals: { imc: "35.8 kg/m²", triglic: "240 mg/dL", tgp: "64 U/L" },
       correctIndex: 2,
       options: [
         "Manter dieta rica em gorduras saturadas para palatabilidade.",
         "Restringir totalmente qualquer fonte de gordura, incluindo as boas.",
-        "Implementar Protocolo tipo Mediterrâneo enriquecido com Ômega-3 e controle rigoroso de frutose."
+        "Implementar Protocolo tipo Mediterrâneo enriquecido com Ômega-3 e controle de frutose."
       ],
-      explanation: "Correto! A esteatose hepática não alcoólica responde perfeitamente à dieta mediterrânea e suplementação de ômega-3 para redução da inflamação hepática."
+      explanation: "Correto! Esteatose hepática responde muito bem à dieta mediterrânea e suplementação de ômega-3."
     },
     {
       title: "Caso 04: Obesidade com Hipertensão Arterial Sistêmica",
@@ -404,7 +381,7 @@
         "Aumentar o consumo de embutidos e conservas por praticidade.",
         "Suspender o consumo de água para evitar inchaço."
       ],
-      explanation: "Correto! O padrão DASH é o padrão Ouro clínico validado para controle tensional em pacientes com sobrepeso e hipertensão."
+      explanation: "Correto! O padrão DASH é o padrão-ouro clínico validado para controle tensional."
     },
     {
       title: "Caso 05: Compulsão Alimentar Noturna",
@@ -414,10 +391,10 @@
       correctIndex: 1,
       options: [
         "Proibir totalmente o açúcar em casa sob punição severa.",
-        "Integrar o Módulo de Terapia Cognitivo-Comportamental (TCC) com reestruturação de horários e saciedade proteica.",
+        "Integrar o Módulo de Terapia Cognitivo-Comportamental (TCC) com reestruturação de horários e saciedade.",
         "Prescrever sedativos pesados sem acompanhamento nutricional."
       ],
-      explanation: "Correto! Transtornos comportamentais e compulsão exigem abordagem multidisciplinar unindo TCC e ajustes de saciedade nutricional."
+      explanation: "Correto! Transtornos comportamentais e compulsão exigem TCC e ajustes de saciedade."
     },
     {
       title: "Caso 06: Síndrome Metabólica em Homem de Meia-Idade",
@@ -428,9 +405,9 @@
       options: [
         "Recomendar apenas caminhada de 10 minutos por mês.",
         "Focar exclusivamente em estética corporal sem olhar exames.",
-        "Aplicar Protocolo de Remissão Metabólica intensivo com déficit sustentável e modulação da microbiota."
+        "Aplicar Protocolo de Remissão Metabólica intensivo com déficit sustentável e modulação intestinal."
       ],
-      explanation: "Correto! A Síndrome Metabólica requer intervenção metabólica profunda visando a remissão dos fatores de risco cardiovascular."
+      explanation: "Correto! A Síndrome Metabólica requer intervenção metabólica profunda visando a remissão dos fatores de risco."
     },
     {
       title: "Caso 07: Obesidade e Disbiose Intestinal Crônica",
@@ -443,7 +420,7 @@
         "Ingerir laxantes fortes diariamente sem orientação.",
         "Consumir ultraprocessados ricos em emulsificantes."
       ],
-      explanation: "Correto! A modulação intestinal corrige a permeabilidade e reduz a inflamação sistêmica de baixo grau ligada à obesidade."
+      explanation: "Correto! A modulação intestinal corrige a permeabilidade e reduz a inflamação sistêmica."
     },
     {
       title: "Caso 08: Obesidade Grau II com Pré-Diabetes",
@@ -452,7 +429,7 @@
       vitals: { imc: "38.5 kg/m²", glicemia: "122 mg/dL", hba1c: "6.4%" },
       correctIndex: 1,
       options: [
-        "Liberar livre consumo de carboidratos complexos sem controle de porções.",
+        "Liberar livre consumo de carboidratos complexos sem controle.",
         "Iniciar Déficit Sustentável com controle glicêmico estrito e carga glicêmica baixa.",
         "Aguardar virar diabetes tipo 2 para tomar atitude."
       ],
@@ -467,9 +444,9 @@
       options: [
         "Manter exatamente a mesma dieta da juventude.",
         "Fazer dietas de fome extrema que destroem a massa magra.",
-        "Ajustar aporte de proteína magra de alta qualidade e treino de força com periodização nutricional."
+        "Ajustar aporte de proteína magra de alta qualidade e treino de força."
       ],
-      explanation: "Correto! No climatério, a preservação de massa magra via aporte proteico adequado é vital para manter o gasto energético basal."
+      explanation: "Correto! No climatério, a preservação de massa magra via aporte proteico adequado é vital."
     },
     {
       title: "Caso 10: Adiposidade Infantil / Adolescente Acompanhado",
@@ -482,7 +459,7 @@
         "Dieta restritiva de 800 calorias em fase de crescimento.",
         "Remédios para emagrecimento sem supervisão pediátrica."
       ],
-      explanation: "Correto! Na adolescência, o foco é a mudança do ambiente familiar e inclusão de alimentos in natura, preservando o desenvolvimento."
+      explanation: "Correto! Na adolescência, o foco é a mudança do ambiente familiar e inclusão de alimentos in natura."
     },
     {
       title: "Caso 11: Obesidade Mórbida Pré-Bariátrica",
@@ -495,7 +472,7 @@
         "Aplicar protocolo de redução hepática com baixo teor de carboidratos e alto valor proteico.",
         "Fazer jejum absoluto de 5 dias antes da operação."
       ],
-      explanation: "Correto! A redução do volume hepático pré-operatório é obrigatória para segurança do cirurgião na videocirurgia."
+      explanation: "Correto! A redução do volume hepático pré-operatório é obrigatória para segurança do cirurgião."
     },
     {
       title: "Caso 12: Recuperação Pós-Bariátrica com Reganha",
@@ -508,7 +485,7 @@
         "Forçar grandes volumes de alimentos de uma só vez.",
         "Reestruturação comportamental (TCC) combinada com alta densidade proteica e fracionamento."
       ],
-      explanation: "Correto! A reganha pós-bariátrica decorre de dilatação ou escape comportamental, exigindo TCC e densidade nutricional."
+      explanation: "Correto! A reganha pós-bariátrica exige TCC e densidade nutricional."
     },
     {
       title: "Caso 13: Atleta Amador com Gordura Visceral Elevada",
@@ -521,23 +498,23 @@
         "Parar totalmente de treinar musculação.",
         "Comer 5000 calorias limpas por dia."
       ],
-      explanation: "Correto! Mesmo com boa musculatura, o excesso calórico gera gordura visceral, exigindo ajuste fino no déficit."
+      explanation: "Correto! Mesmo com boa musculatura, o excesso calórico gera gordura visceral."
     },
     {
       title: "Caso 14: Obesidade Associada a Hipotireoidismo Subcontrolado",
       patient: "Camila Farias, 40 anos",
       complaint: "Dificuldade extrema em baixar peso mesmo com restrição calórica.",
-      vitals: { imc: "34.6 kg/m²", tsh: "4.8 mUI/L",letargia: "Sim" },
+      vitals: { imc: "34.6 kg/m²", tsh: "4.8 mUI/L", letargia: "Sim" },
       correctIndex: 1,
       options: [
         "Acarretar culpa na paciente dizendo que ela mente na dieta.",
-        "Otimizar suporte micronutricional (selênio, zinco, iodo) e alinhar dieta anti-inflamatória.",
+        "Otimizar suporte micronutricional e alinhar dieta anti-inflamatória.",
         "Eliminar todos os grupos alimentares da dieta."
       ],
-      explanation: "Correto! O hipotireoidismo reduz o metabolismo basal, exigindo suporte de cofatores e controle inflamatório."
+      explanation: "Correto! O hipotireoidismo reduz o metabolismo basal, exigindo suporte de cofatores."
     },
     {
-      title: "Caso 15: Síndrome dos Ovários Policísticos (SOP) e Resistência à Insulina",
+      title: "Caso 15: Síndrome dos Ovários Policísticos (SOP)",
       patient: "Beatriz Lima, 27 anos",
       complaint: "Acne, irregularidade menstrual, dificuldade de emagrecimento e ganho central.",
       vitals: { imc: "32.4 kg/m²", sop: "Sim", homa: "3.5" },
@@ -545,22 +522,22 @@
       options: [
         "Apenas receitar cosméticos para a pele.",
         "Ignorar a resistência insulínica.",
-        "Aplicar protocolo Low-Glicêmico e suporte com Inositol e Fibras para reverter a hiperinsulinemia."
+        "Aplicar protocolo Low-Glicêmico e suporte com Inositol e Fibras."
       ],
-      explanation: "Correto! A SOP na maioria das vezes é impulsionada pela resistência insulínica, respondendo perfeitamente ao controle glicêmico."
+      explanation: "Correto! A SOP na maioria das vezes é impulsionada pela resistência insulínica."
     },
     {
       title: "Caso 16: Transtorno da Compulsão Periódica",
       patient: "Eduardo Siqueira, 46 anos",
       complaint: "Ataques de comilança voraz seguidos de forte culpa e ganho de peso.",
-      vitals: { imc: "38.0 kg/m²", compulsao: "Severa", triglic.: "280" },
+      vitals: { imc: "38.0 kg/m²", compulsao: "Severa", triglic: "280" },
       correctIndex: 0,
       options: [
         "Abordagem combinada de Módulo TCC e reeducação sem restrições proibitivas.",
         "Isolar o paciente em casa sem acesso a comida.",
         "Dar broncas severas nas consultas."
       ],
-      explanation: "Correto! O transtorno de compulsão exige acolhimiento psicológico via TCC e eliminação do ciclo de restrição-compulsão."
+      explanation: "Correto! O transtorno de compulsão exige acolhimento psicológico via TCC."
     },
     {
       title: "Caso 17: Perfil de Longevidade e Emagrecimento Saudável",
@@ -573,7 +550,7 @@
         "Aplicar o Programa Vida Plena com alta densidade de nutrientes, ômega-3 e proteção muscular.",
         "Não fazer nada por causa da idade avançada."
       ],
-      explanation: "Correto! Na terceira idade, o emagrecimento deve vir acompanhado de proteção contra a sarcopenia e suporte à longevidade."
+      explanation: "Correto! Na terceira idade, o emagrecimento deve vir acompanhado de proteção contra sarcopenia."
     },
     {
       title: "Caso 18: Obesidade Refratária com Múltiplas Falhas Prévias",
@@ -584,9 +561,9 @@
       options: [
         "Dizer que ele não tem força de vontade.",
         "Colocar em jejum de 7 dias.",
-        "Reconstrução metabólica gradual com déficit sustentável e suporte comportamental sólido."
+        "Reconstrução metabólica gradual com déficit sustentável e suporte comportamental."
       ],
-      explanation: "Correto! O efeito sanfona danifica o metabolismo e o psicológico; a recuperação exige paciência, déficit sustentável e TCC."
+      explanation: "Correto! O efeito sanfona danifica o metabolismo; a recuperação exige paciência e déficit sustentável."
     },
     {
       title: "Caso 19: Executivo com Estresse Crônico e Obesidade Abdominal",
@@ -599,7 +576,7 @@
         "Pedir para ele largar o emprego imediatamente.",
         "Prescrever energéticos em alta dose."
       ],
-      explanation: "Correto! O cortisol alto bloqueia a lipólise na região abdominal; ajustar a crononutrição e o estresse é fundamental."
+      explanation: "Correto! O cortisol alto bloqueia a lipólise na região abdominal."
     },
     {
       title: "Caso 20: O Grande Desafio Metabólico Final",
@@ -608,15 +585,14 @@
       vitals: { imc: "40.0 kg/m²", hba1c: "6.5%", joelhos: "Dor crônica" },
       correctIndex: 1,
       options: [
-        "Sugerir corrida de alta impacto imediatamente.",
-        "Aplicar o Protocolo Mestre de Remissão Metabólica Completa, unindo nutrição clínica avançada e alívio articular.",
+        "Sugerir corrida de alto impacto imediatamente.",
+        "Aplicar o Protocolo Mestre de Remissão Metabólica Completa, unindo nutrição clínica e alívio articular.",
         "Desistir do caso por ser complexo demais."
       ],
-      explanation: "Correto! O caso final exige a maestria completa de todas as ferramentas e protocolos clínicos integrados para remissão metabólica total."
+      explanation: "Correto! O caso final exige a maestria completa de todas as ferramentas e protocolos clínicos integrados."
     }
   ];
 
-  // Estado Global do Jogador
   let gameState = {
     cash: 50000,
     currentCaseIndex: 0,
@@ -637,13 +613,13 @@
     upgrades: []
   };
 
-  // Carregar do localStorage se houver
   function loadGame() {
     const saved = localStorage.getItem("nutriclinica_pro_save");
     if (saved) {
       try { gameState = JSON.parse(saved); } catch(e) {}
     }
   }
+
   function saveGame() {
     localStorage.setItem("nutriclinica_pro_save", JSON.stringify(gameState));
     updateHUD();
@@ -658,7 +634,7 @@
 
   function updateHUD() {
     document.getElementById("topCash").textContent = gameState.cash.toLocaleString("pt-BR") + " CR";
-    document.getElementById("topScore").textContent = `Caso ${String(gameState.currentCaseIndex + 1).padStart(2, '0')}/20`;
+    document.getElementById("topScore").textContent = `Caso ${String(Math.min(gameState.currentCaseIndex + 1, CASES.length)).padStart(2, '0')}/20`;
   }
 
   function switchView(viewId, btnEl) {
@@ -675,7 +651,6 @@
     if(viewId === 'upgrades') renderUpgrades();
   }
 
-  // Renderização do Prontuário Clínico Atual
   function renderCurrentCase() {
     if (gameState.currentCaseIndex >= CASES.length) {
       document.getElementById("view-cases").innerHTML = `
@@ -711,13 +686,11 @@
     document.getElementById("nextCaseBtn").style.display = "none";
   }
 
-  // Escolha do Protocolo Clínico com Punição por Erro
   function selectProtocol(idx) {
     const c = CASES[gameState.currentCaseIndex];
     const feedbackBox = document.getElementById("caseFeedback");
     const optionBtns = document.querySelectorAll(".protocol-option");
 
-    // Travar botões após escolha
     optionBtns.forEach((b, i) => {
       b.style.pointerEvents = "none";
       if(i === c.correctIndex) b.classList.add("correct");
@@ -746,7 +719,6 @@
     renderCurrentCase();
   }
 
-  // Farmácia / Manipulação de Insumos
   function renderPharmacy() {
     let html = "";
     for (let [id, item] of Object.entries(ITEMS)) {
@@ -778,7 +750,6 @@
     renderStock();
   }
 
-  // Estoque Clínico
   function renderStock() {
     let html = "";
     for (let [id, qty] of Object.entries(gameState.stock)) {
@@ -795,7 +766,6 @@
     document.getElementById("stockList").innerHTML = html || "<p style='color:var(--text-muted);'>Nenhum insumo em estoque.</p>";
   }
 
-  // Mercado / Monetização
   function renderMarket() {
     let html = "";
     for (let [id, qty] of Object.entries(gameState.stock)) {
@@ -828,7 +798,6 @@
     renderMarket();
   }
 
-  // Upgrades e Equipamentos
   function renderUpgrades() {
     const upgrades = [
       { id: "bioimpedancia", name: "Analisador de Bioimpedância Profissional", cost: 15000, desc: "Aumenta a precisão dos diagnósticos." },
@@ -872,7 +841,7 @@
     }
   }
 
-  // Inicialização
+  // Inicialização segura
   loadGame();
   updateHUD();
   renderCurrentCase();
