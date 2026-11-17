@@ -1131,10 +1131,32 @@
 
   <script>
     // =========================================================================
+    // 1. DADOS DE MATERIAIS & CATÁLOGO NUTRICIONAL
+    // =========================================================================
+    const MATERIALS = {
+      raw_ingredients: { name: "Alimentos In Natura", icon: "🥦", unit: "un.", price: 20, cssClass: "mat-raw" },
+      fiber_complex: { name: "Complexo de Fibras", icon: "🌾", unit: "un.", price: 65, cssClass: "mat-fiber" },
+      lean_protein: { name: "Proteína Magra", icon: "🍗", unit: "un.", price: 110, cssClass: "mat-protein" },
+      low_gi_carb: { name: "Carboidratos Baixo IG", icon: "🍠", unit: "un.", price: 180, cssClass: "mat-carb" },
+      omega_lipid: { name: "Ômega-3 & Polifenóis", icon: "🫒", unit: "un.", price: 290, cssClass: "mat-omega" },
+      mediterranean_plan: { name: "Dieta Mediterrânea", icon: "🥗", unit: "un.", price: 480, cssClass: "mat-med" },
+      dash_protocol: { name: "Protocolo DASH", icon: "🫀", unit: "un.", price: 750, cssClass: "mat-dash" },
+      deficit_protocol: { name: "Déficit Calórico Sustentável", icon: "⚖️", unit: "un.", price: 1100, cssClass: "mat-deficit" },
+      microbiota_therapy: { name: "Modulação Intestinal", icon: "🦠", unit: "un.", price: 1700, cssClass: "mat-microbiota" },
+      behavioral_cbt: { name: "Terapia Comportamental (TCC)", icon: "🧠", unit: "un.", price: 2600, cssClass: "mat-cbt" },
+      metabolic_remission: { name: "Remissão Metabólica", icon: "🩺", unit: "un.", price: 4200, cssClass: "mat-remission" },
+      longevity_program: { name: "Programa Vida Plena", icon: "🌟", unit: "un.", price: 7500, cssClass: "mat-longevity" }
+    };
+
+    function matBadge(id) {
+      const m = MATERIALS[id] || { name: id, icon: "📦", cssClass: "mat-raw" };
+      return `<span class="mat-badge ${m.cssClass}">${m.icon} ${m.name}</span>`;
+    }
+
+    // =========================================================================
     // 2. CASOS CLÍNICOS / MISSÕES (20 PRONTUÁRIOS REAIS + DECISÃO CLÍNICA)
     // =========================================================================
     const MISSIONS = [
-      // FASE 1: NUTRIÇÃO CLÍNICA & REEDUCAÇÃO ALIMENTAR (1-10)
       {
         title: "Mariana, 34a — Obesidade Grau I & Ultraprocessados",
         sticker: "🥦",
@@ -1144,21 +1166,9 @@
         },
         desc: "Qual deve ser a primeira intervenção estrutural segundo o Guia Alimentar e diretrizes ABESO?",
         options: [
-          {
-            label: "Jejum intermitente 20/4 imediato mantendo ultraprocessados na janela alimentar",
-            correct: false,
-            rationale: "Contraindicado: restrições extremas sem melhora da qualidade nutricional geram compulsão e não reduzem a densidade calórica da dieta."
-          },
-          {
-            label: "Substituição gradual por Alimentos In Natura e minimamente processados (regra de ouro)",
-            correct: true,
-            rationale: "Correto! Aumentar alimentos in natura reduz naturalmente a densidade energética, eleva fibras/micronutrientes e promove saciedade sem contagem rígida inicial."
-          },
-          {
-            label: "Dieta cetogênica estrita (<20g carboidrato/dia) com suplementação de triglicerídeos",
-            correct: false,
-            rationale: "Desnecessário como primeira linha para obesidade grau I sem refratariedade, apresentando baixa adesão a longo prazo nessa rotina."
-          }
+          { label: "Jejum intermitente 20/4 imediato mantendo ultraprocessados na janela alimentar", correct: false, rationale: "Contraindicado: restrições extremas sem melhora da qualidade nutricional geram compulsão e não reduzem a densidade calórica da dieta." },
+          { label: "Substituição gradual por Alimentos In Natura e minimamente processados (regra de ouro)", correct: true, rationale: "Correto! Aumentar alimentos in natura reduz naturalmente a densidade energética, eleva fibras/micronutrientes e promove saciedade sem contagem rígida inicial." },
+          { label: "Dieta cetogênica estrita (<20g carboidrato/dia) com suplementação de triglicerídeos", correct: false, rationale: "Desnecessário como primeira linha para obesidade grau I sem refratariedade, apresentando baixa adesão a longo prazo nessa rotina." }
         ],
         goal: "raw_ingredients",
         target: 50,
@@ -1174,21 +1184,9 @@
         },
         desc: "Qual protocolo otimiza a saciedade gástrica e o trânsito intestinal deste paciente?",
         options: [
-          {
-            label: "Aporte de Fibras Solúveis & Prebióticos (25–35 g/dia + hidratação ajustada)",
-            correct: true,
-            rationale: "Excelente! Fibras solúveis (aveia, psyllium, leguminosas) formam gel viscoso, retardam o esvaziamento gástrico, estimulam GLP-1 e regularizam o intestino."
-          },
-          {
-            label: "Substituir o almoço por sucos detox coados de frutas",
-            correct: false,
-            rationale: "Inadequado: coar o suco remove as fibras insolúveis e solúveis, elevando a carga glicêmica e reduzindo a saciedade."
-          },
-          {
-            label: "Dieta líquida hipocalórica de 800 kcal/dia por 30 dias",
-            correct: false,
-            rationale: "Contraindicado: dietas de muito baixas calorias (VLCD) exigem supervisão hospitalar estrita e causam perda de massa magra."
-          }
+          { label: "Aporte de Fibras Solúveis & Prebióticos (25–35 g/dia + hidratação ajustada)", correct: true, rationale: "Excelente! Fibras solúveis (aveia, psyllium, leguminosas) formam gel viscoso, retardam o esvaziamento gástrico, estimulam GLP-1 e regularizam o intestino." },
+          { label: "Substituir o almoço por sucos detox coados de frutas", correct: false, rationale: "Inadequado: coar o suco remove as fibras insolúveis e solúveis, elevando a carga glicêmica e reduzindo a saciedade." },
+          { label: "Dieta líquida hipocalórica de 800 kcal/dia por 30 dias", correct: false, rationale: "Contraindicado: dietas de muito baixas calorias (VLCD) exigem supervisão hospitalar estrita e causam perda de massa magra." }
         ],
         goal: "fiber_complex",
         target: 20,
@@ -1204,21 +1202,9 @@
         },
         desc: "Como proteger a massa muscular e a Taxa Metabólica Basal durante o emagrecimento?",
         options: [
-          {
-            label: "Reduzir proteínas para 0,6 g/kg/dia para poupar função renal preventiva",
-            correct: false,
-            rationale: "Incorreto: sem doença renal crônica avançada, baixa proteína acelera a perda de massa muscular e derruba a taxa metabólica basal."
-          },
-          {
-            label: "Prescrever Proteína Magra Biodisponível (1,2–1,6 g/kg/dia) fracionada nas refeições",
-            correct: true,
-            rationale: "Perfeito! O aporte proteico elevado aumenta a termogênese induzida pela dieta, suprime a grelina e preserva massa magra no déficit calórico."
-          },
-          {
-            label: "Excluir jantar e realizar apenas 1 refeição rica em carboidratos simples",
-            correct: false,
-            rationale: "Inadequado: prejudica a síntese proteica muscular (que depende de pulsos de leucina ao longo do dia)."
-          }
+          { label: "Reduzir proteínas para 0,6 g/kg/dia para poupar função renal preventiva", correct: false, rationale: "Incorreto: sem doença renal crônica avançada, baixa proteína acelera a perda de massa muscular e derruba a taxa metabólica basal." },
+          { label: "Prescrever Proteína Magra Biodisponível (1,2–1,6 g/kg/dia) fracionada nas refeições", correct: true, rationale: "Perfeito! O aporte proteico elevado aumenta a termogênese induzida pela dieta, suprime a grelina e preserva massa magra no déficit calórico." },
+          { label: "Excluir jantar e realizar apenas 1 refeição rica em carboidratos simples", correct: false, rationale: "Inadequado: prejudica a síntese proteica muscular (que depende de pulsos de leucina ao longo do dia)." }
         ],
         goal: "lean_protein",
         target: 12,
@@ -1234,21 +1220,9 @@
         },
         desc: "Qual estratégia de carboidratos controla os picos insulínicos sem gerar fadiga?",
         options: [
-          {
-            label: "Priorizar Carboidratos de Baixo Índice Glicêmico e baixa carga glicêmica associados a fibras",
-            correct: true,
-            rationale: "Correto! Carboidratos complexos de absorção lenta atenuam a excursão glicêmica pós-prandial, reduzem hiperinsulinemia e evitam hipoglicemia reativa."
-          },
-          {
-            label: "Aumentar frutose isolada e maltodextrina antes do trabalho",
-            correct: false,
-            rationale: "Contraindicado: açúcares simples agravam a resistência insulínica e estimulam lipogênese de novo hepática."
-          },
-          {
-            label: "Eliminar totalmente vegetais e leguminosas da alimentação",
-            correct: false,
-            rationale: "Incorreto: leguminosas e vegetais possuem baixíssimo índice glicêmico e melhoram a sensibilidade à insulina."
-          }
+          { label: "Priorizar Carboidratos de Baixo Índice Glicêmico e baixa carga glicêmica associados a fibras", correct: true, rationale: "Correto! Carboidratos complexos de absorção lenta atenuam a excursão glicêmica pós-prandial, reduzem hiperinsulinemia e evitam hipoglicemia reativa." },
+          { label: "Aumentar frutose isolada e maltodextrina antes do trabalho", correct: false, rationale: "Contraindicado: açúcares simples agravam a resistência insulínica e estimulam lipogênese de novo hepática." },
+          { label: "Eliminar totalmente vegetais e leguminosas da alimentação", correct: false, rationale: "Incorreto: leguminosas e vegetais possuem baixíssimo índice glicêmico e melhoram a sensibilidade à insulina." }
         ],
         goal: "low_gi_carb",
         target: 4,
@@ -1264,21 +1238,9 @@
         },
         desc: "Qual conduta potencializa o controle glicêmico noturno e matinal?",
         options: [
-          {
-            label: "Escalar Carboidratos de Baixo IG & Amido Resistente combinados a proteínas no jantar",
-            correct: true,
-            rationale: "Excelente! O amido resistente fermenta no cólon gerando butirato, que melhora a sinalização insulínica e reduz o fenômeno do alvorecer."
-          },
-          {
-            label: "Trocar pão branco por tapioca pura com mel no café da manhã",
-            correct: false,
-            rationale: "Incorreto: tapioca pura com mel possui altíssimo índice glicêmico, provocando pico imediato de glicose e insulina."
-          },
-          {
-            label: "Manter dieta habitual e usar apenas chás amargos sem déficit calórico",
-            correct: false,
-            rationale: "Insuficiente: perda de 5–7% do peso corporal via ajuste calórico e qualidade de carboidratos é o padrão-ouro para prevenir DM2."
-          }
+          { label: "Escalar Carboidratos de Baixo IG & Amido Resistente combinados a proteínas no jantar", correct: true, rationale: "Excelente! O amido resistente fermenta no cólon gerando butirato, que melhora a sinalização insulínica e reduz o fenômeno do alvorecer." },
+          { label: "Trocar pão branco por tapioca pura com mel no café da manhã", correct: false, rationale: "Incorreto: tapioca pura com mel possui altíssimo índice glicêmico, provocando pico imediato de glicose e insulina." },
+          { label: "Manter dieta habitual e usar apenas chás amargos sem déficit calórico", correct: false, rationale: "Insuficiente: perda de 5–7% do peso corporal via ajuste calórico e qualidade de carboidratos é o padrão-ouro para prevenir DM2." }
         ],
         goal: "low_gi_carb",
         target: 10,
@@ -1294,21 +1256,9 @@
         },
         desc: "Qual modulação lipídica combate a inflamação do tecido adiposo e reduz triglicerídeos?",
         options: [
-          {
-            label: "Dieta zero gordura (<10% VET) rica em carboidratos refinados",
-            correct: false,
-            rationale: "Contraindicado: excesso de carboidratos em dieta muito pobre em gorduras eleva ainda mais os triglicerídeos plasmáticos."
-          },
-          {
-            label: "Protocolo rico em Ômega-3 (EPA/DHA), azeite extravirgem e polifenóis antioxidantes",
-            correct: true,
-            rationale: "Perfeito! Ácidos graxos ômega-3 inibem a síntese hepática de VLDL/triglicerídeos, enquanto polifenóis reduzem citocinas inflamatórias (IL-6, TNF-α)."
-          },
-          {
-            label: "Suplementação de óleo de coco e manteiga ghee no café",
-            correct: false,
-            rationale: "Inadequado: gorduras saturadas em excesso elevam LDL-c e ativam receptores pró-inflamatórios TLR-4."
-          }
+          { label: "Dieta zero gordura (<10% VET) rica em carboidratos refinados", correct: false, rationale: "Contraindicado: excesso de carboidratos em dieta muito pobre em gorduras eleva ainda mais os triglicerídeos plasmáticos." },
+          { label: "Protocolo rico em Ômega-3 (EPA/DHA), azeite extravirgem e polifenóis antioxidantes", correct: true, rationale: "Perfeito! Ácidos graxos ômega-3 inibem a síntese hepática de VLDL/triglicerídeos, enquanto polifenóis reduzem citocinas inflamatórias (IL-6, TNF-α)." },
+          { label: "Suplementação de óleo de coco e manteiga ghee no café", correct: false, rationale: "Inadequado: gorduras saturadas em excesso elevam LDL-c e ativam receptores pró-inflamatórios TLR-4." }
         ],
         goal: "omega_lipid",
         target: 8,
@@ -1324,21 +1274,9 @@
         },
         desc: "Qual padrão alimentar possui maior evidência científica (estudo PREDIMED) para este caso?",
         options: [
-          {
-            label: "Protocolo Dieta Mediterrânea (azeite, peixes, leguminosas, oleaginosas e vegetais)",
-            correct: true,
-            rationale: "Correto! A Dieta Mediterrânea reduz eventos cardiovasculares maiores em ~30%, melhora o perfil lipídico e apresenta altíssima adesão."
-          },
-          {
-            label: "Dieta carnívora exclusiva à base de carnes vermelhas e embutidos",
-            correct: false,
-            rationale: "Contraindicado: eleva LDL-c, TMAO e risco aterosclerótico em paciente já dislipidêmica."
-          },
-          {
-            label: "Monodieta da sopa por 21 dias seguidos",
-            correct: false,
-            rationale: "Inadequado: deficiente em ácidos graxos essenciais e proteínas, insustentável para prevenção cardiovascular."
-          }
+          { label: "Protocolo Dieta Mediterrânea (azeite, peixes, leguminosas, oleaginosas e vegetais)", correct: true, rationale: "Correto! A Dieta Mediterrânea reduz eventos cardiovasculares maiores em ~30%, melhora o perfil lipídico e apresenta altíssima adesão." },
+          { label: "Dieta carnívora exclusiva à base de carnes vermelhas e embutidos", correct: false, rationale: "Contraindicado: eleva LDL-c, TMAO e risco aterosclerótico em paciente já dislipidêmica." },
+          { label: "Monodieta da sopa por 21 dias seguidos", correct: false, rationale: "Inadequado: deficiente em ácidos graxos essenciais e proteínas, insustentável para prevenção cardiovascular." }
         ],
         goal: "mediterranean_plan",
         target: 10,
@@ -1354,21 +1292,9 @@
         },
         desc: "Qual protocolo dietoterápico é padrão-ouro para redução pressórica associada ao emagrecimento?",
         options: [
-          {
-            label: "Protocolo DASH Metabólico (rico em K, Mg, Ca, fibras e restrito em sódio <2g/dia)",
-            correct: true,
-            rationale: "Excelente! A dieta DASH reduz a pressão sistólica em 8–14 mmHg e potencializa a perda ponderal quando combinada ao déficit calórico."
-          },
-          {
-            label: "Aumentar consumo de bebidas isotônicas e embutidos light",
-            correct: false,
-            rationale: "Contraindicado: produtos 'light' em calorias frequentemente mantêm alto teor de sódio e conservantes."
-          },
-          {
-            label: "Restringir ingestão de água para 800 mL/dia para reduzir edema",
-            correct: false,
-            rationale: "Incorreto: a restrição hídrica sem indicação cardiológica/renal específica prejudica a excreção renal de sódio."
-          }
+          { label: "Protocolo DASH Metabólico (rico em K, Mg, Ca, fibras e restrito em sódio <2g/dia)", correct: true, rationale: "Excelente! A dieta DASH reduz a pressão sistólica em 8–14 mmHg e potencializa a perda ponderal quando combinada ao déficit calórico." },
+          { label: "Aumentar consumo de bebidas isotônicas e embutidos light", correct: false, rationale: "Contraindicado: produtos 'light' em calorias frequentemente mantêm alto teor de sódio e conservantes." },
+          { label: "Restringir ingestão de água para 800 mL/dia para reduzir edema", correct: false, rationale: "Incorreto: a restrição hídrica sem indicação cardiológica/renal específica prejudica a excreção renal de sódio." }
         ],
         goal: "dash_protocol",
         target: 8,
@@ -1384,21 +1310,9 @@
         },
         desc: "Qual prescrição energética promove perda de 0,5 a 1,0 kg/semana com sustentabilidade?",
         options: [
-          {
-            label: "Plano de Déficit Calórico Sustentável (redução de 500–750 kcal/dia sobre o GET)",
-            correct: true,
-            rationale: "Correto! Segundo as diretrizes ABESO/OMS, um déficit moderado de 500–750 kcal/dia maximiza a perda de gordura minimizando a adaptação metabólica."
-          },
-          {
-            label: "Cortar 1.800 kcal/dia de imediato para acelerar resultados no primeiro mês",
-            correct: false,
-            rationale: "Contraindicado: déficits agressivos disparam fome compensatória intensa (grelina) e abandono precoce do tratamento."
-          },
-          {
-            label: "Manter dieta isocalórica sem déficit esperando apenas efeito de termogênicos",
-            correct: false,
-            rationale: "Ineficaz: sem balanço energético negativo, suplementos termogênicos não promovem redução significativa de adiposidade."
-          }
+          { label: "Plano de Déficit Calórico Sustentável (redução de 500–750 kcal/dia sobre o GET)", correct: true, rationale: "Correto! Segundo as diretrizes ABESO/OMS, um déficit moderado de 500–750 kcal/dia maximiza a perda de gordura minimizando a adaptação metabólica." },
+          { label: "Cortar 1.800 kcal/dia de imediato para acelerar resultados no primeiro mês", correct: false, rationale: "Contraindicado: déficits agressivos disparam fome compensatória intensa (grelina) e abandono precoce do tratamento." },
+          { label: "Manter dieta isocalórica sem déficit esperando apenas efeito de termogênicos", correct: false, rationale: "Ineficaz: sem balanço energético negativo, suplementos termogênicos não promovem redução significativa de adiposidade." }
         ],
         goal: "deficit_protocol",
         target: 5,
@@ -1414,21 +1328,9 @@
         },
         desc: "Qual abordagem atua no eixo intestino-cérebro e na endotoxemia metabólica?",
         options: [
-          {
-            label: "Protocolo de Modulação Intestinal (prebióticos, polifenóis e variedade vegetal >30/sem)",
-            correct: true,
-            rationale: "Perfeito! Restaurar a diversidade microbiana eleva ácidos graxos de cadeia curta (butirato/propionato), melhora a barreira intestinal e destrava o platô."
-          },
-          {
-            label: "Uso contínuo de laxantes estimulantes para esvaziar o intestino",
-            correct: false,
-            rationale: "Contraindicado: laxantes irritam a mucosa, causam distúrbios hidroeletrolíticos e não reduzem gordura corporal."
-          },
-          {
-            label: "Dieta estéril baseada apenas em alimentos ultraprocessados industrializados",
-            correct: false,
-            rationale: "Incorreto: emulsificantes e aditivos agravam a permeabilidade intestinal e a disbiose."
-          }
+          { label: "Protocolo de Modulação Intestinal (prebióticos, polifenóis e variedade vegetal >30/sem)", correct: true, rationale: "Perfeito! Restaurar a diversidade microbiana eleva ácidos graxos de cadeia curta (butirato/propionato), melhora a barreira intestinal e destrava o platô." },
+          { label: "Uso contínuo de laxantes estimulantes para esvaziar o intestino", correct: false, rationale: "Contraindicado: laxantes irritam a mucosa, causam distúrbios hidroeletrolíticos e não reduzem gordura corporal." },
+          { label: "Dieta estéril baseada apenas em alimentos ultraprocessados industrializados", correct: false, rationale: "Incorreto: emulsificantes e aditivos agravam a permeabilidade intestinal e a disbiose." }
         ],
         goal: "microbiota_therapy",
         target: 3,
@@ -1445,21 +1347,9 @@
         },
         desc: "Qual intervenção é indispensável para romper o ciclo restrição-compulsão?",
         options: [
-          {
-            label: "Proibir todos os alimentos favoritos e aplicar punição calórica no dia seguinte",
-            correct: false,
-            rationale: "Contraindicado: a dicotomia 'alimento proibido vs. permitido' e a compensação restritiva perpetuam os episódios de compulsão alimentar."
-          },
-          {
-            label: "Terapia Cognitivo-Comportamental Nutricional (TCC), Mindful Eating e regularidade de refeições",
-            correct: true,
-            rationale: "Excelente! A TCC nutricional identifica gatilhos emocionais, elimina a restrição cognitiva rígida e restabelece sinais internos de fome e saciedade."
-          },
-          {
-            label: "Jejum de 24 horas após cada episódio de exagero alimentar",
-            correct: false,
-            rationale: "Perigoso: caracteriza comportamento compensatório purgativo/restritivo e agrava transtornos alimentares."
-          }
+          { label: "Proibir todos os alimentos favoritos e aplicar punição calórica no dia seguinte", correct: false, rationale: "Contraindicado: a dicotomia 'alimento proibido vs. permitido' e a compensação restritiva perpetuam os episódios de compulsão alimentar." },
+          { label: "Terapia Cognitivo-Comportamental Nutricional (TCC), Mindful Eating e regularidade de refeições", correct: true, rationale: "Excelente! A TCC nutricional identifica gatilhos emocionais, elimina a restrição cognitiva rígida e restabelece sinais internos de fome e saciedade." },
+          { label: "Jejum de 24 horas após cada episódio de exagero alimentar", correct: false, rationale: "Perigoso: caracteriza comportamento compensatório purgativo/restritivo e agrava transtornos alimentares." }
         ],
         goal: "behavioral_cbt",
         target: 5,
@@ -1475,21 +1365,9 @@
         },
         desc: "Qual conduta clínica promove regressão da esteatose e fibrose hepática?",
         options: [
-          {
-            label: "Protocolo de Remissão Metabólica (perda de 7–10% do peso + zero frutose líquida + ômega-3)",
-            correct: true,
-            rationale: "Correto! Perdas de 7% a 10% do peso corporal associadas à eliminação de xarope de frutose e aporte de polifenóis/ômega-3 revertem a esteato-hepatite."
-          },
-          {
-            label: "Suplementação de altas doses de vitamina A e ferro isolados",
-            correct: false,
-            rationale: "Contraindicado: excesso de vitamina A e ferro pode causar hepatotoxicidade e estresse oxidativo hepático."
-          },
-          {
-            label: "Substituir açúcar por sucos concentrados de uva integral 4x ao dia",
-            correct: false,
-            rationale: "Incorreto: excesso de frutose concentrada sofre metabolismo hepático direto em triglicerídeos."
-          }
+          { label: "Protocolo de Remissão Metabólica (perda de 7–10% do peso + zero frutose líquida + ômega-3)", correct: true, rationale: "Correto! Perdas de 7% a 10% do peso corporal associadas à eliminação de xarope de frutose e aporte de polifenóis/ômega-3 revertem a esteato-hepatite." },
+          { label: "Suplementação de altas doses de vitamina A e ferro isolados", correct: false, rationale: "Contraindicado: excesso de vitamina A e ferro pode causar hepatotoxicidade e estresse oxidativo hepático." },
+          { label: "Substituir açúcar por sucos concentrados de uva integral 4x ao dia", correct: false, rationale: "Incorreto: excesso de frutose concentrada sofre metabolismo hepático direto em triglicerídeos." }
         ],
         goal: "metabolic_remission",
         target: 4,
@@ -1505,21 +1383,9 @@
         },
         desc: "Qual protocolo clínico maximiza a chance de remissão do Diabetes Tipo 2?",
         options: [
-          {
-            label: "Protocolo de Remissão Metabólica com redução de gordura ectópica pancreática e hepática",
-            correct: true,
-            rationale: "Perfeito! O estudo DiRECT demonstrou que perdas ponderais estruturadas (>10–15 kg) reduzem a gordura intra-pancreática e restauram a secreção de insulina."
-          },
-          {
-            label: "Aumentar carboidratos simples para evitar hipoglicemia mesmo sem uso de insulina",
-            correct: false,
-            rationale: "Incorreto: paciente não usa insulina exógena; excesso de carboidratos simples piora a glicotoxicidade das células beta."
-          },
-          {
-            label: "Ignorar circunferência abdominal e focar apenas no IMC isolado",
-            correct: false,
-            rationale: "Incompleto: a adiposidade visceral é o principal motor da resistência insulínica e deve ser monitorada."
-          }
+          { label: "Protocolo de Remissão Metabólica com redução de gordura ectópica pancreática e hepática", correct: true, rationale: "Perfeito! O estudo DiRECT demonstrou que perdas ponderais estruturadas (>10–15 kg) reduzem a gordura intra-pancreática e restauram a secreção de insulina." },
+          { label: "Aumentar carboidratos simples para evitar hipoglicemia mesmo sem uso de insulina", correct: false, rationale: "Incorreto: paciente não usa insulina exógena; excesso de carboidratos simples piora a glicotoxicidade das células beta." },
+          { label: "Ignorar circunferência abdominal e focar apenas no IMC isolado", correct: false, rationale: "Incompleto: a adiposidade visceral é o principal motor da resistência insulínica e deve ser monitorada." }
         ],
         goal: "metabolic_remission",
         target: 8,
@@ -1535,21 +1401,9 @@
         },
         desc: "Qual estratégia sustenta o novo peso a longo prazo e evita o efeito sanfona?",
         options: [
-          {
-            label: "Dar alta imediata sem retorno e liberar retorno aos hábitos antigos",
-            correct: false,
-            rationale: "Contraindicado: a obesidade é uma doença crônica recidivante; a interrupção abrupta do suporte leva ao reganho em >80% dos casos."
-          },
-          {
-            label: "Programa Vida Plena: transição calórica gradual, alta densidade proteica, automonitoramento e exercício",
-            correct: true,
-            rationale: "Correto! Aumentar gradualmente as calorias (reverse dieting controlada), manter proteína elevada e acompanhamento periódico neutraliza a adaptação metabólica."
-          },
-          {
-            label: "Reduzir ainda mais as calorias para 900 kcal/dia indefinidamente",
-            correct: false,
-            rationale: "Insustentável e prejudicial à saúde óssea, hormonal e psicológica."
-          }
+          { label: "Dar alta imediata sem retorno e liberar retorno aos hábitos antigos", correct: false, rationale: "Contraindicado: a obesidade é uma doença crônica recidivante; a interrupção abrupta do suporte leva ao reganho em >80% dos casos." },
+          { label: "Programa Vida Plena: transição calórica gradual, alta densidade proteica, automonitoramento e exercício", correct: true, rationale: "Correto! Aumentar gradualmente as calorias (reverse dieting controlada), manter proteína elevada e acompanhamento periódico neutraliza a adaptação metabólica." },
+          { label: "Reduzir ainda mais as calorias para 900 kcal/dia indefinidamente", correct: false, rationale: "Insustentável e prejudicial à saúde óssea, hormonal e psicológica." }
         ],
         goal: "longevity_program",
         target: 2,
@@ -1565,21 +1419,9 @@
         },
         desc: "Qual abordagem educacional e comportamental promove autonomia duradoura?",
         options: [
-          {
-            label: "Terapia Comportamental (TCC): psicoeducação sobre neurobiologia da obesidade e metas flexíveis",
-            correct: true,
-            rationale: "Excelente! Compreender que a obesidade envolve regulação neuroendócrina reduz o estigma internalizado e melhora a autoeficácia."
-          },
-          {
-            label: "Expor publicamente o peso semanal de cada participante como forma de pressão",
-            correct: false,
-            rationale: "Antiético e contraindicado: o estigma do peso eleva cortisol, piora a saúde mental e aumenta o abandono."
-          },
-          {
-            label: "Entregar uma lista idêntica de 1.100 kcal impressa para todos",
-            correct: false,
-            rationale: "Inadequado: desconsidera necessidades energéticas individuais, cultura alimentar e contexto socioeconômico."
-          }
+          { label: "Terapia Comportamental (TCC): psicoeducação sobre neurobiologia da obesidade e metas flexíveis", correct: true, rationale: "Excelente! Compreender que a obesidade envolve regulação neuroendócrina reduz o estigma internalizado e melhora a autoeficácia." },
+          { label: "Expor publicamente o peso semanal de cada participante como forma de pressão", correct: false, rationale: "Antiético e contraindicado: o estigma do peso eleva cortisol, piora a saúde mental e aumenta o abandono." },
+          { label: "Entregar uma lista idêntica de 1.100 kcal impressa para todos", correct: false, rationale: "Inadequado: desconsidera necessidades energéticas individuais, cultura alimentar e contexto socioeconômico." }
         ],
         goal: "behavioral_cbt",
         target: 15,
@@ -1595,21 +1437,9 @@
         },
         desc: "Qual conduta nutricional integra o cuidado interdisciplinar na obesidade grave?",
         options: [
-          {
-            label: "Protocolo de Remissão Metabólica individualizado integrado à equipe médica e exercício adaptado",
-            correct: true,
-            rationale: "Correto! Na obesidade grau III, o cuidado interdisciplinar (nutrição, endocrinologia, psicologia e educação física) potencializa a segurança e os desfechos."
-          },
-          {
-            label: "Prescrever treino de corrida de alto impacto em jejum prolongado",
-            correct: false,
-            rationale: "Contraindicado: alto risco articular e cardiovascular sem avaliação e adaptação progressiva."
-          },
-          {
-            label: "Aguardar perda de 40 kg antes de tratar hipertensão e apneia",
-            correct: false,
-            rationale: "Incorreto: perdas de 5–10% já melhoram significativamente a apneia do sono e a pressão arterial."
-          }
+          { label: "Protocolo de Remissão Metabólica individualizado integrado à equipe médica e exercício adaptado", correct: true, rationale: "Correto! Na obesidade grau III, o cuidado interdisciplinar (nutrição, endocrinologia, psicologia e educação física) potencializa a segurança e os desfechos." },
+          { label: "Prescrever treino de corrida de alto impacto em jejum prolongado", correct: false, rationale: "Contraindicado: alto risco articular e cardiovascular sem avaliação e adaptação progressiva." },
+          { label: "Aguardar perda de 40 kg antes de tratar hipertensão e apneia", correct: false, rationale: "Incorreto: perdas de 5–10% já melhoram significativamente a apneia do sono e a pressão arterial." }
         ],
         goal: "metabolic_remission",
         target: 14,
@@ -1625,21 +1455,9 @@
         },
         desc: "Como garantir equidade, custo acessível e alta taxa de manutenção em 12 meses?",
         options: [
-          {
-            label: "Programa Vida Plena valorizando cultura alimentar regional (feijão com arroz, hortaliças) e educação contínua",
-            correct: true,
-            rationale: "Perfeito! O Guia Alimentar demonstra que preparações culinárias tradicionais brasileiras são nutricionalmente completas, acessíveis e sustentáveis."
-          },
-          {
-            label: "Exigir salmão selvagem, aspargos importados e suplementos caros",
-            correct: false,
-            rationale: "Inviável: cria barreira financeira imediata e leva ao abandono do tratamento."
-          },
-          {
-            label: "Suspender o acompanhamento após os primeiros 30 dias",
-            correct: false,
-            rationale: "Ineficaz: o acompanhamento longitudinal é determinante para consolidar novos hábitos."
-          }
+          { label: "Programa Vida Plena valorizando cultura alimentar regional (feijão com arroz, hortaliças) e educação contínua", correct: true, rationale: "Perfeito! O Guia Alimentar demonstra que preparações culinárias tradicionais brasileiras são nutricionalmente completas, acessíveis e sustentáveis." },
+          { label: "Exigir salmão selvagem, aspargos importados e suplementos caros", correct: false, rationale: "Inviável: cria barreira financeira imediata e leva ao abandono do tratamento." },
+          { label: "Suspender o acompanhamento após os primeiros 30 dias", correct: false, rationale: "Ineficaz: o acompanhamento longitudinal é determinante para consolidar novos hábitos." }
         ],
         goal: "longevity_program",
         target: 5,
@@ -1655,21 +1473,9 @@
         },
         desc: "Qual conduta restaura a relação saudável com a comida sem reganho de peso?",
         options: [
-          {
-            label: "Terapia Comportamental (TCC) com reintrodução gradual de alimentos temidos e flexibilidade cognitiva",
-            correct: true,
-            rationale: "Correto! A abordagem não-punitiva e flexível previne a evolução para transtornos alimentares graves e mantém o peso estável."
-          },
-          {
-            label: "Reforçar que frutas possuem açúcar e devem ser evitadas para sempre",
-            correct: false,
-            rationale: "Contraindicado: alimenta crenças disfuncionais e terrorismo nutricional sem base científica."
-          },
-          {
-            label: "Prescrever pesagem corporal 3 vezes ao dia para controle",
-            correct: false,
-            rationale: "Prejudicial: aumenta hipervigilância, ansiedade e flutuações hídricas mal interpretadas."
-          }
+          { label: "Terapia Comportamental (TCC) com reintrodução gradual de alimentos temidos e flexibilidade cognitiva", correct: true, rationale: "Correto! A abordagem não-punitiva e flexível previne a evolução para transtornos alimentares graves e mantém o peso estável." },
+          { label: "Reforçar que frutas possuem açúcar e devem ser evitadas para sempre", correct: false, rationale: "Contraindicado: alimenta crenças disfuncionais e terrorismo nutricional sem base científica." },
+          { label: "Prescrever pesagem corporal 3 vezes ao dia para controle", correct: false, rationale: "Prejudicial: aumenta hipervigilância, ansiedade e flutuações hídricas mal interpretadas." }
         ],
         goal: "behavioral_cbt",
         target: 30,
@@ -1685,21 +1491,9 @@
         },
         desc: "Qual pilar consolida os resultados de 24 meses na linha de cuidado da obesidade?",
         options: [
-          {
-            label: "Programa Vida Plena: monitoramento periódico de composição corporal, sono, estresse e autonomia culinária",
-            correct: true,
-            rationale: "Excelente! O manejo integrado de sono, estresse, atividade física e alimentação personalizada sustenta a saúde metabólica a longo prazo."
-          },
-          {
-            label: "Substituir todas as refeições sólidas por shakes industrializados indefinidamente",
-            correct: false,
-            rationale: "Inadequado: não desenvolve habilidades culinárias nem autonomia social."
-          },
-          {
-            label: "Focar exclusivamente no número da balança ignorando exames laboratoriais e massa magra",
-            correct: false,
-            rationale: "Incompleto: saúde metabólica envolve composição corporal, marcadores bioquímicos e bem-estar integral."
-          }
+          { label: "Programa Vida Plena: monitoramento periódico de composição corporal, sono, estresse e autonomia culinária", correct: true, rationale: "Excelente! O manejo integrado de sono, estresse, atividade física e alimentação personalizada sustenta a saúde metabólica a longo prazo." },
+          { label: "Substituir todas as refeições sólidas por shakes industrializados indefinidamente", correct: false, rationale: "Inadequado: não desenvolve habilidades culinárias nem autonomia social." },
+          { label: "Focar exclusivamente no número da balança ignorando exames laboratoriais e massa magra", correct: false, rationale: "Incompleto: saúde metabólica envolve composição corporal, marcadores bioquímicos e bem-estar integral." }
         ],
         goal: "longevity_program",
         target: 10,
@@ -1715,21 +1509,9 @@
         },
         desc: "Qual síntese define o padrão-ouro contemporâneo do nutricionista no tratamento da obesidade?",
         options: [
-          {
-            label: "Programa Vida Plena: cuidado centrado na pessoa, déficit sustentável, qualidade nutricional e zero estigma",
-            correct: true,
-            rationale: "Brilhante! Você concluiu toda a jornada clínica unindo rigor científico, empatia e transformação real da saúde metabólica!"
-          },
-          {
-            label: "Prescrição padronizada de dietas da moda extremas para perda rápida a qualquer custo",
-            correct: false,
-            rationale: "Contraria todas as diretrizes científicas nacionais e internacionais de saúde."
-          },
-          {
-            label: "Culpar o paciente sempre que ocorrer um platô fisiológico esperado",
-            correct: false,
-            rationale: "Antiético: platôs fazem parte da adaptação metabólica e exigem ajuste técnico empático do profissional."
-          }
+          { label: "Programa Vida Plena: cuidado centrado na pessoa, déficit sustentável, qualidade nutricional e zero estigma", correct: true, rationale: "Brilhante! Você concluiu toda a jornada clínica unindo rigor científico, empatia e transformação real da saúde metabólica!" },
+          { label: "Prescrição padronizada de dietas da moda extremas para perda rápida a qualquer custo", correct: false, rationale: "Contraria todas as diretrizes científicas nacionais e internacionais de saúde." },
+          { label: "Culpar o paciente sempre que ocorrer um platô fisiológico esperado", correct: false, rationale: "Antiético: platôs fazem parte da adaptação metabólica e exigem ajuste técnico empático do profissional." }
         ],
         goal: "longevity_program",
         target: 20,
@@ -1874,7 +1656,7 @@
     }
 
     // =========================================================================
-    // 6. SÍNTESE DE ÁUDIO (WEB AUDIO API) & VOZ (WEB SPEECH API)
+    // 6. SÍNTESE DE ÁUDIO (WEB AUDIO API) & TOAST / MODAL / NAVEGAÇÃO
     // =========================================================================
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let actx = null;
@@ -1902,7 +1684,6 @@
           osc.type = "sine";
           osc.frequency.setValueAtTime(280, now);
           osc.frequency.linearRampToValueAtTime(420, now + 0.22);
-          osc.frequency.linearRampToValueAtTime(340, now + 0.36);
           gain.gain.setValueAtTime(0.14, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
           osc.start(now);
@@ -1946,6 +1727,28 @@
       setTimeout(() => el.remove(), 1250);
     }
 
+    function toast(msg) {
+      const t = $("toast");
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 3200);
+    }
+
+    function showModal(title, text, symbol = "🎉", eyebrow = "EVOLUÇÃO CLÍNICA") {
+      if ($("modalTitle")) $("modalTitle").textContent = title;
+      if ($("modalText")) $("modalText").innerHTML = text;
+      if ($("modalSymbol")) $("modalSymbol").textContent = symbol;
+      if ($("modalEyebrow")) $("modalEyebrow").textContent = eyebrow;
+      const backdrop = $("modalBackdrop");
+      if (backdrop) backdrop.classList.add("show");
+    }
+
+    function closeModal() {
+      const backdrop = $("modalBackdrop");
+      if (backdrop) backdrop.classList.remove("show");
+    }
+
     function speak(text) {
       lastSpokenText = String(text || "").replace(/<[^>]*>/g, "");
       if (!audioVoiceEnabled || !lastSpokenText || !("speechSynthesis" in window)) return;
@@ -1982,6 +1785,130 @@
       const emoji = icons[index % icons.length];
 
       return `
+        <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g${index}" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="${bg}" />
+              <stop offset="100%" stop-color="#041019" />
+            </linearGradient>
+            <filter id="glow${index}" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="8" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+          <rect width="280" height="200" fill="url(#g${index})" rx="14" />
+          <circle cx="140" cy="100" r="65" fill="${primary}" opacity="0.18" filter="url(#glow${index})" />
+          <circle cx="140" cy="100" r="42" fill="none" stroke="${light}" stroke-width="2" stroke-dasharray="6,4" opacity="0.45" />
+          <text x="140" y="112" font-size="52" text-anchor="middle" dominant-baseline="middle" filter="url(#glow${index})">${emoji}</text>
+          <rect x="16" y="16" width="64" height="22" rx="6" fill="rgba(4,16,25,0.8)" stroke="${primary}" stroke-width="1.2" />
+          <text x="48" y="31" font-size="10" font-weight="700" fill="${light}" text-anchor="middle">CASO ${String(index + 1).padStart(2, "0")}</text>
+          ${label ? `<text x="140" y="178" font-size="10" font-weight="700" fill="${light}" text-anchor="middle" opacity="0.85">${label}</text>` : ""}
+        </svg>
+      `;
+    }
+
+    // =========================================================================
+    // 8. LÓGICA DE NAVEGAÇÃO & HELPERS DE JOGO
+    // =========================================================================
+    function activeMissionIndex() {
+      for (let i = 0; i < MISSIONS.length; i++) {
+        if (!state.completed.includes(i)) return i;
+      }
+      return -1;
+    }
+
+    function missionProgress(i) {
+      const m = MISSIONS[i];
+      if (!m) return 0;
+      const cur = state.stock[m.goal] || 0;
+      return Math.min(100, Math.floor((cur / m.target) * 100));
+    }
+
+    function totalEfficiencyBonus() {
+      return state.upgrades.reduce((acc, uid) => {
+        const u = UPGRADES.find(x => x.id === uid);
+        return acc + (u ? u.eff : 0);
+      }, 0);
+    }
+
+    function effectiveCost(p) {
+      const eff = totalEfficiencyBonus();
+      const discount = 1 - (eff / 100);
+      return Math.max(10, Math.floor(p.cost * Math.max(0.2, discount)));
+    }
+
+    function unlockedProcess(p) {
+      return state.completed.length >= p.unlock;
+    }
+
+    function changeView(viewId) {
+      playSfx("click");
+      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+      document.querySelectorAll(".nav-link").forEach(b => b.classList.remove("active"));
+
+      const targetView = $("view-" + viewId);
+      if (targetView) targetView.classList.add("active");
+
+      const navBtn = document.querySelector(`.nav-link[data-view="${viewId}"]`);
+      if (navBtn) navBtn.classList.add("active");
+
+      const titles = {
+        dashboard: "Consultório Central",
+        missions: "Casos Clínicos & Prontuários",
+        production: "Cozinha Experimental & Protocolos",
+        market: "Consultoria & Planos",
+        upgrades: "Equipamentos Clínicos"
+      };
+      if ($("pageTitle")) $("pageTitle").textContent = titles[viewId] || "Consultório Central";
+
+      // Fecha menu mobile se estiver aberto
+      const sb = $("sidebar");
+      const sbd = $("sidebarBackdrop");
+      if (sb) sb.classList.remove("open");
+      if (sbd) sbd.classList.remove("show");
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // =========================================================================
+    // 9. RENDERIZAÇÃO DE COMPONENTES DO DOM
+    // =========================================================================
+    function renderStock() {
+      const list = $("stockList");
+      if (!list) return;
+      list.innerHTML = Object.entries(state.stock).map(([id, qty]) => {
+        const m = MATERIALS[id] || { name: id, icon: "📦", unit: "un." };
+        return `
+          <div class="stock-row">
+            <span class="material-icon sticker-float">${m.icon}</span>
+            <div>
+              <strong>${m.name}</strong>
+              <small class="stock-sub">${id === "raw_ingredients" ? "Insumo hortifruti" : "Protocolo clínico"}</small>
+            </div>
+            <div class="stock-qty">${fmt(qty)} <small>${m.unit}</small></div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderChain() {
+      const strip = $("chainStrip");
+      if (!strip) return;
+      strip.innerHTML = MISSIONS.slice(0, 5).map((m, i) => {
+        const done = state.completed.includes(i);
+        const unlocked = i === activeMissionIndex() || done;
+        return `
+          <div class="chain-step ${done ? "done" : unlocked ? "" : "locked"}">
+            <span class="step-no">CASO 0${i + 1}</span>
+            <strong>${m.sticker} ${m.title.split("—")[0]}</strong>
+            <small style="display:block;margin-top:4px;color:${done ? "var(--accent)" : "var(--muted)"}">
+              ${done ? "✓ Concluído" : unlocked ? "Em atendimento" : "Bloqueado"}
+            </small>
+          </div>
+        `;
+      }).join("");
+    }
+
     function selectClinicalOption(missionIdx, optionIdx) {
       if (missionIdx !== activeMissionIndex()) return;
       const m = MISSIONS[missionIdx];
@@ -2310,7 +2237,6 @@
       const extraText = p.extraInput ? ` + ${fmt(p.extraQty * times)} ${MATERIALS[p.extraInput].name}` : "";
       $("processConsumption").innerHTML = `<span>🔻 Insumos utilizados: <strong>${inputText}${extraText}</strong></span><span>🔺 Resultado clínico: <strong>${fmt(p.out * times)} ${MATERIALS[p.output].name}</strong></span>`;
       
-      // Reinicia animação da barra
       const bar = overlay.querySelector(".process-progress span");
       if (bar) {
         bar.style.animation = "none";
@@ -2470,65 +2396,69 @@
     }
 
     // =========================================================================
-    // 12. EVENT LISTENERS & INICIALIZAÇÃO
+    // 12. EVENT LISTENERS & INICIALIZAÇÃO SEGURA
     // =========================================================================
-    document.querySelectorAll(".nav-link").forEach(b => b.addEventListener("click", () => changeView(b.dataset.view)));
-    document.querySelectorAll("[data-goto]").forEach(b => b.addEventListener("click", () => changeView(b.dataset.goto)));
-
-    if ($("brandHome")) $("brandHome").addEventListener("click", e => { e.preventDefault(); changeView("dashboard"); });
-
-    if ($("mobileMenu") && $("sidebar") && $("sidebarBackdrop")) {
-      $("mobileMenu").addEventListener("click", () => {
-        $("sidebar").classList.toggle("open");
-        $("sidebarBackdrop").classList.toggle("show");
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".nav-link").forEach(b => {
+        b.addEventListener("click", () => changeView(b.dataset.view));
       });
-      $("sidebarBackdrop").addEventListener("click", () => {
-        $("sidebar").classList.remove("open");
-        $("sidebarBackdrop").classList.remove("show");
+      document.querySelectorAll("[data-goto]").forEach(b => {
+        b.addEventListener("click", () => changeView(b.dataset.goto));
       });
-    }
 
-    ["newGame", "resetGame"].forEach(id => {
-      if ($(id)) $(id).addEventListener("click", startNewGame);
-    });
+      if ($("brandHome")) $("brandHome").addEventListener("click", e => { e.preventDefault(); changeView("dashboard"); });
 
-    if ($("forceSyncBtn")) {
-      $("forceSyncBtn").addEventListener("click", () => {
-        playSfx("click");
-        saveToLocalStorage();
-        toast("💾 Prontuário clínico salvo com segurança no navegador!");
+      if ($("mobileMenu") && $("sidebar") && $("sidebarBackdrop")) {
+        $("mobileMenu").addEventListener("click", () => {
+          $("sidebar").classList.toggle("open");
+          $("sidebarBackdrop").classList.toggle("show");
+        });
+        $("sidebarBackdrop").addEventListener("click", () => {
+          $("sidebar").classList.remove("open");
+          $("sidebarBackdrop").classList.remove("show");
+        });
+      }
+
+      ["newGame", "resetGame"].forEach(id => {
+        if ($(id)) $(id).addEventListener("click", startNewGame);
       });
-    }
 
-    if ($("mineBonusBtn")) $("mineBonusBtn").addEventListener("click", harvestIngredientsBonus);
-    if ($("factoryMineBtn")) $("factoryMineBtn").addEventListener("click", harvestIngredientsBonus);
+      if ($("forceSyncBtn")) {
+        $("forceSyncBtn").addEventListener("click", () => {
+          playSfx("click");
+          saveToLocalStorage();
+          toast("💾 Prontuário clínico salvo com segurança no navegador!");
+        });
+      }
 
-    if ($("sfxToggleBtn")) {
-      $("sfxToggleBtn").addEventListener("click", () => {
-        sfxEnabled = !sfxEnabled;
-        $("sfxToggleBtn").textContent = sfxEnabled ? "🔊 SFX: ON" : "🔇 SFX: OFF";
-        if (sfxEnabled) playSfx("coin");
-      });
-    }
+      if ($("mineBonusBtn")) $("mineBonusBtn").addEventListener("click", harvestIngredientsBonus);
+      if ($("factoryMineBtn")) $("factoryMineBtn").addEventListener("click", harvestIngredientsBonus);
 
-    if ($("modalClose")) $("modalClose").addEventListener("click", closeModal);
-    if ($("modalOk")) $("modalOk").addEventListener("click", closeModal);
-    if ($("modalBackdrop")) $("modalBackdrop").addEventListener("click", e => { if (e.target === $("modalBackdrop")) closeModal(); });
-    if ($("speakMissionBtn")) $("speakMissionBtn").addEventListener("click", speakCurrentMission);
+      if ($("sfxToggleBtn")) {
+        $("sfxToggleBtn").addEventListener("click", () => {
+          sfxEnabled = !sfxEnabled;
+          $("sfxToggleBtn").textContent = sfxEnabled ? "🔊 SFX: ON" : "🔇 SFX: OFF";
+          if (sfxEnabled) playSfx("coin");
+        });
+      }
 
-    if ($("audioEnable")) $("audioEnable").addEventListener("click", () => { audioVoiceEnabled = true; speak("Preceptor clínico ativado! Pronto para orientar suas prescrições nutricionais."); });
-    if ($("audioRepeat")) $("audioRepeat").addEventListener("click", () => speak(lastSpokenText));
-    if ($("audioToggle")) {
-      $("audioToggle").addEventListener("click", () => {
-        audioVoiceEnabled = !audioVoiceEnabled;
-        $("audioToggle").textContent = audioVoiceEnabled ? "Voz Ligada" : "Voz Desligada";
-      });
-    }
+      if ($("modalClose")) $("modalClose").addEventListener("click", closeModal);
+      if ($("modalOk")) $("modalOk").addEventListener("click", closeModal);
+      if ($("modalBackdrop")) $("modalBackdrop").addEventListener("click", e => { if (e.target === $("modalBackdrop")) closeModal(); });
+      if ($("speakMissionBtn")) $("speakMissionBtn").addEventListener("click", speakCurrentMission);
 
-    window.onload = function () {
+      if ($("audioEnable")) $("audioEnable").addEventListener("click", () => { audioVoiceEnabled = true; speak("Preceptor clínico ativado! Pronto para orientar suas prescrições nutricionais."); });
+      if ($("audioRepeat")) $("audioRepeat").addEventListener("click", () => speak(lastSpokenText));
+      if ($("audioToggle")) {
+        $("audioToggle").addEventListener("click", () => {
+          audioVoiceEnabled = !audioVoiceEnabled;
+          $("audioToggle").textContent = audioVoiceEnabled ? "Voz Ligada" : "Voz Desligada";
+        });
+      }
+
       loadFromLocalStorage();
       renderAll();
-    };
+    });
   </script>
 </body>
 </html>
