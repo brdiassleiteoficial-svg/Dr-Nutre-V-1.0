@@ -1,0 +1,2017 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#041019">
+  <meta name="description" content="NutriClínica Tycoon — Simulador clínico gamificado de nutrição baseada em evidências, dietoterapia e tratamento integral da obesidade.">
+  <title>NutriClínica Tycoon | Especialista em Obesidade & Saúde Metabólica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;1,700&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #041019;
+      --surface: rgba(11, 26, 40, 0.84);
+      --surface-card: rgba(17, 39, 58, 0.9);
+      --ink: #f1f5f9;
+      --muted: #94a3b8;
+      --line: rgba(30, 58, 82, 0.85);
+      --navy: #071624;
+      --accent: #10b981;
+      --accent-hover: #059669;
+      --accent-glow: rgba(16, 185, 129, 0.4);
+      --cyan: #06b6d4;
+      --cyan-glow: rgba(6, 182, 212, 0.4);
+      --violet: #a855f7;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --white: #ffffff;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
+      --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.14) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.12) 0%, transparent 50%),
+        linear-gradient(180deg, #05131f 0%, #041019 100%);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    h1, h2, h3, .brand strong, .hero-index, .stat-card > strong, .market-price {
+      font-family: 'Chakra Petch', 'Manrope', sans-serif;
+    }
+
+    button { font: inherit; cursor: pointer; }
+    button:disabled { opacity: 0.42; cursor: not-allowed; transform: none !important; filter: none !important; box-shadow: none !important; }
+
+    @keyframes floatSticker {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-5px) rotate(4deg); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px var(--accent-glow)); }
+      50% { transform: scale(1.1); filter: drop-shadow(0 0 14px var(--accent-glow)); }
+    }
+
+    @keyframes spinSlow {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(360deg); }
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      70% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes floatUpFx {
+      0% { opacity: 1; transform: translateY(0) scale(0.9); }
+      100% { opacity: 0; transform: translateY(-70px) scale(1.25); }
+    }
+
+    @keyframes processFill { to { width: 100%; } }
+    @keyframes processPop { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes scenePulse { from { filter: brightness(.92) saturate(1); } to { filter: brightness(1.1) saturate(1.15); } }
+
+    .sticker-float { display: inline-block; animation: floatSticker 3s ease-in-out infinite; }
+    .sticker-pulse { display: inline-block; animation: pulseGlow 2.2s ease-in-out infinite; }
+    .sticker-spin { display: inline-block; animation: spinSlow 5s linear infinite; }
+    .sticker-bounce { animation: bounceIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+    .fx-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+
+    .fx-popup {
+      position: absolute;
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: #34d399;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.9), 0 0 15px rgba(16, 185, 129, 0.8);
+      animation: floatUpFx 1.2s ease-out forwards;
+      white-space: nowrap;
+    }
+
+    .app-shell { min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 280px;
+      background: rgba(7, 22, 36, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      position: fixed;
+      inset: 0 auto 0 0;
+      padding: 22px 16px 20px;
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+      box-shadow: 10px 0 40px rgba(0,0,0,0.6);
+    }
+
+    .sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 16, 25, 0.78);
+      z-index: 40;
+      display: none;
+      backdrop-filter: blur(5px);
+    }
+    .sidebar-backdrop.show { display: block; }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--white);
+      padding: 0 6px 20px;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #10b981, #06b6d4);
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      box-shadow: 0 0 22px var(--accent-glow);
+      transition: transform 0.2s;
+    }
+    .brand:hover .brand-mark { transform: rotate(-8deg) scale(1.08); }
+
+    .brand strong { display: block; font-size: 16px; letter-spacing: 0.8px; color: var(--white); }
+    .brand small { display: block; color: var(--cyan); font-size: 10px; font-weight: 700; letter-spacing: 1.4px; margin-top: 2px; }
+
+    .game-badge-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, rgba(17, 39, 58, 0.85), rgba(11, 26, 40, 0.92));
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .company-icon {
+      height: 40px;
+      width: 40px;
+      border-radius: 12px;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      flex: none;
+    }
+
+    .company-card strong { display: block; font-size: 13px; color: var(--white); }
+    .company-card small { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 5px; margin-top: 3px; flex-wrap: wrap; }
+    .lvl-pill { background: var(--accent); color: #041019; font-weight: 800; padding: 1px 6px; border-radius: 6px; font-size: 10px; }
+
+    .main-nav { display: grid; gap: 8px; }
+
+    .nav-link {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid transparent;
+      color: var(--muted);
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.22s ease;
+      width: 100%;
+    }
+
+    .nav-sticker { font-size: 19px; width: 24px; text-align: center; transition: transform 0.2s; }
+    .nav-link:hover { background: rgba(255, 255, 255, 0.06); color: var(--white); transform: translateX(4px); }
+    .nav-link:hover .nav-sticker { transform: scale(1.2) rotate(6deg); }
+    .nav-link.active {
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.22), rgba(6, 182, 212, 0.08));
+      color: var(--white);
+      border-color: rgba(16, 185, 129, 0.45);
+      box-shadow: 0 4px 18px rgba(16, 185, 129, 0.2), inset 3px 0 var(--accent);
+    }
+
+    .nav-count {
+      margin-left: auto;
+      background: var(--accent);
+      color: #041019;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 9px;
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    .sidebar-bottom { margin-top: auto; padding-top: 16px; }
+
+    .mascot-tip {
+      display: flex;
+      gap: 10px;
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .mascot-avatar { font-size: 24px; flex: none; animation: floatSticker 2.5s ease-in-out infinite; }
+    .help-box strong { font-size: 11px; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.5px; }
+    .help-box p { font-size: 11px; line-height: 1.45; color: var(--ink); margin: 4px 0 0; }
+
+    .version { display: block; color: var(--muted); font-size: 9px; letter-spacing: 1.2px; margin: 10px 4px 0; text-transform: uppercase; text-align: center; }
+
+    /* MAIN AREA */
+    .main-area {
+      margin-left: 280px;
+      min-height: 100vh;
+      padding: 0 34px;
+      max-width: 1700px;
+      position: relative;
+      flex: 1;
+    }
+
+    .topbar {
+      min-height: 76px;
+      padding: 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+    .breadcrumb i { font-style: normal; color: var(--accent); font-size: 10px; }
+    .breadcrumb strong { color: var(--white); font-weight: 700; font-size: 14px; }
+
+    .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+
+    .coin-hud {
+      display: grid;
+      grid-template-columns: auto auto;
+      align-items: center;
+      column-gap: 8px;
+      font-weight: 800;
+      font-size: 15px;
+      font-family: 'Chakra Petch', sans-serif;
+      background: linear-gradient(135deg, rgba(11, 26, 40, 0.92), rgba(17, 39, 58, 0.92));
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      padding: 6px 16px;
+      border-radius: 14px;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+    }
+    .coin-hud small { grid-column: 2; color: var(--amber); font-size: 8px; letter-spacing: 1.2px; font-family: 'DM Sans', sans-serif; }
+    .coin { font-size: 20px; }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #10b981, #06b6d4);
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.4);
+      flex: none;
+    }
+
+    .game-chip-btn {
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      background: rgba(6, 182, 212, 0.14);
+      color: var(--cyan);
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+    .game-chip-btn:hover { background: rgba(6, 182, 212, 0.28); transform: translateY(-2px); color: var(--white); }
+
+    .mobile-menu { display: none; border: var(--glass-border); background: rgba(11, 26, 40, 0.9); color: var(--white); font-size: 20px; width: 42px; height: 42px; border-radius: 12px; align-items: center; justify-content: center; flex: none; }
+
+    .view { display: none; padding: 26px 0 24px; }
+    .view.active { display: block; animation: fadeIn 0.3s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .welcome-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .eyebrow { font-size: 10px; letter-spacing: 2px; font-weight: 800; color: var(--accent); text-transform: uppercase; }
+    .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 6px; box-shadow: 0 0 12px var(--accent); }
+
+    h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; color: var(--white); margin: 6px 0; }
+    h1 span { color: var(--accent); text-shadow: 0 0 22px var(--accent-glow); }
+    .welcome-row p, .page-intro p { color: var(--muted); margin: 0; font-size: 13px; }
+
+    .date-chip {
+      border: var(--glass-border);
+      background: rgba(11, 26, 40, 0.75);
+      color: var(--ink);
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .hero-banner {
+      min-height: 275px;
+      border-radius: 22px;
+      background: linear-gradient(95deg, rgba(4, 16, 25, 0.97) 0%, rgba(7, 22, 36, 0.88) 46%, rgba(16, 185, 129, 0.16) 100%);
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+      padding: 32px 36px;
+      display: flex;
+      align-items: center;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .hero-copy { position: relative; z-index: 2; max-width: 490px; }
+    .hero-kicker { font-size: 10px; letter-spacing: 2px; color: var(--cyan); font-weight: 800; }
+    .hero-copy h2 { font-size: 30px; line-height: 1.14; margin: 10px 0 10px; color: var(--white); }
+    .hero-copy h2 em { font-style: normal; color: var(--accent); text-shadow: 0 0 25px var(--accent-glow); }
+    .hero-copy p { font-size: 13px; color: var(--muted); max-width: 420px; line-height: 1.6; margin-bottom: 22px; }
+
+    .hero-scene {
+      position: absolute;
+      right: 0; top: 0; bottom: 0; width: 55%;
+      z-index: 1; pointer-events: none;
+      display: flex; align-items: center; justify-content: flex-end;
+      overflow: hidden;
+    }
+    .hero-scene svg { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.9; }
+
+    .hero-stage-tag {
+      position: absolute; right: 22px; top: 18px; z-index: 4;
+      background: rgba(7, 22, 36, 0.92);
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      color: var(--accent); padding: 6px 14px; border-radius: 20px;
+      font-size: 10px; font-weight: 800; letter-spacing: 1px;
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    .hero-index {
+      position: absolute; right: 24px; bottom: 18px; z-index: 4;
+      font-size: 20px; font-weight: 700; color: var(--white);
+      background: rgba(7, 22, 36, 0.85); padding: 4px 12px; border-radius: 10px; border: var(--glass-border);
+    }
+    .hero-index span { font-size: 12px; color: var(--muted); }
+
+    .btn {
+      border: 0; border-radius: 14px; padding: 12px 18px;
+      font-weight: 800; font-size: 11px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer; text-transform: uppercase; letter-spacing: 0.7px;
+      white-space: nowrap; position: relative;
+    }
+    .btn:hover { transform: translateY(-3px) scale(1.02); filter: brightness(1.12); }
+    .btn:active { transform: translateY(2px) scale(0.97); }
+
+    .btn-light {
+      background: linear-gradient(180deg, #34d399 0%, #10b981 50%, #059669 100%);
+      color: #041019;
+      box-shadow: 0 5px 0 #064e3b, 0 10px 25px var(--accent-glow);
+    }
+    .btn-light:active { box-shadow: 0 2px 0 #064e3b; }
+
+    .btn-primary {
+      background: linear-gradient(180deg, #22d3ee 0%, #06b6d4 50%, #0284c7 100%);
+      color: #041019;
+      box-shadow: 0 5px 0 #0c4a6e, 0 10px 25px var(--cyan-glow);
+    }
+    .btn-primary:active { box-shadow: 0 2px 0 #0c4a6e; }
+
+    .btn-outline {
+      background: rgba(17, 39, 58, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: var(--white);
+      box-shadow: 0 4px 0 rgba(0,0,0,0.5);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+    .btn.full { width: 100%; }
+
+    .process-btn-group {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+    }
+
+    .section-heading { display: flex; justify-content: space-between; align-items: flex-end; margin: 30px 0 16px; gap: 10px; flex-wrap: wrap; }
+    .section-heading h2 { font-size: 22px; margin: 4px 0 0; color: var(--white); }
+    .updated-label { font-size: 11px; color: var(--muted); }
+
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .stat-card, .panel {
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      border: var(--glass-border);
+      border-radius: 18px;
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+    .hud-card:hover { transform: translateY(-4px); border-color: rgba(16, 185, 129, 0.45); }
+    .stat-card { padding: 20px; }
+    .stat-top { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; }
+
+    .stat-icon { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; font-size: 20px; }
+    .green { background: rgba(16, 185, 129, 0.2); }
+    .orange { background: rgba(245, 158, 11, 0.2); }
+    .blue { background: rgba(6, 182, 212, 0.2); }
+    .purple { background: rgba(168, 85, 247, 0.2); }
+
+    .stat-card > strong { display: block; font-size: 28px; margin: 10px 0 4px; color: var(--white); }
+    .stat-card > strong small { font-size: 11px; color: var(--muted); font-family: 'DM Sans', sans-serif; }
+    .stat-foot { font-size: 11px; color: var(--muted); }
+    .stat-foot.positive { color: var(--accent); font-weight: 700; }
+
+    .dashboard-columns { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 18px; margin-top: 18px; }
+    .panel { padding: 24px; }
+    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .panel h3 { font-size: 18px; margin: 4px 0 0; color: var(--white); }
+
+    .status-pill {
+      background: rgba(16, 185, 129, 0.22);
+      color: var(--accent);
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      padding: 5px 12px; border-radius: 20px; font-size: 9px; font-weight: 800; letter-spacing: 0.8px;
+    }
+
+    .muted { color: var(--muted); font-size: 13px; line-height: 1.6; margin: 14px 0 18px; }
+    .progress-label { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+    .progress-label strong { color: var(--accent); }
+
+    .progress-track { height: 11px; border-radius: 10px; background: rgba(4, 16, 25, 0.9); overflow: hidden; border: var(--glass-border); }
+    .progress-track > span { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--cyan)); border-radius: 10px; transition: width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 0 15px var(--accent-glow); }
+
+    .mission-panel-buttons { display: flex; align-items: center; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+    .text-button { border: 0; background: none; color: var(--cyan); font-weight: 700; font-size: 12px; cursor: pointer; }
+    .text-button:hover { text-decoration: underline; }
+
+    /* MATERIAL BADGES */
+    .mat-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 10px; font-weight: 700; font-size: 11px;
+      border: 1px solid transparent; white-space: nowrap;
+    }
+    .mat-raw { background: rgba(16, 185, 129, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.45); }
+    .mat-fiber { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border-color: rgba(245, 158, 11, 0.45); }
+    .mat-protein { background: rgba(244, 63, 94, 0.2); color: #fb7185; border-color: rgba(244, 63, 94, 0.45); }
+    .mat-carb { background: rgba(234, 179, 8, 0.2); color: #fde047; border-color: rgba(234, 179, 8, 0.45); }
+    .mat-omega { background: rgba(6, 182, 212, 0.2); color: #22d3ee; border-color: rgba(6, 182, 212, 0.45); }
+    .mat-med { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-color: rgba(59, 130, 246, 0.45); }
+    .mat-dash { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border-color: rgba(139, 92, 246, 0.45); }
+    .mat-deficit { background: rgba(20, 184, 166, 0.2); color: #2dd4bf; border-color: rgba(20, 184, 166, 0.45); }
+    .mat-microbiota { background: rgba(168, 85, 247, 0.22); color: #d8b4fe; border-color: rgba(168, 85, 247, 0.5); }
+    .mat-cbt { background: rgba(236, 72, 153, 0.22); color: #f472b6; border-color: rgba(236, 72, 153, 0.5); }
+    .mat-remission { background: rgba(34, 197, 94, 0.25); color: #86efac; border-color: #22c55e; }
+    .mat-longevity { background: linear-gradient(135deg, #071624, #11273a); color: var(--accent); border-color: var(--accent); }
+
+    .stock-list { display: grid; gap: 10px; margin-top: 16px; max-height: 360px; overflow-y: auto; padding-right: 4px; }
+    .stock-row { display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 12px; background: rgba(7, 22, 36, 0.75); padding: 10px 14px; border-radius: 14px; border: var(--glass-border); transition: transform 0.2s; }
+    .stock-row:hover { transform: translateX(4px); border-color: rgba(255,255,255,0.2); }
+    .material-icon { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; font-size: 20px; background: rgba(255,255,255,0.05); }
+    .stock-sub { display: block; color: var(--muted); font-size: 10px; margin-top: 2px; }
+    .stock-qty { font-size: 15px; font-weight: 800; color: var(--white); font-family: 'Chakra Petch', sans-serif; }
+
+    /* CLINICAL EVIDENCE GUIDE CARDS */
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .evidence-card {
+      background: rgba(11, 26, 40, 0.78);
+      border: 1px solid rgba(6, 182, 212, 0.25);
+      border-radius: 16px;
+      padding: 16px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .evidence-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+    .evidence-card h4 { margin: 8px 0 6px; font-size: 14px; color: var(--white); font-family: 'Chakra Petch', sans-serif; }
+    .evidence-card p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .evidence-tag { font-size: 10px; font-weight: 800; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.8px; }
+
+    .lower-heading { margin-top: 34px; }
+    .chain-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; overflow-x: auto; padding-bottom: 6px; }
+    .chain-step { background: var(--surface); border: var(--glass-border); border-radius: 16px; padding: 14px; min-height: 100px; min-width: 145px; transition: transform 0.2s; }
+    .chain-step:hover { transform: translateY(-3px); }
+    .chain-step .step-no { font-size: 10px; color: var(--muted); font-weight: 700; }
+    .chain-step strong { display: block; font-size: 12px; margin-top: 6px; color: var(--white); }
+    .chain-step.done { border-color: rgba(16, 185, 129, 0.6); background: rgba(16, 185, 129, 0.12); }
+    .chain-step.done .step-no { color: var(--accent); }
+    .chain-step.locked { opacity: 0.45; }
+
+    /* MISSIONS / CLINICAL CASES */
+    .mission-summary {
+      background: linear-gradient(135deg, rgba(11, 26, 40, 0.92), rgba(17, 39, 58, 0.92));
+      border-radius: 18px; padding: 22px 28px;
+      display: flex; align-items: center; gap: 24px; margin-bottom: 20px;
+      border: var(--glass-border); box-shadow: var(--shadow); flex-wrap: wrap;
+    }
+    .mission-summary > div:first-child strong { display: block; font-size: 28px; color: var(--accent); font-family: 'Chakra Petch', sans-serif; }
+    .mission-summary > div:first-child span { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+    .wide-progress { flex: 1; min-width: 220px; }
+    .wide-progress small { display: block; color: var(--muted); font-size: 11px; margin-top: 8px; }
+    .summary-medal { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; background: rgba(16, 185, 129, 0.2); font-size: 28px; border: 1px solid rgba(16, 185, 129, 0.5); }
+
+    .mission-list { display: grid; gap: 14px; }
+    .mission-card {
+      display: grid; grid-template-columns: 112px 50px minmax(0,1fr) auto; align-items: center; gap: 16px;
+      padding: 16px 18px; background: var(--surface); border: var(--glass-border); border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35); transition: transform 0.2s, border-color 0.2s;
+    }
+    .mission-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.2); }
+    .mission-art {
+      width: 112px; height: 82px; border-radius: 12px;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      box-shadow: 0 5px 18px rgba(0,0,0,.35);
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      background: #071624;
+    }
+    .mission-art svg { width: 100%; height: 100%; display: block; }
+    .mission-card.locked .mission-art { filter: grayscale(.75) brightness(.65); }
+    .mission-card.completed .mission-art { border-color: rgba(16, 185, 129, .75); box-shadow: 0 0 18px rgba(16, 185, 129, .2); }
+    .mission-card.locked { opacity: 0.55; }
+    .mission-number {
+      width: 50px; height: 50px; border-radius: 14px; background: rgba(7, 22, 36, 0.85);
+      display: grid; place-items: center; font-size: 18px; font-weight: 800; color: var(--muted); border: var(--glass-border);
+      font-family: 'Chakra Petch', sans-serif;
+    }
+    .mission-card.unlocked .mission-number { background: rgba(16, 185, 129, 0.22); color: var(--accent); border-color: rgba(16, 185, 129, 0.5); }
+    .mission-card.completed .mission-number { background: var(--accent); color: #041019; }
+    .mission-info h3 { font-size: 16px; margin: 0 0 5px; color: var(--white); }
+    .mission-info p { color: var(--muted); font-size: 12px; margin: 0; line-height: 1.5; }
+    .mission-reward { font-size: 12px; color: var(--ink); margin-top: 8px; }
+    .mission-action { text-align: right; min-width: 155px; }
+    .mission-action small { display: block; color: var(--muted); font-size: 10px; margin-bottom: 8px; font-weight: 700; }
+
+    /* PRODUCTION / CLINICAL PROTOCOLS */
+    .production-layout { display: grid; grid-template-columns: 1fr 310px; gap: 20px; }
+    .process-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .process-card { background: var(--surface); border: var(--glass-border); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; box-shadow: 0 15px 35px rgba(0,0,0,0.35); transition: transform 0.2s; }
+    .process-card:hover { transform: translateY(-3px); border-color: rgba(6, 182, 212, 0.4); }
+    .final-process-card { border: 2px solid var(--accent); background: linear-gradient(135deg, rgba(16,185,129,0.14), rgba(11,26,40,0.94)); }
+    .process-top { display: flex; justify-content: space-between; align-items: center; }
+    .process-icon { width: 46px; height: 46px; border-radius: 14px; background: rgba(16, 185, 129, 0.2); display: grid; place-items: center; font-size: 24px; }
+    .process-card h3 { font-size: 16px; margin: 14px 0 6px; color: var(--white); }
+    .process-card p { font-size: 12px; color: var(--muted); line-height: 1.55; flex: 1; margin: 0 0 14px; }
+    .recipe { background: rgba(7, 22, 36, 0.85); border-radius: 14px; padding: 12px; margin-bottom: 16px; font-size: 12px; color: var(--muted); line-height: 1.85; border: var(--glass-border); }
+    .recipe strong { color: var(--white); }
+
+    .factory-visual {
+      height: 125px; border-radius: 16px;
+      background: linear-gradient(135deg, rgba(7,22,36,0.95), rgba(17,39,58,0.85));
+      display: grid; place-items: center; font-size: 38px; margin: 16px 0;
+      border: 1px solid rgba(6, 182, 212, 0.35);
+    }
+    .crusher-anim { animation: floatSticker 2s ease-in-out infinite; letter-spacing: 6px; }
+    .capacity-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin: 12px 0; }
+    .capacity-row strong { color: var(--white); }
+    .aside-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 16px 0; }
+    .small-note { font-size: 11px; line-height: 1.55; color: var(--muted); margin: 16px 0; }
+
+    /* MARKET / CONSULTATION & PLANS */
+    .market-banner {
+      background: linear-gradient(135deg, rgba(16,185,129,0.18), rgba(11,26,40,0.92));
+      border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 18px; padding: 24px 28px;
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 16px; flex-wrap: wrap;
+    }
+    .market-banner h2 { font-size: 24px; margin: 6px 0; color: var(--white); }
+    .market-banner p { font-size: 12px; color: var(--muted); margin: 0; }
+    .market-symbol { font-size: 46px; }
+
+    .market-grid, .upgrade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .market-card, .upgrade-card { background: var(--surface); border: var(--glass-border); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; box-shadow: 0 15px 35px rgba(0,0,0,0.35); transition: transform 0.2s; }
+    .market-card:hover, .upgrade-card:hover { transform: translateY(-3px); }
+    .chip-market-card { border: 2px solid var(--accent); }
+    .market-card h3, .upgrade-card h3 { font-size: 16px; margin: 14px 0 6px; color: var(--white); }
+    .market-card p, .upgrade-card p { font-size: 12px; line-height: 1.55; color: var(--muted); flex: 1; }
+    .market-price { font-size: 22px; font-weight: 800; margin: 12px 0; color: var(--accent); }
+    .market-price small { font-size: 11px; color: var(--muted); font-family: 'DM Sans', sans-serif; }
+    .sell-row { display: flex; gap: 10px; margin-top: auto; }
+    .sell-row input { width: 78px; background: rgba(4,16,25,0.85); border: var(--glass-border); border-radius: 12px; padding: 10px; font-size: 13px; font-weight: 700; color: var(--white); text-align: center; }
+    .sell-row .btn { flex: 1; padding: 10px; }
+
+    .upgrade-card { position: relative; }
+    .upgrade-card .upgrade-icon { height: 50px; width: 50px; border-radius: 14px; background: rgba(7,22,36,0.85); display: grid; place-items: center; font-size: 26px; border: var(--glass-border); }
+    .upgrade-card .owned { position: absolute; right: 18px; top: 18px; background: rgba(16,185,129,0.22); color: var(--accent); border: 1px solid rgba(16,185,129,0.45); border-radius: 20px; padding: 4px 12px; font-size: 10px; font-weight: 800; }
+    .upgrade-cost { font-size: 20px; font-weight: 800; margin: 14px 0; color: var(--white); font-family: 'Chakra Petch', sans-serif; }
+    .upgrade-cost small { font-size: 11px; color: var(--muted); font-family: 'DM Sans', sans-serif; }
+
+    .audio-bar {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      padding: 12px 18px; margin: 16px 0 0; background: var(--surface); border: var(--glass-border); border-radius: 16px; flex-wrap: wrap;
+    }
+    .audio-copy { display: flex; align-items: center; gap: 12px; }
+    .audio-symbol { width: 38px; height: 38px; display: grid; place-items: center; background: rgba(6,182,212,0.2); border-radius: 12px; font-size: 20px; }
+    .audio-copy strong { display: block; font-size: 12px; color: var(--white); }
+    .audio-copy small { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .audio-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .audio-btn { border: var(--glass-border); background: rgba(7, 22, 36, 0.8); color: var(--white); border-radius: 10px; padding: 8px 14px; font-size: 11px; font-weight: 700; transition: 0.2s; }
+    .audio-btn:hover { background: rgba(255,255,255,0.1); }
+    .audio-main { background: rgba(16,185,129,0.22); border-color: rgba(16,185,129,0.45); color: var(--accent); }
+
+    .footer { border-top: 1px solid rgba(255,255,255,0.08); padding: 22px 0 28px; display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; gap: 10px; flex-wrap: wrap; }
+
+    .toast {
+      position: fixed; right: 24px; bottom: 24px; background: rgba(11, 26, 40, 0.95); color: var(--white);
+      padding: 14px 22px; border-radius: 16px; font-size: 13px; z-index: 1000;
+      opacity: 0; transform: translateY(15px); transition: all 0.3s ease; pointer-events: none;
+      border: 1px solid rgba(16, 185, 129, 0.6); font-weight: 700; max-width: 90%;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 25px var(--accent-glow);
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* CINEMATIC PROCESS OVERLAY */
+    .process-overlay { position: fixed; inset: 0; z-index: 150; display: none; place-items: center; padding: 18px; background: rgba(2, 10, 18, 0.88); backdrop-filter: blur(12px); }
+    .process-overlay.show { display: grid; }
+    .process-window { position: relative; width: min(620px, 100%); padding: 24px; overflow: hidden; text-align: center; border: 1px solid rgba(16, 185, 129, 0.55); border-radius: 24px; background: linear-gradient(145deg, rgba(11, 30, 46, 0.98), rgba(4, 16, 25, 0.98)); box-shadow: 0 25px 90px rgba(0,0,0,.7), 0 0 45px rgba(16, 185, 129, .2); animation: processPop .35s ease both; }
+    .process-window h2 { margin: 14px 0 8px; color: var(--white); font-size: clamp(20px, 4vw, 28px); }
+    .process-window p { color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .process-scene { width: 100%; height: clamp(180px, 32vw, 250px); margin: 14px 0; border-radius: 16px; border: 1px solid rgba(16, 185, 129, .35); background: #061523; overflow: hidden; box-shadow: inset 0 0 35px rgba(0,0,0,.25), 0 10px 30px rgba(0,0,0,.25); animation: scenePulse 1.5s ease-in-out infinite alternate; }
+    .process-scene svg { width: 100%; height: 100%; display: block; }
+    .process-machine-icon { position: absolute; top: 58px; right: 34px; display: grid; place-items: center; width: 54px; height: 54px; border-radius: 16px; background: rgba(4, 18, 32, .88); border: 1px solid rgba(16, 185, 129, .5); font-size: 28px; box-shadow: 0 0 25px rgba(16, 185, 129, .2); }
+    .process-consumption { display: grid; gap: 8px; margin: 16px 0; padding: 13px; border-radius: 12px; background: rgba(255,255,255,.045); color: var(--muted); font-size: 12px; }
+    .process-consumption strong { color: var(--white); }
+    .process-progress { height: 9px; overflow: hidden; border-radius: 20px; background: rgba(255,255,255,.1); }
+    .process-progress span { display: block; width: 0; height: 100%; border-radius: 20px; background: linear-gradient(90deg, #10b981, #06b6d4); box-shadow: 0 0 15px rgba(16, 185, 129, .55); animation: processFill 3.2s linear forwards; }
+    .process-window small { display: block; margin-top: 10px; color: var(--muted); }
+
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(4, 16, 25, 0.85); display: none; place-items: center; z-index: 110; padding: 16px; backdrop-filter: blur(10px); }
+    .modal-backdrop.show { display: grid; }
+    .modal { width: min(500px, 100%); background: rgba(11, 26, 40, 0.96); border: 2px solid rgba(16, 185, 129, 0.5); border-radius: 22px; padding: 32px; position: relative; text-align: center; box-shadow: 0 30px 90px rgba(0,0,0,0.85), 0 0 40px var(--accent-glow); max-height: 90vh; overflow-y: auto; }
+    .modal-close { position: absolute; right: 18px; top: 16px; border: 0; background: rgba(255,255,255,0.08); width: 34px; height: 34px; border-radius: 50%; font-size: 20px; color: var(--muted); display: grid; place-items: center; }
+    .modal-symbol { width: 72px; height: 72px; border-radius: 22px; background: rgba(16,185,129,0.22); display: grid; place-items: center; font-size: 38px; margin: 0 auto 18px; border: 1px solid rgba(16,185,129,0.5); box-shadow: 0 0 30px var(--accent-glow); }
+    .modal h2 { font-size: 24px; margin: 8px 0; color: var(--white); }
+    .modal p { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 0 0 24px; }
+
+    .reset-link { display: block; width: 100%; text-align: left; background: rgba(255,255,255,0.03); border: var(--glass-border); border-radius: 12px; padding: 10px 14px; color: var(--muted); font-size: 12px; font-weight: 600; transition: 0.2s; }
+    .reset-link:hover { background: rgba(244, 63, 94, 0.15); border-color: rgba(244, 63, 94, 0.4); color: #fda4af; }
+    .welcome-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .produced-count { font-weight: 800; color: var(--accent); }
+
+    :focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+
+    @media(max-width: 1200px) {
+      .dashboard-columns, .production-layout { grid-template-columns: 1fr; }
+      .market-grid, .upgrade-grid, .evidence-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media(max-width: 900px) {
+      .sidebar { transform: translateX(-100%); width: 280px; }
+      .sidebar.open { transform: translateX(0); }
+      .main-area { margin-left: 0; padding: 0 16px; }
+      .mobile-menu { display: flex; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .market-grid, .upgrade-grid, .process-grid, .evidence-grid { grid-template-columns: 1fr; }
+      .hero-scene { opacity: 0.45; width: 100%; }
+      .mission-card { grid-template-columns: 86px 44px minmax(0,1fr); gap: 10px; padding: 13px; }
+      .mission-art { width: 86px; height: 68px; }
+      .mission-action { grid-column: 1 / -1; text-align: left; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px; }
+    }
+
+    @media(max-width: 480px) {
+      .stat-grid { grid-template-columns: 1fr; }
+      .game-chip-btn { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="fxLayer" class="fx-layer" aria-hidden="true"></div>
+
+  <div class="app-shell">
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#inicio" id="brandHome" aria-label="NutriClínica Tycoon início">
+        <span class="brand-mark">🥗</span>
+        <span><strong>NUTRICLÍNICA</strong><small>OBESITY & METABOLIC TYCOON</small></span>
+      </a>
+
+      <div class="company-card game-badge-card">
+        <div class="company-icon sticker-float">🩺</div>
+        <div>
+          <strong id="companyName">Dr(a). Nutri Especialista</strong>
+          <small>Nível <span id="companyLevel" class="lvl-pill">1</span> · <span id="cloudSyncStatus">💾 Save Local Ativo</span></small>
+        </div>
+      </div>
+
+      <nav class="main-nav" aria-label="Navegação principal">
+        <button class="nav-link active" type="button" data-view="dashboard"><span class="nav-sticker">🏥</span> Consultório Central</button>
+        <button class="nav-link" type="button" data-view="missions"><span class="nav-sticker">📋</span> Casos Clínicos <b class="nav-count" id="missionCount">1</b></button>
+        <button class="nav-link" type="button" data-view="production"><span class="nav-sticker">🧪</span> Cozinha & Protocolos</button>
+        <button class="nav-link" type="button" data-view="market"><span class="nav-sticker">💼</span> Consultoria & Planos</button>
+        <button class="nav-link" type="button" data-view="upgrades"><span class="nav-sticker">🔬</span> Equipamentos Clínicos</button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="help-box mascot-tip">
+          <span class="mascot-avatar">🧬</span>
+          <div>
+            <strong>Diretrizes ABESO / OMS</strong>
+            <p id="mascotTipText">Tratamento da obesidade exige déficit calórico individualizado, preservação de massa magra e suporte comportamental.</p>
+          </div>
+        </div>
+        <button class="reset-link" id="resetGame" type="button">🔄 Reiniciar Carreira Clínica</button>
+        <small class="version">NUTRICLÍNICA TYCOON v1.0 · EVIDENCE-BASED</small>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" type="button" aria-label="Abrir menu">☰</button>
+        <div class="breadcrumb"><span>ALA CLÍNICA</span><i>▶</i><strong id="pageTitle">Consultório Central</strong></div>
+        <div class="top-actions">
+          <button class="game-chip-btn" id="forceSyncBtn" type="button" title="Salvar progresso imediatamente">💾 Salvar Agora</button>
+          <button class="game-chip-btn" id="sfxToggleBtn" type="button" title="Ativar/Desativar Efeitos Sonoros">🔊 SFX: ON</button>
+          <button class="game-chip-btn" id="newGame" type="button" title="Começar uma nova carreira">✨ Novo Jogo</button>
+          <div class="top-stat coin-hud" id="coinHud">
+            <span class="coin sticker-spin">🪙</span>
+            <span id="topCoins">500.000</span>
+            <small>CRÉDITOS CRN</small>
+          </div>
+          <div class="user-avatar" title="Nutricionista Especialista">⚕️</div>
+        </div>
+      </header>
+
+      <section class="audio-bar" aria-label="Preceptor Clínico por Voz">
+        <div class="audio-copy">
+          <span class="audio-symbol sticker-pulse">🎙️</span>
+          <div>
+            <strong>Preceptor Clínico & Orientação por Voz</strong>
+            <small id="audioStatus">Clique em "Ouvir Caso Clínico" para narração das condutas nutricionais.</small>
+          </div>
+        </div>
+        <div class="audio-actions">
+          <button class="audio-btn audio-main" id="audioEnable" type="button">▶ Testar Voz</button>
+          <button class="audio-btn" id="audioRepeat" type="button">↻ Repetir</button>
+          <button class="audio-btn" id="audioToggle" type="button" aria-pressed="true">Voz Ligada</button>
+        </div>
+      </section>
+
+      <!-- VIEW: DASHBOARD (CONSULTÓRIO CENTRAL) -->
+      <section class="view active" id="view-dashboard">
+        <div class="welcome-row">
+          <div>
+            <div class="eyebrow"><span class="live-dot"></span> ATENDIMENTO ATIVO · SAÚDE METABÓLICA & OBESIDADE</div>
+            <h1>Consultório <span>Nutricional</span></h1>
+            <p>Transforme alimentos in natura e nutrientes bioativos em protocolos dietoterápicos baseados em evidências.</p>
+          </div>
+          <div class="welcome-actions">
+            <div class="date-chip">🛡️ <span id="firebaseUidLabel">Prontuário Local Protegido</span></div>
+            <button class="btn btn-outline" id="mineBonusBtn" type="button">🥦 Abastecer +1.000 In Natura</button>
+          </div>
+        </div>
+
+        <div class="hero-banner">
+          <div class="hero-copy">
+            <span class="hero-kicker" id="heroKicker">FASE 1 · NUTRIÇÃO CLÍNICA & REEDUCAÇÃO (1-10)</span>
+            <h2 id="heroTitle">Dietoterapia Baseada<br><em>em Evidências!</em></h2>
+            <p id="heroDesc">Conclua os 10 casos clínicos iniciais de reeducação alimentar para alcançar o Nível 2 e desbloquear protocolos avançados de remissão metabólica!</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button class="btn btn-light" type="button" data-goto="missions">📋 Ver Casos Clínicos <span>▶</span></button>
+              <button class="btn btn-primary" type="button" data-goto="production">🧪 Preparar Protocolos</button>
+            </div>
+          </div>
+          <div class="hero-scene" id="heroScene" aria-hidden="true"></div>
+          <div class="hero-index" id="heroIndex">01 <span>/ 20</span></div>
+        </div>
+
+        <div class="section-heading">
+          <div><span class="eyebrow">INDICADORES DA CLÍNICA</span><h2>Painel do Especialista</h2></div>
+          <span class="updated-label"><span class="live-dot" style="background:#10b981"></span> Prontuário Salvo · 25k Alimentos In Natura</span>
+        </div>
+
+        <div class="stat-grid">
+          <article class="stat-card hud-card">
+            <div class="stat-top"><span>Fundo Clínico / CR</span><span class="stat-icon green sticker-float">💰</span></div>
+            <strong id="statCoins">500.000 <small>CR</small></strong>
+            <div class="stat-foot positive">Orçamento p/ protocolos e clínica</div>
+          </article>
+          <article class="stat-card hud-card">
+            <div class="stat-top"><span>Alimentos In Natura</span><span class="stat-icon orange sticker-float">🥦</span></div>
+            <strong id="statOre">25.000 <small>un.</small></strong>
+            <div class="stat-foot">Base hortifruti e grãos integrais</div>
+          </article>
+          <article class="stat-card hud-card">
+            <div class="stat-top"><span>Protocolos Gerados</span><span class="stat-icon blue sticker-float">📋</span></div>
+            <strong id="statProduction">0 <small>un.</small></strong>
+            <div class="stat-foot">Planos e bioativos formulados</div>
+          </article>
+          <article class="stat-card hud-card">
+            <div class="stat-top"><span>Casos Resolvidos</span><span class="stat-icon purple sticker-float">🏆</span></div>
+            <strong id="statMissions">0 <small>/ 20</small></strong>
+            <div class="stat-foot">Fases 1 & 2</div>
+          </article>
+        </div>
+
+        <div class="dashboard-columns">
+          <article class="panel mission-panel">
+            <div class="panel-head">
+              <div>
+                <span class="eyebrow" id="nextMissionEyebrow">CASO CLÍNICO ATUAL</span>
+                <h3 id="nextMissionTitle">Caso 01 · Triagem Nutricional & Base In Natura</h3>
+              </div>
+              <span class="status-pill" id="nextMissionBadge">EM ATENDIMENTO</span>
+            </div>
+            <p id="nextMissionDesc" class="muted">Garanta uma despensa rica em alimentos in natura e minimamente processados conforme o Guia Alimentar.</p>
+            <div class="progress-label"><span>Meta terapêutica do caso</span><strong id="missionProgressText">0%</strong></div>
+            <div class="progress-track"><span id="missionProgressBar" style="width:0%"></span></div>
+            <div class="mission-panel-buttons">
+              <button class="btn btn-light" id="nextMissionActionBtn" type="button" data-goto="missions">Concluir / Ver Caso <span>→</span></button>
+              <button class="audio-btn" type="button" id="speakMissionBtn">🔊 Ouvir Caso Clínico</button>
+            </div>
+          </article>
+
+          <article class="panel stock-panel">
+            <div class="panel-head">
+              <div><span class="eyebrow">DESPENSA & PROTOCOLOS</span><h3>Acervo Nutricional</h3></div>
+              <button class="text-button" type="button" data-goto="market">Atender Pacientes →</button>
+            </div>
+            <div id="stockList" class="stock-list"></div>
+          </article>
+        </div>
+
+        <div class="section-heading lower-heading">
+          <div><span class="eyebrow">EVIDÊNCIAS CIENTÍFICAS NA OBESIDADE</span><h2>Pilares Dietoterápicos (ABESO / OMS)</h2></div>
+          <span class="updated-label">Referência rápida para prescrição clínica</span>
+        </div>
+        <div class="evidence-grid">
+          <div class="evidence-card">
+            <span class="evidence-tag">1. Balanço Energético</span>
+            <h4>Déficit Calórico Sustentável</h4>
+            <p>Redução de 500 a 750 kcal/dia promove perda de 0,5 a 1,0 kg/semana sem disparar adaptação metabólica severa ou perda muscular.</p>
+          </div>
+          <div class="evidence-card">
+            <span class="evidence-tag">2. Saciedade & Massa Magra</span>
+            <h4>Alta Densidade Proteica & Fibras</h4>
+            <p>1,2 a 1,6 g/kg de proteína + 25–35 g/dia de fibras solúveis estimulam GLP-1/PYY, reduzem grelina e preservam taxa metabólica basal.</p>
+          </div>
+          <div class="evidence-card">
+            <span class="evidence-tag">3. Padrões Alimentares</span>
+            <h4>Dieta Mediterrânea & DASH</h4>
+            <p>Reduzem inflamação crônica de baixo grau, gordura visceral, esteatose hepática e risco cardiometabólico com alta adesão a longo prazo.</p>
+          </div>
+        </div>
+
+        <div class="section-heading lower-heading">
+          <div><span class="eyebrow">LINHA DE CUIDADO INTEGRAL</span><h2>Jornada Terapêutica (Fase 1)</h2></div>
+          <button class="text-button" type="button" data-goto="missions">Ver todos os 20 casos →</button>
+        </div>
+        <div class="chain-strip" id="chainStrip"></div>
+      </section>
+
+      <!-- VIEW: MISSIONS (CASOS CLÍNICOS) -->
+      <section class="view" id="view-missions">
+        <div class="page-intro">
+          <span class="eyebrow">PRONTUÁRIOS & DIRETRIZES · 20 CASOS CLÍNICOS</span>
+          <h1>Quadro de <span>Casos Clínicos</span></h1>
+          <p>Formule os nutrientes e protocolos exigidos para cada perfil metabólico e conquiste honorários e reconhecimento científico!</p>
+        </div>
+        <div class="mission-summary">
+          <div><strong id="missionSummaryCount">0/20</strong><span>casos resolvidos</span></div>
+          <div class="wide-progress">
+            <div class="progress-track"><span id="allMissionProgress" style="width:0%"></span></div>
+            <small id="allMissionPercent">0% da especialização</small>
+          </div>
+          <div class="summary-medal sticker-float">🏅</div>
+        </div>
+        <div class="mission-list" id="missionList"></div>
+      </section>
+
+      <!-- VIEW: PRODUCTION (COZINHA EXPERIMENTAL & PROTOCOLOS) -->
+      <section class="view" id="view-production">
+        <div class="page-intro">
+          <span class="eyebrow">LABORATÓRIO DIETOTERÁPICO</span>
+          <h1>Cozinha Experimental & <span>Protocolos</span></h1>
+          <p>Fraccione alimentos in natura em nutrientes-chave e combine-os para elaborar condutas clínicas completas.</p>
+        </div>
+        <div class="production-layout">
+          <div class="production-main">
+            <div class="section-heading compact">
+              <div><span class="eyebrow">CONDUTAS DISPONÍVEIS</span><h2>Protocolos Nutricionais</h2></div>
+              <button class="btn btn-outline" id="factoryMineBtn" type="button">🥦 +1.000 Alimentos In Natura</button>
+            </div>
+            <div class="process-grid" id="processGrid"></div>
+          </div>
+          <aside class="panel production-aside">
+            <span class="eyebrow">INDICADORES DA CLÍNICA</span>
+            <h3>Eficiência Terapêutica</h3>
+            <div class="factory-visual">
+              <div class="crusher-anim">🥗🧬🩺</div>
+            </div>
+            <div class="capacity-row"><span>Precisão diagnóstica</span><strong id="efficiencyValue">100%</strong></div>
+            <div class="progress-track"><span id="efficiencyBar" style="width:100%"></span></div>
+            <div class="aside-divider"></div>
+            <div class="capacity-row"><span>Protocolos formulados</span><strong id="productionTotal">0 un.</strong></div>
+            <div class="capacity-row"><span>Tecnologias clínicas</span><strong id="equipmentTotal">1</strong></div>
+            <p class="small-note">Dica Clínica: Utilize o botão "Executar 5x" para preparar protocolos em lote para programas coletivos e casos complexos!</p>
+            <button class="btn btn-primary full" type="button" data-goto="upgrades">🔬 Adquirir Equipamentos</button>
+          </aside>
+        </div>
+      </section>
+
+      <!-- VIEW: MARKET (CONSULTORIA & PLANOS) -->
+      <section class="view" id="view-market">
+        <div class="page-intro">
+          <span class="eyebrow">ATENDIMENTO AMBULATORIAL & PROGRAMAS</span>
+          <h1>Consultoria & <span>Prescrições</span></h1>
+          <p>Disponibilize seus protocolos clínicos, suplementos bioativos e programas de acompanhamento para pacientes e convênios.</p>
+        </div>
+        <div class="market-banner">
+          <div>
+            <span class="eyebrow">DEMANDA POR SAÚDE METABÓLICA</span>
+            <h2>Converta protocolos em Créditos CRN!</h2>
+            <p>Programas completos de Remissão Metabólica e Vida Plena possuem altíssima valorização clínica.</p>
+          </div>
+          <div class="market-symbol sticker-float">📈</div>
+        </div>
+        <div class="market-grid" id="marketGrid"></div>
+      </section>
+
+      <!-- VIEW: UPGRADES (EQUIPAMENTOS CLÍNICOS) -->
+      <section class="view" id="view-upgrades">
+        <div class="page-intro">
+          <span class="eyebrow">INFRAESTRUTURA & DIAGNÓSTICO DE PRECISÃO</span>
+          <h1>Equipamentos <span>Clínicos</span></h1>
+          <p>Invista em bioimpedância, calorimetria indireta e telemonitoramento para reduzir custos operacionais dos protocolos.</p>
+        </div>
+        <div class="upgrade-grid" id="upgradeGrid"></div>
+      </section>
+
+      <footer class="footer">
+        <span>© 2026 NUTRICLÍNICA TYCOON · ESPECIALISTA EM OBESIDADE & SAÚDE METABÓLICA</span>
+        <span>Conteúdo educativo baseado em diretrizes científicas (ABESO, OMS, Guia Alimentar).</span>
+      </footer>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- JANELA CINEMATOGRÁFICA DE EXECUÇÃO DE PROTOCOLO -->
+  <div class="process-overlay" id="processOverlay" aria-live="polite" aria-modal="true" role="dialog" aria-hidden="true">
+    <div class="process-window">
+      <span class="eyebrow">FORMULAÇÃO DIETOTERÁPICA EM ANDAMENTO</span>
+      <div class="process-scene" id="processScene" role="img" aria-label="Ilustração do protocolo clínico"></div>
+      <div class="process-machine-icon" id="processMachineIcon">🧪</div>
+      <h2 id="processTitle">Formulando protocolo...</h2>
+      <p id="processDescription">Calculando biodisponibilidade e balanço energético. Aguarde a conclusão.</p>
+      <div class="process-consumption" id="processConsumption"></div>
+      <div class="process-progress"><span></span></div>
+      <small>Processando conduta nutricional · aguarde 3,2 segundos</small>
+    </div>
+  </div>
+
+  <!-- MODAL DE CONQUISTA -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" id="modalClose" type="button" aria-label="Fechar">×</button>
+      <div class="modal-symbol sticker-bounce" id="modalSymbol">🎉</div>
+      <span class="eyebrow" id="modalEyebrow">EVOLUÇÃO CLÍNICA</span>
+      <h2 id="modalTitle">Conduta Concluída</h2>
+      <p id="modalText"></p>
+      <button class="btn btn-light full" id="modalOk" type="button">Continuar Atendimento ▶</button>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. DEFINIÇÃO DE MATERIAIS / NUTRIENTES / PROTOCOLOS CLÍNICOS (12 ITENS)
+    // =========================================================================
+    const MATERIALS = {
+      raw_ingredients:    { name: "Alimentos In Natura", icon: "🥦", price: 1200, unit: "un.", color: "raw" },
+      fiber_complex:      { name: "Fibras Solúveis & Prebióticos", icon: "🌾", price: 45, unit: "un.", color: "fiber" },
+      lean_protein:       { name: "Proteína Magra Biodisponível", icon: "🍗", price: 80, unit: "un.", color: "protein" },
+      low_gi_carb:        { name: "Carboidrato Baixo IG", icon: "🍠", price: 130, unit: "un.", color: "carb" },
+      omega_lipid:        { name: "Ômega-3 & Polifenóis", icon: "🫒", price: 220, unit: "un.", color: "omega" },
+      mediterranean_plan: { name: "Protocolo Dieta Mediterrânea", icon: "🥗", price: 360, unit: "un.", color: "med" },
+      dash_protocol:      { name: "Protocolo DASH Metabólico", icon: "🫀", price: 540, unit: "un.", color: "dash" },
+      deficit_protocol:   { name: "Plano Déficit Sustentável", icon: "⚖️", price: 880, unit: "un.", color: "deficit" },
+      microbiota_therapy: { name: "Modulação Intestinal", icon: "🦠", price: 1650, unit: "un.", color: "microbiota" },
+      behavioral_cbt:     { name: "Terapia Comportamental (TCC)", icon: "🧠", price: 2800, unit: "un.", color: "cbt" },
+      metabolic_remission:{ name: "Protocolo Remissão Metabólica", icon: "🩺", price: 4600, unit: "un.", color: "remission" },
+      longevity_program:  { name: "Programa Vida Plena (Alta)", icon: "🌟", price: 10000, unit: "un.", color: "longevity" }
+    };
+
+    function matBadge(id) {
+      const m = MATERIALS[id];
+      if (!m) return "";
+      return `<span class="mat-badge mat-${m.color}">${m.icon} ${m.name}</span>`;
+    }
+
+    // =========================================================================
+    // 2. CASOS CLÍNICOS / MISSÕES (20 DESAFIOS BASEADOS EM EVIDÊNCIAS)
+    // =========================================================================
+    const MISSIONS = [
+      // FASE 1: NUTRIÇÃO CLÍNICA & REEDUCAÇÃO ALIMENTAR (1-10)
+      {
+        title: "Despensa In Natura (Guia Alimentar)",
+        sticker: "🥦",
+        desc: "Substitua ultraprocessados por alimentos in natura e minimamente processados para reduzir a densidade calórica espontânea.",
+        goal: "raw_ingredients",
+        target: 50,
+        reward: 1200,
+        stage: "Fase 1: Base Alimentar"
+      },
+      {
+        title: "Saciedade Gástrica & Fibras",
+        sticker: "🌾",
+        desc: "Formule fibras solúveis (aveia, psyllium, leguminosas) para retardar o esvaziamento gástrico e prolongar a saciedade.",
+        goal: "fiber_complex",
+        target: 20,
+        reward: 1500,
+        stage: "Fase 1: Saciedade"
+      },
+      {
+        title: "Proteção de Massa Magra",
+        sticker: "🍗",
+        desc: "Garanta aporte proteico (1,2–1,6 g/kg) para suprimir a grelina e preservar a taxa metabólica basal durante o emagrecimento.",
+        goal: "lean_protein",
+        target: 12,
+        reward: 1800,
+        stage: "Fase 1: Termogênese"
+      },
+      {
+        title: "Controle de Picos Insulínicos",
+        sticker: "🍠",
+        desc: "Selecione carboidratos complexos de baixo índice glicêmico para estabilizar a glicemia e reduzir a lipogênese.",
+        goal: "low_gi_carb",
+        target: 4,
+        reward: 2200,
+        stage: "Fase 1: Glicemia"
+      },
+      {
+        title: "Estabilidade Glicêmica Ampliada",
+        sticker: "📉",
+        desc: "Escale o estoque de carboidratos ricos em amido resistente para atender pacientes com resistência insulínica inicial.",
+        goal: "low_gi_carb",
+        target: 10,
+        reward: 2600,
+        stage: "Fase 1: Sensibilidade"
+      },
+      {
+        title: "Combate à Inflamação Adiposa",
+        sticker: "🫒",
+        desc: "Extraia ácidos graxos monoinsaturados, ômega-3 e polifenóis para reduzir citocinas inflamatórias (TNF-α e IL-6).",
+        goal: "omega_lipid",
+        target: 8,
+        reward: 3200,
+        stage: "Fase 1: Anti-inflamatório"
+      },
+      {
+        title: "Padrão-Ouro: Dieta Mediterrânea",
+        sticker: "🥗",
+        desc: "Combine proteínas magras e lipídios cardioprotetores no protocolo Mediterrâneo, reconhecido pela alta adesão e proteção vascular.",
+        goal: "mediterranean_plan",
+        target: 10,
+        reward: 3800,
+        stage: "Fase 1: Cardioproteção"
+      },
+      {
+        title: "Obesidade & Hipertensão (DASH)",
+        sticker: "🫀",
+        desc: "Formule o protocolo DASH rico em potássio, magnésio e fibras para pacientes obesos com hipertensão arterial sistêmica.",
+        goal: "dash_protocol",
+        target: 8,
+        reward: 4500,
+        stage: "Fase 1: Controle Pressórico"
+      },
+      {
+        title: "Déficit Calórico Sustentável",
+        sticker: "⚖️",
+        desc: "Prescreva déficit moderado (500–750 kcal/dia) evitando dietas da moda restritivas que causam compulsão e reganho.",
+        goal: "deficit_protocol",
+        target: 5,
+        reward: 5500,
+        stage: "Fase 1: Balanço Energético"
+      },
+      {
+        title: "Eixo Intestino-Cérebro (Microbiota)",
+        sticker: "🦠",
+        desc: "Module a microbiota intestinal com prebióticos para aumentar ácidos graxos de cadeia curta e concluir a Fase 1!",
+        goal: "microbiota_therapy",
+        target: 3,
+        reward: 15000,
+        stage: "Fase 1: Título de Especialista"
+      },
+      // FASE 2: OBESIDADE COMPLEXA, COMORBIDADES & LONGEVIDADE (11-20)
+      {
+        title: "Manejo de Compulsão & Gatilhos",
+        sticker: "🧠",
+        desc: "Inicie a Fase 2 integrando Terapia Cognitivo-Comportamental Nutricional e Mindful Eating para comer emocional.",
+        goal: "behavioral_cbt",
+        target: 5,
+        reward: 20000,
+        stage: "Fase 2: Comportamento"
+      },
+      {
+        title: "Reversão de Esteatose Hepática",
+        sticker: "🩺",
+        desc: "Aplique o Protocolo de Remissão Metabólica para reduzir gordura visceral e hepática (DHGNA) em obesidade grau II.",
+        goal: "metabolic_remission",
+        target: 4,
+        reward: 25000,
+        stage: "Fase 2: Hepatoproteção"
+      },
+      {
+        title: "Remissão de Pré-Diabetes Tipo 2",
+        sticker: "💉",
+        desc: "Amplie os protocolos de remissão metabólica para restaurar a sensibilidade periférica à insulina e normalizar HbA1c.",
+        goal: "metabolic_remission",
+        target: 8,
+        reward: 35000,
+        stage: "Fase 2: Endocrinologia"
+      },
+      {
+        title: "Prevenção do Efeito Sanfona",
+        sticker: "🌟",
+        desc: "Estruture os primeiros Programas Vida Plena para sustentar a perda de peso após 12 meses de acompanhamento.",
+        goal: "longevity_program",
+        target: 2,
+        reward: 50000,
+        stage: "Fase 2: Manutenção"
+      },
+      {
+        title: "Ambulatório de Comportamento Alimentar",
+        sticker: "🧘",
+        desc: "Escale o suporte comportamental (TCC) para atender grupos de pacientes com histórico de dietas ioiô.",
+        goal: "behavioral_cbt",
+        target: 15,
+        reward: 75000,
+        stage: "Fase 2: Psicologia Nutricional"
+      },
+      {
+        title: "Centro de Síndrome Metabólica",
+        sticker: "🏥",
+        desc: "Consolide o tratamento integrado da síndrome metabólica (obesidade central, dislipidemia e hiperglicemia).",
+        goal: "metabolic_remission",
+        target: 14,
+        reward: 110000,
+        stage: "Fase 2: Alta Complexidade"
+      },
+      {
+        title: "Programa Municipal de Saúde Metabólica",
+        sticker: "🌍",
+        desc: "Forme 5 turmas completas de pacientes com alta clínica sustentada e autonomia alimentar.",
+        goal: "longevity_program",
+        target: 5,
+        reward: 160000,
+        stage: "Fase 2: Saúde Coletiva"
+      },
+      {
+        title: "Referência Nacional em Comportamento",
+        sticker: "📚",
+        desc: "Domine a abordagem não-punitiva e comportamental com 30 protocolos de TCC aplicados com sucesso.",
+        goal: "behavioral_cbt",
+        target: 30,
+        reward: 250000,
+        stage: "Fase 2: Excelência Clínica"
+      },
+      {
+        title: "Legado em Saúde & Longevidade",
+        sticker: "🏛️",
+        desc: "Alcance 10 Programas Vida Plena concluídos com manutenção comprovada de composição corporal.",
+        goal: "longevity_program",
+        target: 10,
+        reward: 400000,
+        stage: "Fase 2: Legado Científico"
+      },
+      {
+        title: "Instituto de Excelência em Obesidade",
+        sticker: "👑",
+        desc: "Coroe sua carreira transformando vidas com ciência, empatia e nutrição baseada em evidências!",
+        goal: "longevity_program",
+        target: 20,
+        reward: 1000000,
+        stage: "Fase 2: Autoridade Máxima"
+      }
+    ];
+
+    // =========================================================================
+    // 3. PROTOCOLOS CLÍNICOS / PRODUÇÃO (12 PROCESSOS ENCADEADOS)
+    // =========================================================================
+    const PROCESSES = [
+      { id: "extract_fiber", title: "Fracionamento de Fibras & Prebióticos", icon: "🌾", desc: "Seleciona grãos integrais, sementes e vegetais ricos em fibras solúveis para saciedade.", input: "raw_ingredients", qty: 10, output: "fiber_complex", out: 5, cost: 120, unlock: 0 },
+      { id: "extract_protein", title: "Seleção de Proteínas Magras", icon: "🍗", desc: "Prepara cortes magros, ovos e leguminosas de alto valor biológico para preservação muscular.", input: "fiber_complex", qty: 5, output: "lean_protein", out: 3, cost: 180, unlock: 1 },
+      { id: "select_carb", title: "Curadoria de Carboidratos Baixo IG", icon: "🍠", desc: "Identifica tubérculos e cereais integrais de absorção lenta para controle insulínico.", input: "lean_protein", qty: 4, output: "low_gi_carb", out: 2, cost: 260, unlock: 2 },
+      { id: "refine_carb", title: "Concentração de Amido Resistente", icon: "📉", desc: "Otimiza técnicas de cocção e resfriamento que multiplicam carboidratos de baixo índice glicêmico.", input: "low_gi_carb", qty: 3, output: "low_gi_carb", out: 5, cost: 380, unlock: 4 },
+      { id: "extract_omega", title: "Prensagem de Ômega-3 & Polifenóis", icon: "🫒", desc: "Extrai lipídios anti-inflamatórios de azeite extravirgem, oleaginosas e peixes.", input: "low_gi_carb", qty: 3, output: "omega_lipid", out: 2, cost: 520, unlock: 5 },
+      { id: "build_med", title: "Formulação Dieta Mediterrânea", icon: "🥗", desc: "Integra lipídios cardioprotetores e antioxidantes em cardápios mediterrâneos personalizados.", input: "omega_lipid", qty: 3, output: "mediterranean_plan", out: 2, cost: 700, unlock: 6 },
+      { id: "build_dash", title: "Formulação Protocolo DASH", icon: "🫀", desc: "Ajusta micronutrientes (K, Mg, Ca) e reduz sódio para controle pressórico e metabólico.", input: "mediterranean_plan", qty: 2, output: "dash_protocol", out: 1, cost: 900, unlock: 7 },
+      { id: "build_deficit", title: "Engenharia de Déficit Sustentável", icon: "⚖️", desc: "Calcula déficit de 500–750 kcal/dia preservando micronutrientes e palatabilidade.", input: "dash_protocol", qty: 2, output: "deficit_protocol", out: 1, cost: 1200, unlock: 8 },
+      { id: "build_microbiota", title: "Protocolo de Modulação Intestinal", icon: "🦠", desc: "Associa fibras prebióticas e polifenóis para restaurar a barreira mucosa e reduzir endotoxemia.", input: "deficit_protocol", qty: 1, extraInput: "fiber_complex", extraQty: 3, output: "microbiota_therapy", out: 1, cost: 1600, unlock: 9 },
+      { id: "build_cbt", title: "Terapia Comportamental (TCC)", icon: "🧠", desc: "Combina plano flexível com ferramentas de Mindful Eating e reestruturação cognitiva.", input: "deficit_protocol", qty: 1, extraInput: "low_gi_carb", extraQty: 2, output: "behavioral_cbt", out: 1, cost: 2200, unlock: 10 },
+      { id: "build_remission", title: "Protocolo de Remissão Metabólica", icon: "🩺", desc: "Integra modulação intestinal e bioativos anti-inflamatórios para reverter esteatose e resistência insulínica.", input: "microbiota_therapy", qty: 2, extraInput: "omega_lipid", extraQty: 2, output: "metabolic_remission", out: 1, cost: 3500, unlock: 11 },
+      { id: "build_longevity", title: "Programa Vida Plena (Alta Clínica)", icon: "🌟", desc: "Consolida autonomia alimentar, comportamento e saúde metabólica para prevenir o reganho de peso!", input: "metabolic_remission", qty: 1, extraInput: "behavioral_cbt", extraQty: 2, output: "longevity_program", out: 1, cost: 7500, unlock: 13, isFinalProject: true }
+    ];
+
+    // =========================================================================
+    // 4. EQUIPAMENTOS CLÍNICOS / UPGRADES (7 TECNOLOGIAS)
+    // =========================================================================
+    const UPGRADES = [
+      { id: "bioimpedance", name: "Bioimpedância Tetrapolar Multifrequencial", icon: "📊", desc: "Avalia massa magra, gordura visceral e água corporal com alta precisão.", cost: 1800, eff: 5 },
+      { id: "calorimetry", name: "Calorimetria Indireta Portátil", icon: "🫁", desc: "Mede a Taxa Metabólica Basal real (VO2/VCO2) evitando subestimação calórica.", cost: 2600, eff: 8 },
+      { id: "kitchen_lab", name: "Cozinha Experimental Dietoterápica", icon: "🍳", desc: "Otimiza o preparo de receitas funcionais de baixa densidade energética.", cost: 4200, eff: 12 },
+      { id: "microbiome_seq", name: "Analisador de Microbiota & Metabolômica", icon: "🧬", desc: "Personaliza prebióticos e polifenóis conforme o perfil intestinal do paciente.", cost: 5500, eff: 10 },
+      { id: "telehealth_ai", name: "App de Telemonitoramento & Diário Fotográfico", icon: "📱", desc: "Aumenta a adesão terapêutica entre consultas e reduz custos operacionais.", cost: 8000, eff: 18 },
+      { id: "multidisciplinary", name: "Núcleo Integrado (Endócrino + Psicologia + Ed. Física)", icon: "🏥", desc: "Abordagem interdisciplinar completa para obesidade grave e refratária.", cost: 12000, eff: 25 },
+      { id: "longevity_institute", name: "Instituto de Pesquisa em Saúde Metabólica", icon: "🏛️", desc: "Infraestrutura definitiva de excelência científica para a Fase 2.", cost: 25000, eff: 35 }
+    ];
+
+    // =========================================================================
+    // 5. ESTADO DO JOGO & PERSISTÊNCIA SEGURA (LOCALSTORAGE)
+    // =========================================================================
+    const DEFAULT_STATE = {
+      coins: 500000,
+      stock: {
+        raw_ingredients: 25000,
+        fiber_complex: 0,
+        lean_protein: 0,
+        low_gi_carb: 0,
+        omega_lipid: 0,
+        mediterranean_plan: 0,
+        dash_protocol: 0,
+        deficit_protocol: 0,
+        microbiota_therapy: 0,
+        behavioral_cbt: 0,
+        metabolic_remission: 0,
+        longevity_program: 0
+      },
+      produced: {
+        fiber_complex: 0,
+        lean_protein: 0,
+        low_gi_carb: 0,
+        omega_lipid: 0,
+        mediterranean_plan: 0,
+        dash_protocol: 0,
+        deficit_protocol: 0,
+        microbiota_therapy: 0,
+        behavioral_cbt: 0,
+        metabolic_remission: 0,
+        longevity_program: 0
+      },
+      completed: [],
+      production: 0,
+      upgrades: []
+    };
+
+    let state = structuredClone(DEFAULT_STATE);
+    let isProcessing = false;
+    let sfxEnabled = true;
+    let audioVoiceEnabled = true;
+    let lastSpokenText = "Bem-vindo à NutriClínica! Vamos transformar vidas através da nutrição baseada em evidências.";
+
+    const LOCAL_STORAGE_KEY = "nutriclinica_tycoon_save_v1";
+    const fmt = n => Number(n || 0).toLocaleString("pt-BR");
+    const $ = id => document.getElementById(id);
+
+    function setCloudStatus(text) {
+      const el = $("cloudSyncStatus");
+      if (el) el.textContent = text;
+    }
+
+    function normalizeState(raw) {
+      const base = structuredClone(DEFAULT_STATE);
+      if (!raw || typeof raw !== "object") return base;
+      return {
+        coins: typeof raw.coins === "number" ? raw.coins : base.coins,
+        stock: { ...base.stock, ...(raw.stock || {}) },
+        produced: { ...base.produced, ...(raw.produced || {}) },
+        completed: Array.isArray(raw.completed) ? raw.completed : [],
+        production: typeof raw.production === "number" ? raw.production : 0,
+        upgrades: Array.isArray(raw.upgrades) ? raw.upgrades : []
+      };
+    }
+
+    function loadFromLocalStorage() {
+      try {
+        const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          state = normalizeState(parsed.gameState || parsed);
+          setCloudStatus("💾 Prontuário Carregado");
+        }
+      } catch (e) {
+        console.error("Erro ao ler salvamento local:", e);
+        setCloudStatus("⚠️ Erro ao ler save local");
+      }
+    }
+
+    function saveToLocalStorage() {
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
+          schemaVersion: 1,
+          savedAt: Date.now(),
+          gameState: state
+        }));
+        setCloudStatus("💾 Salvo com Segurança");
+        return true;
+      } catch (e) {
+        console.error("Erro ao gravar localStorage:", e);
+        setCloudStatus("⚠️ Armazenamento cheio");
+        return false;
+      }
+    }
+
+    function save() {
+      renderAll();
+      saveToLocalStorage();
+    }
+
+    // =========================================================================
+    // 6. SÍNTESE DE ÁUDIO (WEB AUDIO API) & VOZ (WEB SPEECH API)
+    // =========================================================================
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let actx = null;
+
+    function playSfx(type) {
+      if (!sfxEnabled || !AudioCtx) return;
+      try {
+        if (!actx) actx = new AudioCtx();
+        if (actx.state === "suspended") actx.resume();
+        const now = actx.currentTime;
+        const osc = actx.createOscillator();
+        const gain = actx.createGain();
+        osc.connect(gain);
+        gain.connect(actx.destination);
+
+        if (type === "click") {
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(540, now);
+          osc.frequency.exponentialRampToValueAtTime(220, now + 0.06);
+          gain.gain.setValueAtTime(0.11, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+          osc.start(now);
+          osc.stop(now + 0.06);
+        } else if (type === "prep") {
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(280, now);
+          osc.frequency.linearRampToValueAtTime(420, now + 0.22);
+          osc.frequency.linearRampToValueAtTime(340, now + 0.36);
+          gain.gain.setValueAtTime(0.14, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+          osc.start(now);
+          osc.stop(now + 0.38);
+        } else if (type === "coin") {
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(987.77, now);
+          osc.frequency.setValueAtTime(1318.51, now + 0.08);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+          osc.start(now);
+          osc.stop(now + 0.3);
+        } else if (type === "win") {
+          const notes = [523.25, 659.25, 783.99, 1046.50];
+          notes.forEach((freq, idx) => {
+            const o = actx.createOscillator();
+            const g = actx.createGain();
+            o.type = "triangle";
+            o.connect(g);
+            g.connect(actx.destination);
+            o.frequency.setValueAtTime(freq, now + idx * 0.09);
+            g.gain.setValueAtTime(0.14, now + idx * 0.09);
+            g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.09 + 0.28);
+            o.start(now + idx * 0.09);
+            o.stop(now + idx * 0.09 + 0.28);
+          });
+        }
+      } catch (e) {}
+    }
+
+    function spawnFloatingText(text, color = "#34d399") {
+      const layer = $("fxLayer");
+      if (!layer) return;
+      const el = document.createElement("div");
+      el.className = "fx-popup";
+      el.textContent = text;
+      el.style.color = color;
+      el.style.left = (45 + (Math.random() * 20 - 10)) + "%";
+      el.style.top = (45 + (Math.random() * 14 - 7)) + "%";
+      layer.appendChild(el);
+      setTimeout(() => el.remove(), 1250);
+    }
+
+    function speak(text) {
+      lastSpokenText = String(text || "").replace(/<[^>]*>/g, "");
+      if (!audioVoiceEnabled || !lastSpokenText || !("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(lastSpokenText);
+      u.lang = "pt-BR";
+      u.rate = 1.02;
+      window.speechSynthesis.speak(u);
+    }
+
+    function speakCurrentMission() {
+      const i = activeMissionIndex();
+      if (i < 0) {
+        speak("Parabéns Especialista! Todos os vinte casos clínicos foram resolvidos com excelência!");
+        return;
+      }
+      const m = MISSIONS[i];
+      speak(`Caso Clínico ${i + 1}: ${m.title}. ${m.desc}`);
+    }
+
+    // =========================================================================
+    // 7. ILUSTRAÇÕES SVG DINÂMICAS (100% AUTO-CONTIDAS OFFLINE)
+    // =========================================================================
+    function generateClinicalSvg(index, label = "") {
+      const palettes = [
+        ["#064e3b", "#10b981", "#34d399"],
+        ["#0c4a6e", "#06b6d4", "#22d3ee"],
+        ["#3b0764", "#a855f7", "#d8b4fe"],
+        ["#78350f", "#f59e0b", "#fbbf24"],
+        ["#881337", "#f43f5e", "#fda4af"]
+      ];
+      const [bg, primary, light] = palettes[index % palettes.length];
+      const icons = ["🥦", "🌾", "🍗", "🍠", "📉", "🫒", "🥗", "🫀", "⚖️", "🦠", "🧠", "🩺", "💉", "🌟", "🧘", "🏥", "🌍", "📚", "🏛️", "👑"];
+      const emoji = icons[index % icons.length];
+
+      return `
+        <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="grad-${index}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="${bg}"/>
+              <stop offset="100%" stop-color="#041019"/>
+            </linearGradient>
+          </defs>
+          <rect width="640" height="280" fill="url(#grad-${index})"/>
+          <circle cx="480" cy="140" r="105" fill="${primary}" opacity="0.14"/>
+          <circle cx="480" cy="140" r="72" fill="none" stroke="${light}" stroke-width="2" stroke-dasharray="8 6" opacity="0.65"/>
+          <path d="M 140 160 L 210 160 L 230 115 L 255 195 L 280 95 L 305 175 L 325 140 L 385 140" fill="none" stroke="${light}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+          <text x="480" y="158" text-anchor="middle" font-size="64">${emoji}</text>
+          ${label ? `<text x="320" y="254" text-anchor="middle" fill="${light}" font-family="Chakra Petch, sans-serif" font-weight="700" font-size="14" letter-spacing="1.5">${label}</text>` : ""}
+        </svg>
+      `;
+    }
+
+    // =========================================================================
+    // 8. LÓGICAS DE NEGÓCIO & PROGRESSÃO
+    // =========================================================================
+    function totalEfficiencyBonus() {
+      return state.upgrades.reduce((acc, id) => acc + (UPGRADES.find(u => u.id === id)?.eff || 0), 0);
+    }
+
+    function effectiveCost(p) {
+      const bonus = totalEfficiencyBonus();
+      const discountRate = Math.min(0.40, bonus * 0.005);
+      return Math.max(10, Math.round(p.cost * (1 - discountRate)));
+    }
+
+    function activeMissionIndex() {
+      for (let i = 0; i < MISSIONS.length; i++) {
+        if (!state.completed.includes(i)) return i;
+      }
+      return -1;
+    }
+
+    function missionProgress(i) {
+      const m = MISSIONS[i];
+      return Math.min(100, Math.floor((state.stock[m.goal] || 0) / m.target * 100));
+    }
+
+    function unlockedProcess(p) {
+      return state.completed.length >= p.unlock;
+    }
+
+    function toast(msg) {
+      const el = $("toast");
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => el.classList.remove("show"), 2700);
+    }
+
+    function showModal(title, text, symbol = "🎉", eyebrow = "EVOLUÇÃO CLÍNICA") {
+      $("modalTitle").textContent = title;
+      $("modalText").innerHTML = text;
+      $("modalSymbol").textContent = symbol;
+      $("modalEyebrow").textContent = eyebrow;
+      $("modalBackdrop").classList.add("show");
+    }
+
+    function closeModal() {
+      playSfx("click");
+      $("modalBackdrop").classList.remove("show");
+    }
+
+    function changeView(name) {
+      playSfx("click");
+      document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === "view-" + name));
+      document.querySelectorAll(".nav-link").forEach(b => b.classList.toggle("active", b.dataset.view === name));
+      const labels = {
+        dashboard: "Consultório Central",
+        missions: "Quadro de Casos Clínicos",
+        production: "Cozinha Experimental & Protocolos",
+        market: "Consultoria & Prescrições",
+        upgrades: "Equipamentos Clínicos"
+      };
+      if ($("pageTitle")) $("pageTitle").textContent = labels[name] || "Consultório Central";
+      if ($("sidebar")) $("sidebar").classList.remove("open");
+      if ($("sidebarBackdrop")) $("sidebarBackdrop").classList.remove("show");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // =========================================================================
+    // 9. RENDERIZAÇÃO DAS VIEWS
+    // =========================================================================
+    function renderStock() {
+      const list = $("stockList");
+      if (!list) return;
+      list.innerHTML = Object.entries(MATERIALS).map(([id, m]) => `
+        <div class="stock-row">
+          <span class="material-icon">${m.icon}</span>
+          <div>${matBadge(id)}<small class="stock-sub">Honorário: ${fmt(m.price)} CR/un.</small></div>
+          <strong class="stock-qty">${fmt(state.stock[id])} ${m.unit}</strong>
+        </div>
+      `).join("");
+    }
+
+    function renderChain() {
+      const strip = $("chainStrip");
+      if (!strip) return;
+      const displayMissions = MISSIONS.slice(0, 10);
+      strip.innerHTML = displayMissions.map((m, i) => `
+        <div class="chain-step ${state.completed.includes(i) ? "done" : i === activeMissionIndex() ? "" : "locked"}">
+          <span class="step-no">${m.sticker} ETAPA ${String(i + 1).padStart(2, "0")}</span>
+          <strong>${m.title}</strong>
+          <div style="margin-top:8px">${matBadge(m.goal)}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderDashboard() {
+      const idx = activeMissionIndex();
+      if ($("statCoins")) $("statCoins").innerHTML = `${fmt(state.coins)} <small>CR</small>`;
+      if ($("topCoins")) $("topCoins").textContent = fmt(state.coins);
+      if ($("statOre")) $("statOre").innerHTML = `${fmt(state.stock.raw_ingredients)} <small>un.</small>`;
+      if ($("statProduction")) $("statProduction").innerHTML = `${fmt(state.production)} <small>un.</small>`;
+      if ($("statMissions")) $("statMissions").innerHTML = `${state.completed.length} <small>/ 20</small>`;
+      if ($("companyLevel")) $("companyLevel").textContent = state.completed.length >= 10 ? 2 : 1;
+      if ($("missionCount")) $("missionCount").textContent = idx < 0 ? "★" : idx + 1;
+      if ($("heroIndex")) $("heroIndex").innerHTML = `${idx < 0 ? "20" : String(idx + 1).padStart(2, "0")} <span>/ 20</span>`;
+
+      const isPhase2 = state.completed.length >= 10;
+      const stageLabel = isPhase2 ? "FASE 2 · REMISSÃO METABÓLICA & TCC" : "FASE 1 · DIETOTERAPIA & SACIEDADE";
+      if ($("heroScene")) {
+        const artIndex = idx < 0 ? 19 : idx;
+        $("heroScene").innerHTML = `${generateClinicalSvg(artIndex)}<span class="hero-stage-tag">${stageLabel}</span>`;
+      }
+
+      if ($("heroKicker")) $("heroKicker").textContent = isPhase2 ? "FASE 2 · OBESIDADE COMPLEXA & LONGEVIDADE (11-20)" : "FASE 1 · NUTRIÇÃO CLÍNICA & REEDUCAÇÃO (1-10)";
+      if ($("heroTitle")) $("heroTitle").innerHTML = isPhase2 ? "Remissão Metabólica<br><em>& Vida Plena!</em>" : "Dietoterapia Baseada<br><em>em Evidências!</em>";
+
+      if (idx < 0) {
+        if ($("nextMissionEyebrow")) $("nextMissionEyebrow").textContent = "ESPECIALIZAÇÃO CONCLUÍDA!";
+        if ($("nextMissionTitle")) $("nextMissionTitle").textContent = "👑 Instituto de Excelência em Obesidade!";
+        if ($("nextMissionDesc")) $("nextMissionDesc").innerHTML = `Parabéns! Todos os 20 casos clínicos foram solucionados com ciência e empatia!`;
+        if ($("nextMissionBadge")) $("nextMissionBadge").textContent = "ALTA CLÍNICA";
+        if ($("missionProgressText")) $("missionProgressText").textContent = "100%";
+        if ($("missionProgressBar")) $("missionProgressBar").style.width = "100%";
+        if ($("nextMissionActionBtn")) $("nextMissionActionBtn").style.display = "none";
+      } else {
+        const m = MISSIONS[idx];
+        const prog = missionProgress(idx);
+        if ($("nextMissionEyebrow")) $("nextMissionEyebrow").textContent = `${m.sticker} ${m.stage}`;
+        if ($("nextMissionTitle")) $("nextMissionTitle").textContent = `Caso ${String(idx + 1).padStart(2, "0")} · ${m.title}`;
+        if ($("nextMissionDesc")) $("nextMissionDesc").innerHTML = `${m.desc} Meta: <strong>${m.target} un.</strong> de ${matBadge(m.goal)}.`;
+        if ($("nextMissionBadge")) $("nextMissionBadge").textContent = prog >= 100 ? "🎉 PRONTO P/ ALTA!" : "EM ATENDIMENTO";
+        if ($("missionProgressText")) $("missionProgressText").textContent = prog + "%";
+        if ($("missionProgressBar")) $("missionProgressBar").style.width = prog + "%";
+        if ($("nextMissionActionBtn")) $("nextMissionActionBtn").style.display = "inline-flex";
+      }
+
+      renderStock();
+      renderChain();
+    }
+
+    function renderMissions() {
+      const pct = Math.round(state.completed.length / 20 * 100);
+      if ($("missionSummaryCount")) $("missionSummaryCount").textContent = `${state.completed.length}/20`;
+      if ($("allMissionProgress")) $("allMissionProgress").style.width = pct + "%";
+      if ($("allMissionPercent")) $("allMissionPercent").textContent = `${pct}% concluído`;
+
+      const mList = $("missionList");
+      if (!mList) return;
+      mList.innerHTML = MISSIONS.map((m, i) => {
+        const done = state.completed.includes(i);
+        const unlocked = i === activeMissionIndex() || done;
+        const progress = done ? 100 : unlocked ? missionProgress(i) : 0;
+        const readyToClaim = unlocked && !done && (state.stock[m.goal] || 0) >= m.target;
+        return `
+          <article class="mission-card ${done ? "completed" : unlocked ? "unlocked" : "locked"}">
+            <div class="mission-art" role="img" aria-label="Ilustração do caso ${i + 1}: ${m.title}">
+              ${generateClinicalSvg(i)}
+            </div>
+            <div class="mission-number">${done ? "✅" : m.sticker}</div>
+            <div class="mission-info">
+              <h3>Caso ${String(i + 1).padStart(2, "0")}: ${m.title}</h3>
+              <p>${m.desc}</p>
+              <div class="mission-reward">Prescrição exigida: <strong>${m.target} un.</strong> de ${matBadge(m.goal)} · Honorários: 🪙 <strong>+${fmt(m.reward)} CR</strong></div>
+              <div class="progress-track" style="margin-top:10px;max-width:300px"><span style="width:${progress}%"></span></div>
+            </div>
+            <div class="mission-action">
+              <small>${done ? "CASO RESOLVIDO" : readyToClaim ? "🎁 PRONTO PARA ALTA!" : unlocked ? `${progress}% atingido` : "🔒 BLOQUEADO"}</small>
+              ${unlocked && !done ? `<button class="btn ${readyToClaim ? "btn-light" : "btn-outline"} mission-claim-btn" data-mission="${i}" type="button">${readyToClaim ? "🎉 Concluir Caso" : "Verificar"}</button>` : ""}
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      document.querySelectorAll(".mission-claim-btn").forEach(btn => {
+        btn.addEventListener("click", () => completeMission(Number(btn.dataset.mission)));
+      });
+    }
+
+    function canRunTimes(p, times) {
+      const cost = effectiveCost(p) * times;
+      const hasMain = (state.stock[p.input] || 0) >= p.qty * times;
+      const hasExtra = !p.extraInput || (state.stock[p.extraInput] || 0) >= p.extraQty * times;
+      return hasMain && hasExtra && state.coins >= cost;
+    }
+
+    function renderProcesses() {
+      const grid = $("processGrid");
+      if (!grid) return;
+      grid.innerHTML = PROCESSES.map(p => {
+        const open = unlockedProcess(p);
+        const cost = effectiveCost(p);
+        const can1 = open && canRunTimes(p, 1);
+        const can5 = open && canRunTimes(p, 5);
+        return `
+          <article class="process-card ${p.isFinalProject ? "final-process-card" : ""}">
+            <div class="process-top">
+              <span class="process-icon sticker-float">${p.icon}</span>
+              <span class="status-pill">${open ? "PROTOCOLO ATIVO" : `🔒 REQUER CASO ${p.unlock}`}</span>
+            </div>
+            <h3>${p.title}</h3>
+            <p>${p.desc}</p>
+            <div class="recipe">
+              <strong>Utiliza:</strong> ${p.qty} ${matBadge(p.input)}${p.extraInput ? ` + ${p.extraQty} ${matBadge(p.extraInput)}` : ""}<br>
+              <strong>Formula:</strong> ${p.out} ${matBadge(p.output)}<br>
+              <strong>Disponível:</strong> ${fmt(state.stock[p.input] || 0)} ${MATERIALS[p.input].unit} de ${MATERIALS[p.input].name}${p.extraInput ? ` · ${fmt(state.stock[p.extraInput] || 0)} de ${MATERIALS[p.extraInput].name}` : ""}<br>
+              <strong>Total formulado:</strong> <span class="produced-count">${fmt(state.produced[p.output] || 0)} un.</span><br>
+              <strong>Custo operacional:</strong> 🪙 ${fmt(cost)} CR
+            </div>
+            <div class="process-btn-group">
+              <button class="btn ${can1 ? "btn-light" : "btn-outline"} process-run-btn" data-process="${p.id}" data-times="1" type="button" ${can1 && !isProcessing ? "" : "disabled"}>
+                ${isProcessing ? "⏳ Formulando..." : !open ? "🔒 Bloqueado" : !can1 ? "Faltam insumos" : `⚡ Executar 1x (+${p.out})`}
+              </button>
+              <button class="btn ${can5 ? "btn-primary" : "btn-outline"} process-run-btn" data-process="${p.id}" data-times="5" type="button" ${can5 && !isProcessing ? "" : "disabled"} title="Formular 5 lotes de uma vez">
+                ⚡ 5x
+              </button>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      document.querySelectorAll(".process-run-btn").forEach(btn => {
+        btn.addEventListener("click", () => runProcess(btn.dataset.process, Number(btn.dataset.times || 1)));
+      });
+
+      const eff = 100 + totalEfficiencyBonus();
+      if ($("productionTotal")) $("productionTotal").textContent = `${fmt(state.production)} un.`;
+      if ($("equipmentTotal")) $("equipmentTotal").textContent = 1 + state.upgrades.length;
+      if ($("efficiencyValue")) $("efficiencyValue").textContent = `${eff}%`;
+    }
+
+    function renderMarket() {
+      const marketGrid = $("marketGrid");
+      if (!marketGrid) return;
+      marketGrid.innerHTML = Object.entries(MATERIALS).map(([id, m]) => {
+        const qtyAvailable = state.stock[id] || 0;
+        const disabled = qtyAvailable <= 0;
+        return `
+          <article class="market-card ${id === "mediterranean_plan" || id === "metabolic_remission" || id === "longevity_program" ? "chip-market-card" : ""}">
+            <span class="material-icon sticker-float">${m.icon}</span>
+            <div style="margin-top:10px">${matBadge(id)}</div>
+            <p style="margin-top:8px">Disponível na clínica: <strong>${fmt(qtyAvailable)} ${m.unit}</strong></p>
+            <div class="market-price">🪙 ${fmt(m.price)} <small>CR / un.</small></div>
+            <div class="sell-row">
+              <input type="number" min="1" max="${Math.max(1, qtyAvailable)}" value="${qtyAvailable > 0 ? Math.min(5, qtyAvailable) : 0}" id="sell-${id}" ${disabled ? "disabled" : ""}>
+              <button class="btn btn-light market-sell-btn" data-mat="${id}" type="button" ${disabled ? "disabled" : ""}>Prescrever</button>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      document.querySelectorAll(".market-sell-btn").forEach(btn => {
+        btn.addEventListener("click", () => sellMaterial(btn.dataset.mat));
+      });
+    }
+
+    function renderUpgrades() {
+      const upgradeGrid = $("upgradeGrid");
+      if (!upgradeGrid) return;
+      upgradeGrid.innerHTML = UPGRADES.map(u => {
+        const owned = state.upgrades.includes(u.id);
+        const canAfford = state.coins >= u.cost;
+        return `
+          <article class="upgrade-card">
+            <span class="upgrade-icon sticker-float">${u.icon}</span>
+            ${owned ? '<span class="owned">✅ INSTALADO</span>' : ""}
+            <h3>${u.name}</h3>
+            <p>${u.desc}</p>
+            <div class="upgrade-cost">🪙 ${fmt(u.cost)} <small>CRÉDITOS CRN</small></div>
+            <div class="stat-foot positive">Redução de custo & precisão: +${u.eff}%</div>
+            <button class="btn ${owned ? "btn-outline" : "btn-primary"} full upgrade-buy-btn" data-upgrade="${u.id}" type="button" style="margin-top:16px" ${owned || !canAfford ? "disabled" : ""}>
+              ${owned ? "Equipamento Ativo" : !canAfford ? "Créditos Insuficientes" : "🔬 Adquirir Tecnologia"}
+            </button>
+          </article>
+        `;
+      }).join("");
+
+      document.querySelectorAll(".upgrade-buy-btn").forEach(btn => {
+        btn.addEventListener("click", () => buyUpgrade(btn.dataset.upgrade));
+      });
+    }
+
+    function renderAll() {
+      renderDashboard();
+      renderMissions();
+      renderProcesses();
+      renderMarket();
+      renderUpgrades();
+    }
+
+    // =========================================================================
+    // 10. ANIMAÇÃO CINEMATOGRÁFICA DE EXECUÇÃO DE PROTOCOLO (3,2 SEGUNDOS)
+    // =========================================================================
+    const PROCESS_ART_INDEX = {
+      extract_fiber: 1, extract_protein: 2, select_carb: 3, refine_carb: 4,
+      extract_omega: 5, build_med: 6, build_dash: 7, build_deficit: 8,
+      build_microbiota: 9, build_cbt: 10, build_remission: 11, build_longevity: 13
+    };
+
+    function showProcessAnimation(p, times) {
+      const overlay = $("processOverlay");
+      const art = $("processScene");
+      const index = PROCESS_ART_INDEX[p.id] ?? 0;
+      art.innerHTML = generateClinicalSvg(index, p.title.toUpperCase());
+      $("processMachineIcon").textContent = p.icon;
+      $("processTitle").textContent = p.title;
+      $("processDescription").textContent = `${p.desc} Formulando ${times} ${times === 1 ? "protocolo individual" : "protocolos em lote"}.`;
+      const inputText = `${fmt(p.qty * times)} ${MATERIALS[p.input].name}`;
+      const extraText = p.extraInput ? ` + ${fmt(p.extraQty * times)} ${MATERIALS[p.extraInput].name}` : "";
+      $("processConsumption").innerHTML = `<span>🔻 Insumos utilizados: <strong>${inputText}${extraText}</strong></span><span>🔺 Resultado clínico: <strong>${fmt(p.out * times)} ${MATERIALS[p.output].name}</strong></span>`;
+      
+      // Reinicia animação da barra
+      const bar = overlay.querySelector(".process-progress span");
+      if (bar) {
+        bar.style.animation = "none";
+        bar.offsetHeight;
+        bar.style.animation = "processFill 3.2s linear forwards";
+      }
+
+      overlay.classList.add("show");
+      overlay.setAttribute("aria-hidden", "false");
+    }
+
+    function hideProcessAnimation() {
+      const overlay = $("processOverlay");
+      overlay.classList.remove("show");
+      overlay.setAttribute("aria-hidden", "true");
+    }
+
+    function runProcess(id, times = 1) {
+      const p = PROCESSES.find(x => x.id === id);
+      if (!p || isProcessing || !unlockedProcess(p)) return;
+      if (!canRunTimes(p, times)) {
+        toast("⚠️ Insumos nutricionais ou créditos insuficientes!");
+        return;
+      }
+
+      isProcessing = true;
+      renderProcesses();
+      playSfx("prep");
+      showProcessAnimation(p, times);
+
+      window.setTimeout(() => {
+        const cost = effectiveCost(p) * times;
+        const requiredMain = p.qty * times;
+        const requiredExtra = p.extraInput ? p.extraQty * times : 0;
+
+        if (!canRunTimes(p, times)) {
+          hideProcessAnimation();
+          isProcessing = false;
+          renderAll();
+          toast("⚠️ A formulação foi cancelada: os insumos mudaram durante o processo.");
+          return;
+        }
+
+        state.stock[p.input] = Math.max(0, (state.stock[p.input] || 0) - requiredMain);
+        if (p.extraInput) state.stock[p.extraInput] = Math.max(0, (state.stock[p.extraInput] || 0) - requiredExtra);
+        const totalOut = p.out * times;
+        state.stock[p.output] = (state.stock[p.output] || 0) + totalOut;
+        state.produced[p.output] = (state.produced[p.output] || 0) + totalOut;
+        state.coins -= cost;
+        state.production += totalOut;
+
+        hideProcessAnimation();
+        isProcessing = false;
+        playSfx("win");
+        spawnFloatingText(`+${totalOut} ${MATERIALS[p.output].icon} ${MATERIALS[p.output].name}`, "#22d3ee");
+        save();
+        toast(`✅ ${p.title}: +${totalOut} ${MATERIALS[p.output].name} formulado!`);
+      }, 3200);
+    }
+
+    // =========================================================================
+    // 11. CONCLUSÃO DE CASOS CLÍNICOS, PRESCRIÇÃO E EQUIPAMENTOS
+    // =========================================================================
+    function completeMission(i) {
+      if (i !== activeMissionIndex()) return;
+      const m = MISSIONS[i];
+      if ((state.stock[m.goal] || 0) < m.target) {
+        playSfx("click");
+        toast(`⚠️ Você precisa de ${m.target} un. de ${MATERIALS[m.goal].name} para resolver este caso.`);
+        return;
+      }
+      state.completed.push(i);
+      state.coins += m.reward;
+      playSfx("win");
+      spawnFloatingText(`+🪙 ${fmt(m.reward)} CR!`, "#fbbf24");
+      save();
+
+      const justUnlockedPhase2 = state.completed.length === 10;
+      const isAllDone = state.completed.length >= MISSIONS.length;
+
+      const titleModal = isAllDone
+        ? "👑 AUTORIDADE MÁXIMA EM OBESIDADE!"
+        : justUnlockedPhase2
+        ? "🏆 NÍVEL 2 · ESPECIALIZAÇÃO AVANÇADA!"
+        : `${m.sticker} Caso Clínico Resolvido!`;
+
+      const htmlResult = isAllDone
+        ? `Parabéns Especialista! Você solucionou todos os 20 casos clínicos com nutrição baseada em evidências e transformou a saúde metabólica de milhares de pacientes!`
+        : justUnlockedPhase2
+        ? `⭐ <strong>Título de Especialista em Nutrição Clínica!</strong><br><br>Você concluiu os 10 casos fundamentais e avançou para o <strong>Nível 2</strong>!<br>🧬 A <strong>Fase 2 (TCC Nutricional, Remissão Metabólica & Vida Plena)</strong> foi desbloqueada!`
+        : `Excelente conduta! Você concluiu o caso <strong>${m.title}</strong> e recebeu 🪙 <strong>+${fmt(m.reward)} Créditos CRN</strong>!`;
+
+      showModal(titleModal, htmlResult, isAllDone ? "👑" : justUnlockedPhase2 ? "🏆" : m.sticker, "EVOLUÇÃO CLÍNICA");
+    }
+
+    function sellMaterial(id) {
+      const input = $("sell-" + id);
+      if (!input) return;
+      const qty = Math.floor(Number(input.value));
+      if (!Number.isFinite(qty) || qty <= 0 || qty > state.stock[id]) {
+        toast("⚠️ Quantidade inválida.");
+        return;
+      }
+      const revenue = qty * MATERIALS[id].price;
+      state.stock[id] -= qty;
+      state.coins += revenue;
+      playSfx("coin");
+      spawnFloatingText(`+🪙 ${fmt(revenue)} CR`, "#34d399");
+      save();
+      toast(`💼 Atendimento/Prescrição faturada: +${fmt(revenue)} CR!`);
+    }
+
+    function buyUpgrade(id) {
+      const u = UPGRADES.find(x => x.id === id);
+      if (!u || state.upgrades.includes(id) || state.coins < u.cost) return;
+      state.coins -= u.cost;
+      state.upgrades.push(id);
+      playSfx("win");
+      spawnFloatingText(`+${u.eff}% Precisão Clínica!`, "#a855f7");
+      save();
+      showModal("Tecnologia Adquirida!", `<strong>${u.name}</strong> agora integra sua clínica (+${u.eff}% precisão e economia operacional)!`, u.icon, "INFRAESTRUTURA");
+    }
+
+    function startNewGame() {
+      playSfx("click");
+      showModal(
+        "Reiniciar Carreira Clínica?",
+        `Isso reiniciará seu prontuário com <strong>25.000 Alimentos In Natura</strong> e <strong>500.000 Créditos CRN</strong>.<br><br><button class="btn btn-primary full" id="confirmResetAction" type="button">Confirmar Reinício</button>`,
+        "🔄",
+        "CONFIRMAÇÃO"
+      );
+      setTimeout(() => {
+        const btn = $("confirmResetAction");
+        if (btn) {
+          btn.addEventListener("click", () => {
+            closeModal();
+            state = structuredClone(DEFAULT_STATE);
+            save();
+            changeView("dashboard");
+            toast("✨ Nova carreira iniciada com 25.000 Alimentos In Natura e 500.000 CR!");
+          });
+        }
+      }, 50);
+    }
+
+    function harvestIngredientsBonus() {
+      state.stock.raw_ingredients += 1000;
+      playSfx("prep");
+      spawnFloatingText("+1.000 🥦 Alimentos In Natura", "#34d399");
+      save();
+      toast("🥦 Abastecimento realizado: +1.000 unidades de Alimentos In Natura!");
+    }
+
+    // =========================================================================
+    // 12. EVENT LISTENERS & INICIALIZAÇÃO
+    // =========================================================================
+    document.querySelectorAll(".nav-link").forEach(b => b.addEventListener("click", () => changeView(b.dataset.view)));
+    document.querySelectorAll("[data-goto]").forEach(b => b.addEventListener("click", () => changeView(b.dataset.goto)));
+
+    if ($("brandHome")) $("brandHome").addEventListener("click", e => { e.preventDefault(); changeView("dashboard"); });
+
+    if ($("mobileMenu") && $("sidebar") && $("sidebarBackdrop")) {
+      $("mobileMenu").addEventListener("click", () => {
+        $("sidebar").classList.toggle("open");
+        $("sidebarBackdrop").classList.toggle("show");
+      });
+      $("sidebarBackdrop").addEventListener("click", () => {
+        $("sidebar").classList.remove("open");
+        $("sidebarBackdrop").classList.remove("show");
+      });
+    }
+
+    ["newGame", "resetGame"].forEach(id => {
+      if ($(id)) $(id).addEventListener("click", startNewGame);
+    });
+
+    if ($("forceSyncBtn")) {
+      $("forceSyncBtn").addEventListener("click", () => {
+        playSfx("click");
+        saveToLocalStorage();
+        toast("💾 Prontuário clínico salvo com segurança no navegador!");
+      });
+    }
+
+    if ($("mineBonusBtn")) $("mineBonusBtn").addEventListener("click", harvestIngredientsBonus);
+    if ($("factoryMineBtn")) $("factoryMineBtn").addEventListener("click", harvestIngredientsBonus);
+
+    if ($("sfxToggleBtn")) {
+      $("sfxToggleBtn").addEventListener("click", () => {
+        sfxEnabled = !sfxEnabled;
+        $("sfxToggleBtn").textContent = sfxEnabled ? "🔊 SFX: ON" : "🔇 SFX: OFF";
+        if (sfxEnabled) playSfx("coin");
+      });
+    }
+
+    if ($("modalClose")) $("modalClose").addEventListener("click", closeModal);
+    if ($("modalOk")) $("modalOk").addEventListener("click", closeModal);
+    if ($("modalBackdrop")) $("modalBackdrop").addEventListener("click", e => { if (e.target === $("modalBackdrop")) closeModal(); });
+    if ($("speakMissionBtn")) $("speakMissionBtn").addEventListener("click", speakCurrentMission);
+
+    if ($("audioEnable")) $("audioEnable").addEventListener("click", () => { audioVoiceEnabled = true; speak("Preceptor clínico ativado! Pronto para orientar suas prescrições nutricionais."); });
+    if ($("audioRepeat")) $("audioRepeat").addEventListener("click", () => speak(lastSpokenText));
+    if ($("audioToggle")) {
+      $("audioToggle").addEventListener("click", () => {
+        audioVoiceEnabled = !audioVoiceEnabled;
+        $("audioToggle").textContent = audioVoiceEnabled ? "Voz Ligada" : "Voz Desligada";
+      });
+    }
+
+    window.onload = function () {
+      loadFromLocalStorage();
+      renderAll();
+    };
+  </script>
+</body>
+</html>
