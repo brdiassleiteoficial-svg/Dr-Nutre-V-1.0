@@ -589,6 +589,116 @@
     .mission-action { text-align: right; min-width: 155px; }
     .mission-action small { display: block; color: var(--muted); font-size: 10px; margin-bottom: 8px; font-weight: 700; }
 
+    /* CLINICAL PATIENT CASE & DECISION CHOICES */
+    .patient-chart-box {
+      background: rgba(6, 18, 30, 0.85);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin: 12px 0;
+    }
+    .patient-vitals {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .vital-tag {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--cyan);
+      padding: 3px 9px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .vital-tag.alert {
+      color: #fda4af;
+      border-color: rgba(244, 63, 94, 0.4);
+      background: rgba(244, 63, 94, 0.14);
+    }
+    .clinical-choices {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .choice-btn {
+      width: 100%;
+      text-align: left;
+      background: rgba(11, 26, 40, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: var(--ink);
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 12px;
+      line-height: 1.45;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: all 0.18s ease;
+    }
+    .choice-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: rgba(16, 185, 129, 0.12);
+      transform: translateX(3px);
+    }
+    .choice-btn.selected-correct {
+      border-color: var(--accent);
+      background: rgba(16, 185, 129, 0.22);
+      color: var(--white);
+    }
+    .choice-btn.selected-wrong {
+      border-color: var(--rose);
+      background: rgba(244, 63, 94, 0.18);
+    }
+    .choice-letter {
+      background: rgba(6, 182, 212, 0.2);
+      color: var(--cyan);
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 700;
+      min-width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      flex: none;
+    }
+    .clinical-feedback {
+      margin-top: 10px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+    .clinical-feedback.ok {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      color: #a7f3d0;
+    }
+    .clinical-feedback.err {
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.45);
+      color: #fecdd3;
+    }
+    .mission-card-expanded {
+      display: grid;
+      grid-template-columns: 112px 50px minmax(0, 1fr);
+      align-items: start;
+      gap: 16px;
+      padding: 18px 20px;
+      background: var(--surface);
+      border: var(--glass-border);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .mission-card-expanded.unlocked {
+      border-color: rgba(16, 185, 129, 0.45);
+    }
+    .mission-card-expanded.locked {
+      opacity: 0.55;
+    }
+
     /* PRODUCTION / CLINICAL PROTOCOLS */
     .production-layout { display: grid; grid-template-columns: 1fr 310px; gap: 20px; }
     .process-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
@@ -709,7 +819,7 @@
       .stat-grid { grid-template-columns: repeat(2, 1fr); }
       .market-grid, .upgrade-grid, .process-grid, .evidence-grid { grid-template-columns: 1fr; }
       .hero-scene { opacity: 0.45; width: 100%; }
-      .mission-card { grid-template-columns: 86px 44px minmax(0,1fr); gap: 10px; padding: 13px; }
+      .mission-card, .mission-card-expanded { grid-template-columns: 86px 44px minmax(0,1fr); gap: 10px; padding: 13px; }
       .mission-art { width: 86px; height: 68px; }
       .mission-action { grid-column: 1 / -1; text-align: left; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px; }
     }
@@ -852,17 +962,19 @@
           <article class="panel mission-panel">
             <div class="panel-head">
               <div>
-                <span class="eyebrow" id="nextMissionEyebrow">CASO CLÍNICO ATUAL</span>
-                <h3 id="nextMissionTitle">Caso 01 · Triagem Nutricional & Base In Natura</h3>
+                <span class="eyebrow" id="nextMissionEyebrow">PRONTUÁRIO EM ATENDIMENTO</span>
+                <h3 id="nextMissionTitle">Caso 01 · Mariana, 34 anos</h3>
               </div>
-              <span class="status-pill" id="nextMissionBadge">EM ATENDIMENTO</span>
+              <span class="status-pill" id="nextMissionBadge">AGUARDANDO CONDUTA</span>
             </div>
-            <p id="nextMissionDesc" class="muted">Garanta uma despensa rica em alimentos in natura e minimamente processados conforme o Guia Alimentar.</p>
-            <div class="progress-label"><span>Meta terapêutica do caso</span><strong id="missionProgressText">0%</strong></div>
+            <div id="dashboardPatientChart" class="patient-chart-box"></div>
+            <div id="dashboardClinicalChoices" class="clinical-choices"></div>
+            <div id="dashboardClinicalFeedback"></div>
+            <div class="progress-label" style="margin-top:14px;"><span>Insumo / Protocolo em estoque</span><strong id="missionProgressText">0%</strong></div>
             <div class="progress-track"><span id="missionProgressBar" style="width:0%"></span></div>
             <div class="mission-panel-buttons">
-              <button class="btn btn-light" id="nextMissionActionBtn" type="button" data-goto="missions">Concluir / Ver Caso <span>→</span></button>
-              <button class="audio-btn" type="button" id="speakMissionBtn">🔊 Ouvir Caso Clínico</button>
+              <button class="btn btn-light" id="nextMissionActionBtn" type="button">Concluir Atendimento <span>→</span></button>
+              <button class="audio-btn" type="button" id="speakMissionBtn">🔊 Ouvir Prontuário</button>
             </div>
           </article>
 
@@ -1019,119 +1131,305 @@
 
   <script>
     // =========================================================================
-    // 1. DEFINIÇÃO DE MATERIAIS / NUTRIENTES / PROTOCOLOS CLÍNICOS (12 ITENS)
-    // =========================================================================
-    const MATERIALS = {
-      raw_ingredients:    { name: "Alimentos In Natura", icon: "🥦", price: 1200, unit: "un.", color: "raw" },
-      fiber_complex:      { name: "Fibras Solúveis & Prebióticos", icon: "🌾", price: 45, unit: "un.", color: "fiber" },
-      lean_protein:       { name: "Proteína Magra Biodisponível", icon: "🍗", price: 80, unit: "un.", color: "protein" },
-      low_gi_carb:        { name: "Carboidrato Baixo IG", icon: "🍠", price: 130, unit: "un.", color: "carb" },
-      omega_lipid:        { name: "Ômega-3 & Polifenóis", icon: "🫒", price: 220, unit: "un.", color: "omega" },
-      mediterranean_plan: { name: "Protocolo Dieta Mediterrânea", icon: "🥗", price: 360, unit: "un.", color: "med" },
-      dash_protocol:      { name: "Protocolo DASH Metabólico", icon: "🫀", price: 540, unit: "un.", color: "dash" },
-      deficit_protocol:   { name: "Plano Déficit Sustentável", icon: "⚖️", price: 880, unit: "un.", color: "deficit" },
-      microbiota_therapy: { name: "Modulação Intestinal", icon: "🦠", price: 1650, unit: "un.", color: "microbiota" },
-      behavioral_cbt:     { name: "Terapia Comportamental (TCC)", icon: "🧠", price: 2800, unit: "un.", color: "cbt" },
-      metabolic_remission:{ name: "Protocolo Remissão Metabólica", icon: "🩺", price: 4600, unit: "un.", color: "remission" },
-      longevity_program:  { name: "Programa Vida Plena (Alta)", icon: "🌟", price: 10000, unit: "un.", color: "longevity" }
-    };
-
-    function matBadge(id) {
-      const m = MATERIALS[id];
-      if (!m) return "";
-      return `<span class="mat-badge mat-${m.color}">${m.icon} ${m.name}</span>`;
-    }
-
-    // =========================================================================
-    // 2. CASOS CLÍNICOS / MISSÕES (20 DESAFIOS BASEADOS EM EVIDÊNCIAS)
+    // 2. CASOS CLÍNICOS / MISSÕES (20 PRONTUÁRIOS REAIS + DECISÃO CLÍNICA)
     // =========================================================================
     const MISSIONS = [
       // FASE 1: NUTRIÇÃO CLÍNICA & REEDUCAÇÃO ALIMENTAR (1-10)
       {
-        title: "Despensa In Natura (Guia Alimentar)",
+        title: "Mariana, 34a — Obesidade Grau I & Ultraprocessados",
         sticker: "🥦",
-        desc: "Substitua ultraprocessados por alimentos in natura e minimamente processados para reduzir a densidade calórica espontânea.",
+        patient: {
+          vitals: ["IMC: 31,8 kg/m²", "CA: 96 cm", "Glicemia: 94 mg/dL", "Rotina: Delivery e ultraprocessados"],
+          story: "Executiva relata ganho de 11 kg nos últimos 2 anos por falta de tempo para cozinhar, consumindo biscoitos, embutidos e refrigerantes diariamente. Nega comorbidades prévias."
+        },
+        desc: "Qual deve ser a primeira intervenção estrutural segundo o Guia Alimentar e diretrizes ABESO?",
+        options: [
+          {
+            label: "Jejum intermitente 20/4 imediato mantendo ultraprocessados na janela alimentar",
+            correct: false,
+            rationale: "Contraindicado: restrições extremas sem melhora da qualidade nutricional geram compulsão e não reduzem a densidade calórica da dieta."
+          },
+          {
+            label: "Substituição gradual por Alimentos In Natura e minimamente processados (regra de ouro)",
+            correct: true,
+            rationale: "Correto! Aumentar alimentos in natura reduz naturalmente a densidade energética, eleva fibras/micronutrientes e promove saciedade sem contagem rígida inicial."
+          },
+          {
+            label: "Dieta cetogênica estrita (<20g carboidrato/dia) com suplementação de triglicerídeos",
+            correct: false,
+            rationale: "Desnecessário como primeira linha para obesidade grau I sem refratariedade, apresentando baixa adesão a longo prazo nessa rotina."
+          }
+        ],
         goal: "raw_ingredients",
         target: 50,
-        reward: 1200,
+        reward: 1500,
         stage: "Fase 1: Base Alimentar"
       },
       {
-        title: "Saciedade Gástrica & Fibras",
+        title: "Carlos, 42a — Fome Precoce & Constipação Intestinal",
         sticker: "🌾",
-        desc: "Formule fibras solúveis (aveia, psyllium, leguminosas) para retardar o esvaziamento gástrico e prolongar a saciedade.",
+        patient: {
+          vitals: ["IMC: 33,2 kg/m²", "Ingestão de fibras: 9 g/dia", "Hábito intestinal: 2x/semana", "Queixa: Fome 1h após almoço"],
+          story: "Motorista de aplicativo faz refeições rápidas pobres em vegetais e grãos integrais. Relata pico de fome no meio da tarde e beliscos calóricos."
+        },
+        desc: "Qual protocolo otimiza a saciedade gástrica e o trânsito intestinal deste paciente?",
+        options: [
+          {
+            label: "Aporte de Fibras Solúveis & Prebióticos (25–35 g/dia + hidratação ajustada)",
+            correct: true,
+            rationale: "Excelente! Fibras solúveis (aveia, psyllium, leguminosas) formam gel viscoso, retardam o esvaziamento gástrico, estimulam GLP-1 e regularizam o intestino."
+          },
+          {
+            label: "Substituir o almoço por sucos detox coados de frutas",
+            correct: false,
+            rationale: "Inadequado: coar o suco remove as fibras insolúveis e solúveis, elevando a carga glicêmica e reduzindo a saciedade."
+          },
+          {
+            label: "Dieta líquida hipocalórica de 800 kcal/dia por 30 dias",
+            correct: false,
+            rationale: "Contraindicado: dietas de muito baixas calorias (VLCD) exigem supervisão hospitalar estrita e causam perda de massa magra."
+          }
+        ],
         goal: "fiber_complex",
         target: 20,
-        reward: 1500,
+        reward: 1800,
         stage: "Fase 1: Saciedade"
       },
       {
-        title: "Proteção de Massa Magra",
+        title: "Fernanda, 48a — Perimenopausa & Risco de Sarcopenia",
         sticker: "🍗",
-        desc: "Garanta aporte proteico (1,2–1,6 g/kg) para suprimir a grelina e preservar a taxa metabólica basal durante o emagrecimento.",
+        patient: {
+          vitals: ["IMC: 32,5 kg/m²", "Massa Magra: Limítrofe", "TMB estimada: Baixa", "Histórico: Várias dietas restritivas"],
+          story: "Paciente em climatério relata que, toda vez que faz dieta, perde peso rápido mas fica flácida e recupera tudo em meses."
+        },
+        desc: "Como proteger a massa muscular e a Taxa Metabólica Basal durante o emagrecimento?",
+        options: [
+          {
+            label: "Reduzir proteínas para 0,6 g/kg/dia para poupar função renal preventiva",
+            correct: false,
+            rationale: "Incorreto: sem doença renal crônica avançada, baixa proteína acelera a perda de massa muscular e derruba a taxa metabólica basal."
+          },
+          {
+            label: "Prescrever Proteína Magra Biodisponível (1,2–1,6 g/kg/dia) fracionada nas refeições",
+            correct: true,
+            rationale: "Perfeito! O aporte proteico elevado aumenta a termogênese induzida pela dieta, suprime a grelina e preserva massa magra no déficit calórico."
+          },
+          {
+            label: "Excluir jantar e realizar apenas 1 refeição rica em carboidratos simples",
+            correct: false,
+            rationale: "Inadequado: prejudica a síntese proteica muscular (que depende de pulsos de leucina ao longo do dia)."
+          }
+        ],
         goal: "lean_protein",
         target: 12,
-        reward: 1800,
+        reward: 2100,
         stage: "Fase 1: Termogênese"
       },
       {
-        title: "Controle de Picos Insulínicos",
+        title: "Roberto, 39a — Acantose Nigricans & Resistência Insulínica",
         sticker: "🍠",
-        desc: "Selecione carboidratos complexos de baixo índice glicêmico para estabilizar a glicemia e reduzir a lipogênese.",
+        patient: {
+          vitals: ["IMC: 34,9 kg/m²", "Insulina basal: 24 µUI/mL", "HOMA-IR: 5,6 (Elevado)", "Queixa: Sonolência pós-prandial"],
+          story: "Engenheiro apresenta escurecimento cervical (acantose) e hipoglicemia reativa no fim da tarde após almoços ricos em farinhas refinadas."
+        },
+        desc: "Qual estratégia de carboidratos controla os picos insulínicos sem gerar fadiga?",
+        options: [
+          {
+            label: "Priorizar Carboidratos de Baixo Índice Glicêmico e baixa carga glicêmica associados a fibras",
+            correct: true,
+            rationale: "Correto! Carboidratos complexos de absorção lenta atenuam a excursão glicêmica pós-prandial, reduzem hiperinsulinemia e evitam hipoglicemia reativa."
+          },
+          {
+            label: "Aumentar frutose isolada e maltodextrina antes do trabalho",
+            correct: false,
+            rationale: "Contraindicado: açúcares simples agravam a resistência insulínica e estimulam lipogênese de novo hepática."
+          },
+          {
+            label: "Eliminar totalmente vegetais e leguminosas da alimentação",
+            correct: false,
+            rationale: "Incorreto: leguminosas e vegetais possuem baixíssimo índice glicêmico e melhoram a sensibilidade à insulina."
+          }
+        ],
         goal: "low_gi_carb",
         target: 4,
-        reward: 2200,
+        reward: 2500,
         stage: "Fase 1: Glicemia"
       },
       {
-        title: "Estabilidade Glicêmica Ampliada",
+        title: "Sônia, 51a — Glicemia de Jejum Alterada (Pré-Diabetes)",
         sticker: "📉",
-        desc: "Escale o estoque de carboidratos ricos em amido resistente para atender pacientes com resistência insulínica inicial.",
+        patient: {
+          vitals: ["IMC: 33,8 kg/m²", "Glicemia jejum: 114 mg/dL", "HbA1c: 6,1%", "Hábito: Pão branco e doces à noite"],
+          story: "Professora com histórico familiar de DM2 busca evitar a progressão para diabetes usando ajuste dietético."
+        },
+        desc: "Qual conduta potencializa o controle glicêmico noturno e matinal?",
+        options: [
+          {
+            label: "Escalar Carboidratos de Baixo IG & Amido Resistente combinados a proteínas no jantar",
+            correct: true,
+            rationale: "Excelente! O amido resistente fermenta no cólon gerando butirato, que melhora a sinalização insulínica e reduz o fenômeno do alvorecer."
+          },
+          {
+            label: "Trocar pão branco por tapioca pura com mel no café da manhã",
+            correct: false,
+            rationale: "Incorreto: tapioca pura com mel possui altíssimo índice glicêmico, provocando pico imediato de glicose e insulina."
+          },
+          {
+            label: "Manter dieta habitual e usar apenas chás amargos sem déficit calórico",
+            correct: false,
+            rationale: "Insuficiente: perda de 5–7% do peso corporal via ajuste calórico e qualidade de carboidratos é o padrão-ouro para prevenir DM2."
+          }
+        ],
         goal: "low_gi_carb",
         target: 10,
-        reward: 2600,
+        reward: 3000,
         stage: "Fase 1: Sensibilidade"
       },
       {
-        title: "Combate à Inflamação Adiposa",
+        title: "Eduardo, 46a — Hipertrigliceridemia & Inflamação Subclínica",
         sticker: "🫒",
-        desc: "Extraia ácidos graxos monoinsaturados, ômega-3 e polifenóis para reduzir citocinas inflamatórias (TNF-α e IL-6).",
+        patient: {
+          vitals: ["IMC: 35,4 kg/m²", "Triglicerídeos: 268 mg/dL", "PCR-us: 4,8 mg/L (Alta)", "HDL-c: 34 mg/dL"],
+          story: "Paciente apresenta adiposidade visceral acentuada, dieta rica em gorduras trans/saturadas e baixo consumo de peixes e oleaginosas."
+        },
+        desc: "Qual modulação lipídica combate a inflamação do tecido adiposo e reduz triglicerídeos?",
+        options: [
+          {
+            label: "Dieta zero gordura (<10% VET) rica em carboidratos refinados",
+            correct: false,
+            rationale: "Contraindicado: excesso de carboidratos em dieta muito pobre em gorduras eleva ainda mais os triglicerídeos plasmáticos."
+          },
+          {
+            label: "Protocolo rico em Ômega-3 (EPA/DHA), azeite extravirgem e polifenóis antioxidantes",
+            correct: true,
+            rationale: "Perfeito! Ácidos graxos ômega-3 inibem a síntese hepática de VLDL/triglicerídeos, enquanto polifenóis reduzem citocinas inflamatórias (IL-6, TNF-α)."
+          },
+          {
+            label: "Suplementação de óleo de coco e manteiga ghee no café",
+            correct: false,
+            rationale: "Inadequado: gorduras saturadas em excesso elevam LDL-c e ativam receptores pró-inflamatórios TLR-4."
+          }
+        ],
         goal: "omega_lipid",
         target: 8,
-        reward: 3200,
+        reward: 3600,
         stage: "Fase 1: Anti-inflamatório"
       },
       {
-        title: "Padrão-Ouro: Dieta Mediterrânea",
+        title: "Helena, 55a — Risco Cardiovascular & Dislipidemia Mista",
         sticker: "🥗",
-        desc: "Combine proteínas magras e lipídios cardioprotetores no protocolo Mediterrâneo, reconhecido pela alta adesão e proteção vascular.",
+        patient: {
+          vitals: ["IMC: 34,1 kg/m²", "LDL-c: 162 mg/dL", "CA: 104 cm", "Preferência: Gosta de comida saborosa"],
+          story: "Advogada com LDL elevado e histórico paterno de infarto precisa de um padrão alimentar cardioprotetor e prazeroso."
+        },
+        desc: "Qual padrão alimentar possui maior evidência científica (estudo PREDIMED) para este caso?",
+        options: [
+          {
+            label: "Protocolo Dieta Mediterrânea (azeite, peixes, leguminosas, oleaginosas e vegetais)",
+            correct: true,
+            rationale: "Correto! A Dieta Mediterrânea reduz eventos cardiovasculares maiores em ~30%, melhora o perfil lipídico e apresenta altíssima adesão."
+          },
+          {
+            label: "Dieta carnívora exclusiva à base de carnes vermelhas e embutidos",
+            correct: false,
+            rationale: "Contraindicado: eleva LDL-c, TMAO e risco aterosclerótico em paciente já dislipidêmica."
+          },
+          {
+            label: "Monodieta da sopa por 21 dias seguidos",
+            correct: false,
+            rationale: "Inadequado: deficiente em ácidos graxos essenciais e proteínas, insustentável para prevenção cardiovascular."
+          }
+        ],
         goal: "mediterranean_plan",
         target: 10,
-        reward: 3800,
+        reward: 4200,
         stage: "Fase 1: Cardioproteção"
       },
       {
-        title: "Obesidade & Hipertensão (DASH)",
+        title: "Antônio, 58a — Obesidade & Hipertensão Arterial (HAS)",
         sticker: "🫀",
-        desc: "Formule o protocolo DASH rico em potássio, magnésio e fibras para pacientes obesos com hipertensão arterial sistêmica.",
+        patient: {
+          vitals: ["IMC: 36,0 kg/m²", "PA: 148/94 mmHg", "Sódio urinário: Alto", "Ingestão de potássio: Baixa"],
+          story: "Aposentado hipertenso usa temperos prontos e embutidos diariamente, com retenção hídrica e dificuldade para perder peso."
+        },
+        desc: "Qual protocolo dietoterápico é padrão-ouro para redução pressórica associada ao emagrecimento?",
+        options: [
+          {
+            label: "Protocolo DASH Metabólico (rico em K, Mg, Ca, fibras e restrito em sódio <2g/dia)",
+            correct: true,
+            rationale: "Excelente! A dieta DASH reduz a pressão sistólica em 8–14 mmHg e potencializa a perda ponderal quando combinada ao déficit calórico."
+          },
+          {
+            label: "Aumentar consumo de bebidas isotônicas e embutidos light",
+            correct: false,
+            rationale: "Contraindicado: produtos 'light' em calorias frequentemente mantêm alto teor de sódio e conservantes."
+          },
+          {
+            label: "Restringir ingestão de água para 800 mL/dia para reduzir edema",
+            correct: false,
+            rationale: "Incorreto: a restrição hídrica sem indicação cardiológica/renal específica prejudica a excreção renal de sódio."
+          }
+        ],
         goal: "dash_protocol",
         target: 8,
-        reward: 4500,
+        reward: 5000,
         stage: "Fase 1: Controle Pressórico"
       },
       {
-        title: "Déficit Calórico Sustentável",
+        title: "Lucas, 29a — Obesidade Grau II & Frustração com Dietas da Moda",
         sticker: "⚖️",
-        desc: "Prescreva déficit moderado (500–750 kcal/dia) evitando dietas da moda restritivas que causam compulsão e reganho.",
+        patient: {
+          vitals: ["IMC: 37,4 kg/m²", "GET estimado: 2.850 kcal", "Histórico: 5 tentativas falhas", "Meta: Perda realista"],
+          story: "Analista de TI tentou dietas de 1.000 kcal por conta própria, desistindo na segunda semana por fadiga extrema e irritabilidade."
+        },
+        desc: "Qual prescrição energética promove perda de 0,5 a 1,0 kg/semana com sustentabilidade?",
+        options: [
+          {
+            label: "Plano de Déficit Calórico Sustentável (redução de 500–750 kcal/dia sobre o GET)",
+            correct: true,
+            rationale: "Correto! Segundo as diretrizes ABESO/OMS, um déficit moderado de 500–750 kcal/dia maximiza a perda de gordura minimizando a adaptação metabólica."
+          },
+          {
+            label: "Cortar 1.800 kcal/dia de imediato para acelerar resultados no primeiro mês",
+            correct: false,
+            rationale: "Contraindicado: déficits agressivos disparam fome compensatória intensa (grelina) e abandono precoce do tratamento."
+          },
+          {
+            label: "Manter dieta isocalórica sem déficit esperando apenas efeito de termogênicos",
+            correct: false,
+            rationale: "Ineficaz: sem balanço energético negativo, suplementos termogênicos não promovem redução significativa de adiposidade."
+          }
+        ],
         goal: "deficit_protocol",
         target: 5,
-        reward: 5500,
+        reward: 6000,
         stage: "Fase 1: Balanço Energético"
       },
       {
-        title: "Eixo Intestino-Cérebro (Microbiota)",
+        title: "Beatriz, 37a — Disbiose, Distensão Abdominal & Platô de Peso",
         sticker: "🦠",
-        desc: "Module a microbiota intestinal com prebióticos para aumentar ácidos graxos de cadeia curta e concluir a Fase 1!",
+        patient: {
+          vitals: ["IMC: 34,6 kg/m²", "Uso recente de antibióticos", "Sintoma: Distensão e fadiga", "Platô: 6 semanas"],
+          story: "Paciente vinha perdendo peso bem, mas após ciclos de antibióticos desenvolveu distensão abdominal, desejo intenso por doces e estagnação."
+        },
+        desc: "Qual abordagem atua no eixo intestino-cérebro e na endotoxemia metabólica?",
+        options: [
+          {
+            label: "Protocolo de Modulação Intestinal (prebióticos, polifenóis e variedade vegetal >30/sem)",
+            correct: true,
+            rationale: "Perfeito! Restaurar a diversidade microbiana eleva ácidos graxos de cadeia curta (butirato/propionato), melhora a barreira intestinal e destrava o platô."
+          },
+          {
+            label: "Uso contínuo de laxantes estimulantes para esvaziar o intestino",
+            correct: false,
+            rationale: "Contraindicado: laxantes irritam a mucosa, causam distúrbios hidroeletrolíticos e não reduzem gordura corporal."
+          },
+          {
+            label: "Dieta estéril baseada apenas em alimentos ultraprocessados industrializados",
+            correct: false,
+            rationale: "Incorreto: emulsificantes e aditivos agravam a permeabilidade intestinal e a disbiose."
+          }
+        ],
         goal: "microbiota_therapy",
         target: 3,
         reward: 15000,
@@ -1139,90 +1437,300 @@
       },
       // FASE 2: OBESIDADE COMPLEXA, COMORBIDADES & LONGEVIDADE (11-20)
       {
-        title: "Manejo de Compulsão & Gatilhos",
+        title: "Camila, 31a — Comer Emocional & Episódios de Compulsão Noturna",
         sticker: "🧠",
-        desc: "Inicie a Fase 2 integrando Terapia Cognitivo-Comportamental Nutricional e Mindful Eating para comer emocional.",
+        patient: {
+          vitals: ["IMC: 36,8 kg/m²", "Gatilho: Estresse no trabalho", "Padrão: Restrição de dia, compulsão à noite", "Culpa alimentar: Alta"],
+          story: "Designer passa o dia em restrição severa e, ao chegar em casa ansiosa, ingere grandes quantidades de comida sem fome física."
+        },
+        desc: "Qual intervenção é indispensável para romper o ciclo restrição-compulsão?",
+        options: [
+          {
+            label: "Proibir todos os alimentos favoritos e aplicar punição calórica no dia seguinte",
+            correct: false,
+            rationale: "Contraindicado: a dicotomia 'alimento proibido vs. permitido' e a compensação restritiva perpetuam os episódios de compulsão alimentar."
+          },
+          {
+            label: "Terapia Cognitivo-Comportamental Nutricional (TCC), Mindful Eating e regularidade de refeições",
+            correct: true,
+            rationale: "Excelente! A TCC nutricional identifica gatilhos emocionais, elimina a restrição cognitiva rígida e restabelece sinais internos de fome e saciedade."
+          },
+          {
+            label: "Jejum de 24 horas após cada episódio de exagero alimentar",
+            correct: false,
+            rationale: "Perigoso: caracteriza comportamento compensatório purgativo/restritivo e agrava transtornos alimentares."
+          }
+        ],
         goal: "behavioral_cbt",
         target: 5,
         reward: 20000,
         stage: "Fase 2: Comportamento"
       },
       {
-        title: "Reversão de Esteatose Hepática",
+        title: "Marcelo, 49a — Esteatose Hepática Grau II (DHGNA) & Obesidade",
         sticker: "🩺",
-        desc: "Aplique o Protocolo de Remissão Metabólica para reduzir gordura visceral e hepática (DHGNA) em obesidade grau II.",
+        patient: {
+          vitals: ["IMC: 38,2 kg/m²", "TGP/ALT: 78 U/L", "USG: Esteatose moderada", "Consumo: Refrigerantes e frutose"],
+          story: "Gerente comercial descobriu gordura no fígado em exame de rotina e apresenta enzimas hepáticas elevadas."
+        },
+        desc: "Qual conduta clínica promove regressão da esteatose e fibrose hepática?",
+        options: [
+          {
+            label: "Protocolo de Remissão Metabólica (perda de 7–10% do peso + zero frutose líquida + ômega-3)",
+            correct: true,
+            rationale: "Correto! Perdas de 7% a 10% do peso corporal associadas à eliminação de xarope de frutose e aporte de polifenóis/ômega-3 revertem a esteato-hepatite."
+          },
+          {
+            label: "Suplementação de altas doses de vitamina A e ferro isolados",
+            correct: false,
+            rationale: "Contraindicado: excesso de vitamina A e ferro pode causar hepatotoxicidade e estresse oxidativo hepático."
+          },
+          {
+            label: "Substituir açúcar por sucos concentrados de uva integral 4x ao dia",
+            correct: false,
+            rationale: "Incorreto: excesso de frutose concentrada sofre metabolismo hepático direto em triglicerídeos."
+          }
+        ],
         goal: "metabolic_remission",
         target: 4,
         reward: 25000,
         stage: "Fase 2: Hepatoproteção"
       },
       {
-        title: "Remissão de Pré-Diabetes Tipo 2",
+        title: "Patrícia, 53a — Diabetes Tipo 2 Recente & Obesidade Grau II",
         sticker: "💉",
-        desc: "Amplie os protocolos de remissão metabólica para restaurar a sensibilidade periférica à insulina e normalizar HbA1c.",
+        patient: {
+          vitals: ["IMC: 37,9 kg/m²", "HbA1c: 7,4%", "Diagnóstico DM2: Há 8 meses", "Meta: Remissão glicêmica"],
+          story: "Paciente recém-diagnosticada com DM2 deseja alcançar normoglicemia sem escalonamento medicamentoso (baseado no estudo DiRECT)."
+        },
+        desc: "Qual protocolo clínico maximiza a chance de remissão do Diabetes Tipo 2?",
+        options: [
+          {
+            label: "Protocolo de Remissão Metabólica com redução de gordura ectópica pancreática e hepática",
+            correct: true,
+            rationale: "Perfeito! O estudo DiRECT demonstrou que perdas ponderais estruturadas (>10–15 kg) reduzem a gordura intra-pancreática e restauram a secreção de insulina."
+          },
+          {
+            label: "Aumentar carboidratos simples para evitar hipoglicemia mesmo sem uso de insulina",
+            correct: false,
+            rationale: "Incorreto: paciente não usa insulina exógena; excesso de carboidratos simples piora a glicotoxicidade das células beta."
+          },
+          {
+            label: "Ignorar circunferência abdominal e focar apenas no IMC isolado",
+            correct: false,
+            rationale: "Incompleto: a adiposidade visceral é o principal motor da resistência insulínica e deve ser monitorada."
+          }
+        ],
         goal: "metabolic_remission",
         target: 8,
         reward: 35000,
         stage: "Fase 2: Endocrinologia"
       },
       {
-        title: "Prevenção do Efeito Sanfona",
+        title: "Rafael, 41a — Manutenção Pós-Perda de 18 kg (Prevenção de Reganho)",
         sticker: "🌟",
-        desc: "Estruture os primeiros Programas Vida Plena para sustentar a perda de peso após 12 meses de acompanhamento.",
+        patient: {
+          vitals: ["IMC atual: 27,8 kg/m²", "Perda alcançada: -18 kg", "Grelina: Elevada", "TMB: Adaptada (-180 kcal)"],
+          story: "Após 10 meses de tratamento bem-sucedido, paciente entra na fase crítica de manutenção onde hormônios orexígenos tentam recuperar o peso perdido."
+        },
+        desc: "Qual estratégia sustenta o novo peso a longo prazo e evita o efeito sanfona?",
+        options: [
+          {
+            label: "Dar alta imediata sem retorno e liberar retorno aos hábitos antigos",
+            correct: false,
+            rationale: "Contraindicado: a obesidade é uma doença crônica recidivante; a interrupção abrupta do suporte leva ao reganho em >80% dos casos."
+          },
+          {
+            label: "Programa Vida Plena: transição calórica gradual, alta densidade proteica, automonitoramento e exercício",
+            correct: true,
+            rationale: "Correto! Aumentar gradualmente as calorias (reverse dieting controlada), manter proteína elevada e acompanhamento periódico neutraliza a adaptação metabólica."
+          },
+          {
+            label: "Reduzir ainda mais as calorias para 900 kcal/dia indefinidamente",
+            correct: false,
+            rationale: "Insustentável e prejudicial à saúde óssea, hormonal e psicológica."
+          }
+        ],
         goal: "longevity_program",
         target: 2,
         reward: 50000,
         stage: "Fase 2: Manutenção"
       },
       {
-        title: "Ambulatório de Comportamento Alimentar",
+        title: "Grupo Terapêutico — Pacientes com Histórico de Efeito Sanfona",
         sticker: "🧘",
-        desc: "Escale o suporte comportamental (TCC) para atender grupos de pacientes com histórico de dietas ioiô.",
+        patient: {
+          vitals: ["12 participantes", "IMC médio: 35,8 kg/m²", "Crença: 'Não tenho força de vontade'", "Adesão: Desafio"],
+          story: "Grupo de pacientes desmotivados por décadas de dietas restritivas acreditam que falham por falta de disciplina."
+        },
+        desc: "Qual abordagem educacional e comportamental promove autonomia duradoura?",
+        options: [
+          {
+            label: "Terapia Comportamental (TCC): psicoeducação sobre neurobiologia da obesidade e metas flexíveis",
+            correct: true,
+            rationale: "Excelente! Compreender que a obesidade envolve regulação neuroendócrina reduz o estigma internalizado e melhora a autoeficácia."
+          },
+          {
+            label: "Expor publicamente o peso semanal de cada participante como forma de pressão",
+            correct: false,
+            rationale: "Antiético e contraindicado: o estigma do peso eleva cortisol, piora a saúde mental e aumenta o abandono."
+          },
+          {
+            label: "Entregar uma lista idêntica de 1.100 kcal impressa para todos",
+            correct: false,
+            rationale: "Inadequado: desconsidera necessidades energéticas individuais, cultura alimentar e contexto socioeconômico."
+          }
+        ],
         goal: "behavioral_cbt",
         target: 15,
         reward: 75000,
         stage: "Fase 2: Psicologia Nutricional"
       },
       {
-        title: "Centro de Síndrome Metabólica",
+        title: "Jorge, 56a — Síndrome Metabólica Grave & Apneia do Sono",
         sticker: "🏥",
-        desc: "Consolide o tratamento integrado da síndrome metabólica (obesidade central, dislipidemia e hiperglicemia).",
+        patient: {
+          vitals: ["IMC: 41,2 kg/m² (Grau III)", "PA: 150/96 mmHg", "HbA1c: 6,9%", "Apneia obstrutiva: Moderada"],
+          story: "Paciente com obesidade grau III e múltiplas comorbidades inicia preparo nutricional estruturado em equipe interdisciplinar."
+        },
+        desc: "Qual conduta nutricional integra o cuidado interdisciplinar na obesidade grave?",
+        options: [
+          {
+            label: "Protocolo de Remissão Metabólica individualizado integrado à equipe médica e exercício adaptado",
+            correct: true,
+            rationale: "Correto! Na obesidade grau III, o cuidado interdisciplinar (nutrição, endocrinologia, psicologia e educação física) potencializa a segurança e os desfechos."
+          },
+          {
+            label: "Prescrever treino de corrida de alto impacto em jejum prolongado",
+            correct: false,
+            rationale: "Contraindicado: alto risco articular e cardiovascular sem avaliação e adaptação progressiva."
+          },
+          {
+            label: "Aguardar perda de 40 kg antes de tratar hipertensão e apneia",
+            correct: false,
+            rationale: "Incorreto: perdas de 5–10% já melhoram significativamente a apneia do sono e a pressão arterial."
+          }
+        ],
         goal: "metabolic_remission",
         target: 14,
         reward: 110000,
         stage: "Fase 2: Alta Complexidade"
       },
       {
-        title: "Programa Municipal de Saúde Metabólica",
+        title: "Programa Coletivo — Saúde Metabólica na Atenção Primária",
         sticker: "🌍",
-        desc: "Forme 5 turmas completas de pacientes com alta clínica sustentada e autonomia alimentar.",
+        patient: {
+          vitals: ["50 pacientes acompanhados", "Renda: Variada", "Foco: Comida de verdade acessível", "Meta: 12 meses"],
+          story: "Implantação de linha de cuidado de sobrepeso e obesidade utilizando alimentos regionais acessíveis (arroz, feijão, legumes, ovos)."
+        },
+        desc: "Como garantir equidade, custo acessível e alta taxa de manutenção em 12 meses?",
+        options: [
+          {
+            label: "Programa Vida Plena valorizando cultura alimentar regional (feijão com arroz, hortaliças) e educação contínua",
+            correct: true,
+            rationale: "Perfeito! O Guia Alimentar demonstra que preparações culinárias tradicionais brasileiras são nutricionalmente completas, acessíveis e sustentáveis."
+          },
+          {
+            label: "Exigir salmão selvagem, aspargos importados e suplementos caros",
+            correct: false,
+            rationale: "Inviável: cria barreira financeira imediata e leva ao abandono do tratamento."
+          },
+          {
+            label: "Suspender o acompanhamento após os primeiros 30 dias",
+            correct: false,
+            rationale: "Ineficaz: o acompanhamento longitudinal é determinante para consolidar novos hábitos."
+          }
+        ],
         goal: "longevity_program",
         target: 5,
         reward: 160000,
         stage: "Fase 2: Saúde Coletiva"
       },
       {
-        title: "Referência Nacional em Comportamento",
+        title: "Helena, 27a — Ortorexia & Medo de Carboidratos Pós-Dieta",
         sticker: "📚",
-        desc: "Domine a abordagem não-punitiva e comportamental com 30 protocolos de TCC aplicados com sucesso.",
+        patient: {
+          vitals: ["IMC: 26,4 kg/m²", "Ansiedade alimentar: Severa", "Vida social: Isolada", "Risco: Transtorno alimentar"],
+          story: "Após emagrecer com regras rígidas na internet, paciente sente pânico ao comer uma fruta ou arroz em eventos sociais."
+        },
+        desc: "Qual conduta restaura a relação saudável com a comida sem reganho de peso?",
+        options: [
+          {
+            label: "Terapia Comportamental (TCC) com reintrodução gradual de alimentos temidos e flexibilidade cognitiva",
+            correct: true,
+            rationale: "Correto! A abordagem não-punitiva e flexível previne a evolução para transtornos alimentares graves e mantém o peso estável."
+          },
+          {
+            label: "Reforçar que frutas possuem açúcar e devem ser evitadas para sempre",
+            correct: false,
+            rationale: "Contraindicado: alimenta crenças disfuncionais e terrorismo nutricional sem base científica."
+          },
+          {
+            label: "Prescrever pesagem corporal 3 vezes ao dia para controle",
+            correct: false,
+            rationale: "Prejudicial: aumenta hipervigilância, ansiedade e flutuações hídricas mal interpretadas."
+          }
+        ],
         goal: "behavioral_cbt",
         target: 30,
         reward: 250000,
         stage: "Fase 2: Excelência Clínica"
       },
       {
-        title: "Legado em Saúde & Longevidade",
+        title: "Coorte Longitudinal — 2 Anos de Remissão Metabólica",
         sticker: "🏛️",
-        desc: "Alcance 10 Programas Vida Plena concluídos com manutenção comprovada de composição corporal.",
+        patient: {
+          vitals: ["Coorte: 100 pacientes", "Seguimento: 24 meses", "Perda média sustentada: 11,4%", "Qualidade de vida: +85%"],
+          story: "Auditoria clínica dos pacientes acompanhados há 2 anos demonstra redução expressiva de medicamentos anti-hipertensivos e hipoglicemiantes."
+        },
+        desc: "Qual pilar consolida os resultados de 24 meses na linha de cuidado da obesidade?",
+        options: [
+          {
+            label: "Programa Vida Plena: monitoramento periódico de composição corporal, sono, estresse e autonomia culinária",
+            correct: true,
+            rationale: "Excelente! O manejo integrado de sono, estresse, atividade física e alimentação personalizada sustenta a saúde metabólica a longo prazo."
+          },
+          {
+            label: "Substituir todas as refeições sólidas por shakes industrializados indefinidamente",
+            correct: false,
+            rationale: "Inadequado: não desenvolve habilidades culinárias nem autonomia social."
+          },
+          {
+            label: "Focar exclusivamente no número da balança ignorando exames laboratoriais e massa magra",
+            correct: false,
+            rationale: "Incompleto: saúde metabólica envolve composição corporal, marcadores bioquímicos e bem-estar integral."
+          }
+        ],
         goal: "longevity_program",
         target: 10,
         reward: 400000,
         stage: "Fase 2: Legado Científico"
       },
       {
-        title: "Instituto de Excelência em Obesidade",
+        title: "Consenso Científico — Instituto de Excelência em Obesidade",
         sticker: "👑",
-        desc: "Coroe sua carreira transformando vidas com ciência, empatia e nutrição baseada em evidências!",
+        patient: {
+          vitals: ["Banca Científica", "Diretrizes: ABESO / OMS", "Abordagem: Ética, Humana e Baseada em Evidências"],
+          story: "Você apresenta os resultados da sua clínica para certificação máxima em tratamento integral da obesidade."
+        },
+        desc: "Qual síntese define o padrão-ouro contemporâneo do nutricionista no tratamento da obesidade?",
+        options: [
+          {
+            label: "Programa Vida Plena: cuidado centrado na pessoa, déficit sustentável, qualidade nutricional e zero estigma",
+            correct: true,
+            rationale: "Brilhante! Você concluiu toda a jornada clínica unindo rigor científico, empatia e transformação real da saúde metabólica!"
+          },
+          {
+            label: "Prescrição padronizada de dietas da moda extremas para perda rápida a qualquer custo",
+            correct: false,
+            rationale: "Contraria todas as diretrizes científicas nacionais e internacionais de saúde."
+          },
+          {
+            label: "Culpar o paciente sempre que ocorrer um platô fisiológico esperado",
+            correct: false,
+            rationale: "Antiético: platôs fazem parte da adaptação metabólica e exigem ajuste técnico empático do profissional."
+          }
+        ],
         goal: "longevity_program",
         target: 20,
         reward: 1000000,
@@ -1294,6 +1802,8 @@
         longevity_program: 0
       },
       completed: [],
+      solvedDiagnosis: [],
+      selectedOptions: {},
       production: 0,
       upgrades: []
     };
@@ -1321,6 +1831,8 @@
         stock: { ...base.stock, ...(raw.stock || {}) },
         produced: { ...base.produced, ...(raw.produced || {}) },
         completed: Array.isArray(raw.completed) ? raw.completed : [],
+        solvedDiagnosis: Array.isArray(raw.solvedDiagnosis) ? raw.solvedDiagnosis : [],
+        selectedOptions: raw.selectedOptions && typeof raw.selectedOptions === "object" ? raw.selectedOptions : {},
         production: typeof raw.production === "number" ? raw.production : 0,
         upgrades: Array.isArray(raw.upgrades) ? raw.upgrades : []
       };
@@ -1451,7 +1963,7 @@
         return;
       }
       const m = MISSIONS[i];
-      speak(`Caso Clínico ${i + 1}: ${m.title}. ${m.desc}`);
+      speak(`Prontuário ${i + 1}: ${m.title}. ${m.patient.story} Pergunta clínica: ${m.desc}`);
     }
 
     // =========================================================================
@@ -1470,117 +1982,85 @@
       const emoji = icons[index % icons.length];
 
       return `
-        <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="grad-${index}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="${bg}"/>
-              <stop offset="100%" stop-color="#041019"/>
-            </linearGradient>
-          </defs>
-          <rect width="640" height="280" fill="url(#grad-${index})"/>
-          <circle cx="480" cy="140" r="105" fill="${primary}" opacity="0.14"/>
-          <circle cx="480" cy="140" r="72" fill="none" stroke="${light}" stroke-width="2" stroke-dasharray="8 6" opacity="0.65"/>
-          <path d="M 140 160 L 210 160 L 230 115 L 255 195 L 280 95 L 305 175 L 325 140 L 385 140" fill="none" stroke="${light}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-          <text x="480" y="158" text-anchor="middle" font-size="64">${emoji}</text>
-          ${label ? `<text x="320" y="254" text-anchor="middle" fill="${light}" font-family="Chakra Petch, sans-serif" font-weight="700" font-size="14" letter-spacing="1.5">${label}</text>` : ""}
-        </svg>
+    function selectClinicalOption(missionIdx, optionIdx) {
+      if (missionIdx !== activeMissionIndex()) return;
+      const m = MISSIONS[missionIdx];
+      const opt = m.options[optionIdx];
+      if (!opt) return;
+
+      state.selectedOptions[missionIdx] = optionIdx;
+
+      if (opt.correct) {
+        if (!state.solvedDiagnosis.includes(missionIdx)) {
+          state.solvedDiagnosis.push(missionIdx);
+          state.coins += 500;
+          playSfx("win");
+          spawnFloatingText("+500 CR Diagnóstico Correto!", "#34d399");
+          toast("✅ Conduta clínica aprovada! +500 CR de bônus diagnóstico.");
+        } else {
+          playSfx("click");
+        }
+      } else {
+        playSfx("click");
+        toast("⚠️ Conduta inadequada para este perfil clínico. Leia a justificativa!");
+      }
+
+      save();
+    }
+
+    function renderPatientChartHtml(m, i, isUnlocked, isDone) {
+      const vitalsHtml = m.patient.vitals.map((v, idx) =>
+        `<span class="vital-tag ${idx >= 2 ? "alert" : ""}">${v}</span>`
+      ).join("");
+
+      const chosenIdx = state.selectedOptions[i];
+      const diagnosisSolved = isDone || state.solvedDiagnosis.includes(i);
+      const letters = ["A", "B", "C"];
+
+      const choicesHtml = isUnlocked ? `
+        <div class="clinical-choices">
+          ${m.options.map((opt, optIdx) => {
+            let cls = "";
+            if (isDone && opt.correct) cls = "selected-correct";
+            else if (chosenIdx === optIdx) cls = opt.correct ? "selected-correct" : "selected-wrong";
+            return `
+              <button type="button" class="choice-btn ${cls}" data-case-choice="${i}" data-opt-idx="${optIdx}" ${isDone ? "disabled" : ""}>
+                <span class="choice-letter">${letters[optIdx]}</span>
+                <span>${opt.label}</span>
+              </button>
+            `;
+          }).join("")}
+        </div>
+      ` : "";
+
+      let feedbackHtml = "";
+      if (isDone) {
+        const correctOpt = m.options.find(o => o.correct);
+        feedbackHtml = `<div class="clinical-feedback ok"><strong>✅ Conduta Aplicada:</strong> ${correctOpt.rationale}</div>`;
+      } else if (isUnlocked && chosenIdx !== undefined && m.options[chosenIdx]) {
+        const chosenOpt = m.options[chosenIdx];
+        feedbackHtml = `<div class="clinical-feedback ${chosenOpt.correct ? "ok" : "err"}">
+          <strong>${chosenOpt.correct ? "✅ Prescrição Indicada (+500 CR):" : "❌ Contraindicado / Inadequado:"}</strong> ${chosenOpt.rationale}
+        </div>`;
+      }
+
+      return `
+        <div class="patient-chart-box">
+          <div class="patient-vitals">${vitalsHtml}</div>
+          <p style="margin:0;color:var(--ink);font-size:12.5px;line-height:1.55;"><strong>História Clínica:</strong> ${m.patient.story}</p>
+          <p style="margin:8px 0 0;color:var(--accent);font-weight:700;font-size:12.5px;">🩺 ${m.desc}</p>
+          ${choicesHtml}
+          ${feedbackHtml}
+        </div>
       `;
     }
 
-    // =========================================================================
-    // 8. LÓGICAS DE NEGÓCIO & PROGRESSÃO
-    // =========================================================================
-    function totalEfficiencyBonus() {
-      return state.upgrades.reduce((acc, id) => acc + (UPGRADES.find(u => u.id === id)?.eff || 0), 0);
-    }
-
-    function effectiveCost(p) {
-      const bonus = totalEfficiencyBonus();
-      const discountRate = Math.min(0.40, bonus * 0.005);
-      return Math.max(10, Math.round(p.cost * (1 - discountRate)));
-    }
-
-    function activeMissionIndex() {
-      for (let i = 0; i < MISSIONS.length; i++) {
-        if (!state.completed.includes(i)) return i;
-      }
-      return -1;
-    }
-
-    function missionProgress(i) {
-      const m = MISSIONS[i];
-      return Math.min(100, Math.floor((state.stock[m.goal] || 0) / m.target * 100));
-    }
-
-    function unlockedProcess(p) {
-      return state.completed.length >= p.unlock;
-    }
-
-    function toast(msg) {
-      const el = $("toast");
-      if (!el) return;
-      el.textContent = msg;
-      el.classList.add("show");
-      clearTimeout(toast.timer);
-      toast.timer = setTimeout(() => el.classList.remove("show"), 2700);
-    }
-
-    function showModal(title, text, symbol = "🎉", eyebrow = "EVOLUÇÃO CLÍNICA") {
-      $("modalTitle").textContent = title;
-      $("modalText").innerHTML = text;
-      $("modalSymbol").textContent = symbol;
-      $("modalEyebrow").textContent = eyebrow;
-      $("modalBackdrop").classList.add("show");
-    }
-
-    function closeModal() {
-      playSfx("click");
-      $("modalBackdrop").classList.remove("show");
-    }
-
-    function changeView(name) {
-      playSfx("click");
-      document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === "view-" + name));
-      document.querySelectorAll(".nav-link").forEach(b => b.classList.toggle("active", b.dataset.view === name));
-      const labels = {
-        dashboard: "Consultório Central",
-        missions: "Quadro de Casos Clínicos",
-        production: "Cozinha Experimental & Protocolos",
-        market: "Consultoria & Prescrições",
-        upgrades: "Equipamentos Clínicos"
-      };
-      if ($("pageTitle")) $("pageTitle").textContent = labels[name] || "Consultório Central";
-      if ($("sidebar")) $("sidebar").classList.remove("open");
-      if ($("sidebarBackdrop")) $("sidebarBackdrop").classList.remove("show");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    // =========================================================================
-    // 9. RENDERIZAÇÃO DAS VIEWS
-    // =========================================================================
-    function renderStock() {
-      const list = $("stockList");
-      if (!list) return;
-      list.innerHTML = Object.entries(MATERIALS).map(([id, m]) => `
-        <div class="stock-row">
-          <span class="material-icon">${m.icon}</span>
-          <div>${matBadge(id)}<small class="stock-sub">Honorário: ${fmt(m.price)} CR/un.</small></div>
-          <strong class="stock-qty">${fmt(state.stock[id])} ${m.unit}</strong>
-        </div>
-      `).join("");
-    }
-
-    function renderChain() {
-      const strip = $("chainStrip");
-      if (!strip) return;
-      const displayMissions = MISSIONS.slice(0, 10);
-      strip.innerHTML = displayMissions.map((m, i) => `
-        <div class="chain-step ${state.completed.includes(i) ? "done" : i === activeMissionIndex() ? "" : "locked"}">
-          <span class="step-no">${m.sticker} ETAPA ${String(i + 1).padStart(2, "0")}</span>
-          <strong>${m.title}</strong>
-          <div style="margin-top:8px">${matBadge(m.goal)}</div>
-        </div>
-      `).join("");
+    function bindChoiceButtons() {
+      document.querySelectorAll("[data-case-choice]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          selectClinicalOption(Number(btn.dataset.caseChoice), Number(btn.dataset.optIdx));
+        });
+      });
     }
 
     function renderDashboard() {
@@ -1607,7 +2087,7 @@
       if (idx < 0) {
         if ($("nextMissionEyebrow")) $("nextMissionEyebrow").textContent = "ESPECIALIZAÇÃO CONCLUÍDA!";
         if ($("nextMissionTitle")) $("nextMissionTitle").textContent = "👑 Instituto de Excelência em Obesidade!";
-        if ($("nextMissionDesc")) $("nextMissionDesc").innerHTML = `Parabéns! Todos os 20 casos clínicos foram solucionados com ciência e empatia!`;
+        if ($("dashboardPatientChart")) $("dashboardPatientChart").innerHTML = `<p style="margin:0;color:var(--ink);">Parabéns! Todos os 20 prontuários clínicos foram diagnosticados e tratados com base em evidências científicas!</p>`;
         if ($("nextMissionBadge")) $("nextMissionBadge").textContent = "ALTA CLÍNICA";
         if ($("missionProgressText")) $("missionProgressText").textContent = "100%";
         if ($("missionProgressBar")) $("missionProgressBar").style.width = "100%";
@@ -1615,15 +2095,33 @@
       } else {
         const m = MISSIONS[idx];
         const prog = missionProgress(idx);
+        const diagnosisOk = state.solvedDiagnosis.includes(idx);
+        const hasStock = (state.stock[m.goal] || 0) >= m.target;
+        const ready = diagnosisOk && hasStock;
+
         if ($("nextMissionEyebrow")) $("nextMissionEyebrow").textContent = `${m.sticker} ${m.stage}`;
         if ($("nextMissionTitle")) $("nextMissionTitle").textContent = `Caso ${String(idx + 1).padStart(2, "0")} · ${m.title}`;
-        if ($("nextMissionDesc")) $("nextMissionDesc").innerHTML = `${m.desc} Meta: <strong>${m.target} un.</strong> de ${matBadge(m.goal)}.`;
-        if ($("nextMissionBadge")) $("nextMissionBadge").textContent = prog >= 100 ? "🎉 PRONTO P/ ALTA!" : "EM ATENDIMENTO";
-        if ($("missionProgressText")) $("missionProgressText").textContent = prog + "%";
+        if ($("dashboardPatientChart")) {
+          $("dashboardPatientChart").innerHTML = renderPatientChartHtml(m, idx, true, false) +
+            `<div style="margin-top:10px;font-size:12px;color:var(--muted);">
+              <strong>Protocolo exigido para alta:</strong> ${m.target} un. de ${matBadge(m.goal)} (Disponível: <strong>${fmt(state.stock[m.goal] || 0)} un.</strong>)
+            </div>`;
+        }
+        if ($("nextMissionBadge")) $("nextMissionBadge").textContent = ready ? "🎉 PRONTO P/ ALTA!" : diagnosisOk ? "FORMULAR PROTOCOLO" : "ESCOLHER CONDUTA";
+        if ($("missionProgressText")) $("missionProgressText").textContent = `${prog}% (${fmt(state.stock[m.goal] || 0)}/${m.target})`;
         if ($("missionProgressBar")) $("missionProgressBar").style.width = prog + "%";
-        if ($("nextMissionActionBtn")) $("nextMissionActionBtn").style.display = "inline-flex";
+        if ($("nextMissionActionBtn")) {
+          $("nextMissionActionBtn").style.display = "inline-flex";
+          $("nextMissionActionBtn").innerHTML = ready ? `🎉 Dar Alta ao Paciente (+${fmt(m.reward)} CR)` : !diagnosisOk ? "1º Escolha a Conduta Acima" : "🧪 Ir Formular Protocolo →";
+          $("nextMissionActionBtn").onclick = () => {
+            if (ready) completeMission(idx);
+            else if (!diagnosisOk) toast("🩺 Selecione primeiro a opção correta de conduta clínica no prontuário!");
+            else changeView("production");
+          };
+        }
       }
 
+      bindChoiceButtons();
       renderStock();
       renderChain();
     }
@@ -1640,27 +2138,41 @@
         const done = state.completed.includes(i);
         const unlocked = i === activeMissionIndex() || done;
         const progress = done ? 100 : unlocked ? missionProgress(i) : 0;
-        const readyToClaim = unlocked && !done && (state.stock[m.goal] || 0) >= m.target;
+        const diagnosisOk = done || state.solvedDiagnosis.includes(i);
+        const hasStock = (state.stock[m.goal] || 0) >= m.target;
+        const readyToClaim = unlocked && !done && diagnosisOk && hasStock;
+
         return `
-          <article class="mission-card ${done ? "completed" : unlocked ? "unlocked" : "locked"}">
+          <article class="mission-card-expanded ${done ? "completed" : unlocked ? "unlocked" : "locked"}">
             <div class="mission-art" role="img" aria-label="Ilustração do caso ${i + 1}: ${m.title}">
               ${generateClinicalSvg(i)}
             </div>
             <div class="mission-number">${done ? "✅" : m.sticker}</div>
             <div class="mission-info">
-              <h3>Caso ${String(i + 1).padStart(2, "0")}: ${m.title}</h3>
-              <p>${m.desc}</p>
-              <div class="mission-reward">Prescrição exigida: <strong>${m.target} un.</strong> de ${matBadge(m.goal)} · Honorários: 🪙 <strong>+${fmt(m.reward)} CR</strong></div>
-              <div class="progress-track" style="margin-top:10px;max-width:300px"><span style="width:${progress}%"></span></div>
-            </div>
-            <div class="mission-action">
-              <small>${done ? "CASO RESOLVIDO" : readyToClaim ? "🎁 PRONTO PARA ALTA!" : unlocked ? `${progress}% atingido` : "🔒 BLOQUEADO"}</small>
-              ${unlocked && !done ? `<button class="btn ${readyToClaim ? "btn-light" : "btn-outline"} mission-claim-btn" data-mission="${i}" type="button">${readyToClaim ? "🎉 Concluir Caso" : "Verificar"}</button>` : ""}
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+                <h3>Caso ${String(i + 1).padStart(2, "0")}: ${m.title}</h3>
+                <span class="status-pill">${done ? "ALTA CONCLUÍDA" : unlocked ? m.stage : "🔒 BLOQUEADO"}</span>
+              </div>
+              ${unlocked ? renderPatientChartHtml(m, i, unlocked, done) : `<p style="margin-top:6px;">Conclua o caso clínico anterior para liberar este prontuário.</p>`}
+              <div class="mission-reward" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:12px;">
+                <div>
+                  Prescrição necessária: <strong>${m.target} un.</strong> de ${matBadge(m.goal)} · Honorários: 🪙 <strong>+${fmt(m.reward)} CR</strong>
+                  <div class="progress-track" style="margin-top:8px;max-width:300px"><span style="width:${progress}%"></span></div>
+                </div>
+                <div>
+                  ${unlocked && !done ? `
+                    <button class="btn ${readyToClaim ? "btn-light" : "btn-outline"} mission-claim-btn" data-mission="${i}" type="button">
+                      ${readyToClaim ? "🎉 Concluir Caso & Receber" : !diagnosisOk ? "1º Escolha a Conduta" : `Faltam ${Math.max(0, m.target - (state.stock[m.goal] || 0))} un.`}
+                    </button>
+                  ` : ""}
+                </div>
+              </div>
             </div>
           </article>
         `;
       }).join("");
 
+      bindChoiceButtons();
       document.querySelectorAll(".mission-claim-btn").forEach(btn => {
         btn.addEventListener("click", () => completeMission(Number(btn.dataset.mission)));
       });
@@ -1865,9 +2377,14 @@
     function completeMission(i) {
       if (i !== activeMissionIndex()) return;
       const m = MISSIONS[i];
+      if (!state.solvedDiagnosis.includes(i)) {
+        playSfx("click");
+        toast("🩺 Primeiro leia o prontuário e escolha a conduta clínica correta!");
+        return;
+      }
       if ((state.stock[m.goal] || 0) < m.target) {
         playSfx("click");
-        toast(`⚠️ Você precisa de ${m.target} un. de ${MATERIALS[m.goal].name} para resolver este caso.`);
+        toast(`⚠️ Você precisa formular ${m.target} un. de ${MATERIALS[m.goal].name} na Cozinha Experimental.`);
         return;
       }
       state.completed.push(i);
