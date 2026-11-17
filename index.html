@@ -2,2463 +2,880 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#041019">
-  <meta name="description" content="NutriClínica Tycoon — Simulador clínico gamificado de nutrição baseada em evidências, dietoterapia e tratamento integral da obesidade.">
-  <title>NutriClínica Tycoon | Especialista em Obesidade & Saúde Metabólica</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#0f172a">
+  <title>NutriClínica Pro | Sistema de Gestão e Decisão em Obesidade</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;1,700&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #041019;
-      --surface: rgba(11, 26, 40, 0.84);
-      --surface-card: rgba(17, 39, 58, 0.9);
-      --ink: #f1f5f9;
-      --muted: #94a3b8;
-      --line: rgba(30, 58, 82, 0.85);
-      --navy: #071624;
-      --accent: #10b981;
-      --accent-hover: #059669;
-      --accent-glow: rgba(16, 185, 129, 0.4);
-      --cyan: #06b6d4;
-      --cyan-glow: rgba(6, 182, 212, 0.4);
-      --violet: #a855f7;
-      --amber: #f59e0b;
-      --rose: #f43f5e;
-      --white: #ffffff;
-      --shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
-      --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+      --bg: #0b132b;
+      --surface: #111d38;
+      --surface-card: #182647;
+      --border: #22345e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #0ea5e9;
+      --primary-hover: #0284c7;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --radius: 10px;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
     body {
       margin: 0;
       background: var(--bg);
-      background-image:
-        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.14) 0%, transparent 45%),
-        radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.12) 0%, transparent 50%),
-        linear-gradient(180deg, #05131f 0%, #041019 100%);
-      color: var(--ink);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-      min-height: 100vh;
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
     }
 
-    h1, h2, h3, .brand strong, .hero-index, .stat-card > strong, .market-price {
-      font-family: 'Chakra Petch', 'Manrope', sans-serif;
+    .app-shell { display: flex; flex-direction: column; min-height: 100vh; }
+    
+    /* Topbar Profissional */
+    .topbar {
+      height: 60px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
-
-    button { font: inherit; cursor: pointer; }
-    button:disabled { opacity: 0.42; cursor: not-allowed; transform: none !important; filter: none !important; box-shadow: none !important; }
-
-    @keyframes floatSticker {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-5px) rotate(4deg); }
-    }
-
-    @keyframes pulseGlow {
-      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px var(--accent-glow)); }
-      50% { transform: scale(1.1); filter: drop-shadow(0 0 14px var(--accent-glow)); }
-    }
-
-    @keyframes spinSlow {
-      0% { transform: rotateY(0deg); }
-      100% { transform: rotateY(360deg); }
-    }
-
-    @keyframes bounceIn {
-      0% { transform: scale(0.5); opacity: 0; }
-      70% { transform: scale(1.15); opacity: 1; }
-      100% { transform: scale(1); }
-    }
-
-    @keyframes floatUpFx {
-      0% { opacity: 1; transform: translateY(0) scale(0.9); }
-      100% { opacity: 0; transform: translateY(-70px) scale(1.25); }
-    }
-
-    @keyframes processFill { to { width: 100%; } }
-    @keyframes processPop { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes scenePulse { from { filter: brightness(.92) saturate(1); } to { filter: brightness(1.1) saturate(1.15); } }
-
-    .sticker-float { display: inline-block; animation: floatSticker 3s ease-in-out infinite; }
-    .sticker-pulse { display: inline-block; animation: pulseGlow 2.2s ease-in-out infinite; }
-    .sticker-spin { display: inline-block; animation: spinSlow 5s linear infinite; }
-    .sticker-bounce { animation: bounceIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
-
-    .fx-layer {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 9999;
-      overflow: hidden;
-    }
-
-    .fx-popup {
-      position: absolute;
-      font-family: 'Chakra Petch', sans-serif;
+    .brand-title {
       font-weight: 700;
-      font-size: 18px;
-      color: #34d399;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.9), 0 0 15px rgba(16, 185, 129, 0.8);
-      animation: floatUpFx 1.2s ease-out forwards;
-      white-space: nowrap;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-title span { color: var(--primary); }
+    .top-stats {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hud-badge {
+      background: rgba(14, 165, 233, 0.1);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--primary);
+    }
+    .hud-cash {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--success);
     }
 
-    .app-shell { min-height: 100vh; display: flex; flex-direction: column; }
-
-    /* SIDEBAR */
-    .sidebar {
-      width: 280px;
-      background: rgba(7, 22, 36, 0.94);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-right: 1px solid rgba(255, 255, 255, 0.08);
+    /* Navegação Inferior para Mobile / Abas */
+    .main-nav {
       position: fixed;
-      inset: 0 auto 0 0;
-      padding: 22px 16px 20px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      height: 56px;
+      z-index: 50;
+    }
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
       display: flex;
       flex-direction: column;
-      z-index: 50;
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow-y: auto;
-      box-shadow: 10px 0 40px rgba(0,0,0,0.6);
-    }
-
-    .sidebar-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(4, 16, 25, 0.78);
-      z-index: 40;
-      display: none;
-      backdrop-filter: blur(5px);
-    }
-    .sidebar-backdrop.show { display: block; }
-
-    .brand {
-      display: flex;
       align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: var(--white);
-      padding: 0 6px 20px;
-    }
-
-    .brand-mark {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #10b981, #06b6d4);
-      display: grid;
-      place-items: center;
-      font-size: 22px;
-      box-shadow: 0 0 22px var(--accent-glow);
-      transition: transform 0.2s;
-    }
-    .brand:hover .brand-mark { transform: rotate(-8deg) scale(1.08); }
-
-    .brand strong { display: block; font-size: 16px; letter-spacing: 0.8px; color: var(--white); }
-    .brand small { display: block; color: var(--cyan); font-size: 10px; font-weight: 700; letter-spacing: 1.4px; margin-top: 2px; }
-
-    .game-badge-card {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: linear-gradient(135deg, rgba(17, 39, 58, 0.85), rgba(11, 26, 40, 0.92));
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      border-radius: 16px;
-      padding: 12px 14px;
-      margin-bottom: 18px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
-
-    .company-icon {
-      height: 40px;
-      width: 40px;
-      border-radius: 12px;
-      background: rgba(16, 185, 129, 0.2);
-      border: 1px solid rgba(16, 185, 129, 0.45);
-      display: grid;
-      place-items: center;
-      font-size: 22px;
-      flex: none;
-    }
-
-    .company-card strong { display: block; font-size: 13px; color: var(--white); }
-    .company-card small { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 5px; margin-top: 3px; flex-wrap: wrap; }
-    .lvl-pill { background: var(--accent); color: #041019; font-weight: 800; padding: 1px 6px; border-radius: 6px; font-size: 10px; }
-
-    .main-nav { display: grid; gap: 8px; }
-
-    .nav-link {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid transparent;
-      color: var(--muted);
-      text-align: left;
-      padding: 12px 14px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 13px;
+      justify-content: center;
+      font-size: 10px;
       font-weight: 600;
-      transition: all 0.22s ease;
+      gap: 2px;
+      cursor: pointer;
+    }
+    .nav-btn span.icon { font-size: 16px; }
+    .nav-btn.active { color: var(--primary); background: rgba(14, 165, 233, 0.05); }
+
+    /* Área de Conteúdo */
+    .content-area {
+      padding: 16px;
+      padding-bottom: 76px; /* espaço da nav fixa */
+      max-width: 800px;
+      margin: 0 auto;
       width: 100%;
     }
 
-    .nav-sticker { font-size: 19px; width: 24px; text-align: center; transition: transform 0.2s; }
-    .nav-link:hover { background: rgba(255, 255, 255, 0.06); color: var(--white); transform: translateX(4px); }
-    .nav-link:hover .nav-sticker { transform: scale(1.2) rotate(6deg); }
-    .nav-link.active {
-      background: linear-gradient(90deg, rgba(16, 185, 129, 0.22), rgba(6, 182, 212, 0.08));
-      color: var(--white);
-      border-color: rgba(16, 185, 129, 0.45);
-      box-shadow: 0 4px 18px rgba(16, 185, 129, 0.2), inset 3px 0 var(--accent);
-    }
+    .view { display: none; }
+    .view.active { display: block; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    .nav-count {
-      margin-left: auto;
-      background: var(--accent);
-      color: #041019;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 2px 9px;
-      box-shadow: 0 0 12px var(--accent-glow);
-    }
-
-    .sidebar-bottom { margin-top: auto; padding-top: 16px; }
-
-    .mascot-tip {
-      display: flex;
-      gap: 10px;
-      background: rgba(6, 182, 212, 0.1);
-      border: 1px solid rgba(6, 182, 212, 0.3);
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 12px;
-    }
-
-    .mascot-avatar { font-size: 24px; flex: none; animation: floatSticker 2.5s ease-in-out infinite; }
-    .help-box strong { font-size: 11px; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.5px; }
-    .help-box p { font-size: 11px; line-height: 1.45; color: var(--ink); margin: 4px 0 0; }
-
-    .version { display: block; color: var(--muted); font-size: 9px; letter-spacing: 1.2px; margin: 10px 4px 0; text-transform: uppercase; text-align: center; }
-
-    /* MAIN AREA */
-    .main-area {
-      margin-left: 280px;
-      min-height: 100vh;
-      padding: 0 34px;
-      max-width: 1700px;
-      position: relative;
-      flex: 1;
-    }
-
-    .topbar {
-      min-height: 76px;
-      padding: 10px 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .breadcrumb { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
-    .breadcrumb i { font-style: normal; color: var(--accent); font-size: 10px; }
-    .breadcrumb strong { color: var(--white); font-weight: 700; font-size: 14px; }
-
-    .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
-
-    .coin-hud {
-      display: grid;
-      grid-template-columns: auto auto;
-      align-items: center;
-      column-gap: 8px;
-      font-weight: 800;
-      font-size: 15px;
-      font-family: 'Chakra Petch', sans-serif;
-      background: linear-gradient(135deg, rgba(11, 26, 40, 0.92), rgba(17, 39, 58, 0.92));
-      border: 1px solid rgba(245, 158, 11, 0.45);
-      padding: 6px 16px;
-      border-radius: 14px;
-      box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
-    }
-    .coin-hud small { grid-column: 2; color: var(--amber); font-size: 8px; letter-spacing: 1.2px; font-family: 'DM Sans', sans-serif; }
-    .coin { font-size: 20px; }
-
-    .user-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #10b981, #06b6d4);
-      display: grid;
-      place-items: center;
-      font-size: 20px;
-      box-shadow: 0 0 18px rgba(16, 185, 129, 0.4);
-      flex: none;
-    }
-
-    .game-chip-btn {
-      border: 1px solid rgba(6, 182, 212, 0.4);
-      background: rgba(6, 182, 212, 0.14);
-      color: var(--cyan);
-      border-radius: 12px;
-      padding: 8px 14px;
-      font-size: 11px;
-      font-weight: 700;
-      transition: all 0.2s;
-    }
-    .game-chip-btn:hover { background: rgba(6, 182, 212, 0.28); transform: translateY(-2px); color: var(--white); }
-
-    .mobile-menu { display: none; border: var(--glass-border); background: rgba(11, 26, 40, 0.9); color: var(--white); font-size: 20px; width: 42px; height: 42px; border-radius: 12px; align-items: center; justify-content: center; flex: none; }
-
-    .view { display: none; padding: 26px 0 24px; }
-    .view.active { display: block; animation: fadeIn 0.3s ease; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .welcome-row {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      margin-bottom: 22px;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .eyebrow { font-size: 10px; letter-spacing: 2px; font-weight: 800; color: var(--accent); text-transform: uppercase; }
-    .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 6px; box-shadow: 0 0 12px var(--accent); }
-
-    h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; color: var(--white); margin: 6px 0; }
-    h1 span { color: var(--accent); text-shadow: 0 0 22px var(--accent-glow); }
-    .welcome-row p, .page-intro p { color: var(--muted); margin: 0; font-size: 13px; }
-
-    .date-chip {
-      border: var(--glass-border);
-      background: rgba(11, 26, 40, 0.75);
-      color: var(--ink);
-      padding: 10px 16px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .hero-banner {
-      min-height: 275px;
-      border-radius: 22px;
-      background: linear-gradient(95deg, rgba(4, 16, 25, 0.97) 0%, rgba(7, 22, 36, 0.88) 46%, rgba(16, 185, 129, 0.16) 100%);
-      color: var(--white);
-      position: relative;
-      overflow: hidden;
-      padding: 32px 36px;
-      display: flex;
-      align-items: center;
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    }
-
-    .hero-copy { position: relative; z-index: 2; max-width: 490px; }
-    .hero-kicker { font-size: 10px; letter-spacing: 2px; color: var(--cyan); font-weight: 800; }
-    .hero-copy h2 { font-size: 30px; line-height: 1.14; margin: 10px 0 10px; color: var(--white); }
-    .hero-copy h2 em { font-style: normal; color: var(--accent); text-shadow: 0 0 25px var(--accent-glow); }
-    .hero-copy p { font-size: 13px; color: var(--muted); max-width: 420px; line-height: 1.6; margin-bottom: 22px; }
-
-    .hero-scene {
-      position: absolute;
-      right: 0; top: 0; bottom: 0; width: 55%;
-      z-index: 1; pointer-events: none;
-      display: flex; align-items: center; justify-content: flex-end;
-      overflow: hidden;
-    }
-    .hero-scene svg { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.9; }
-
-    .hero-stage-tag {
-      position: absolute; right: 22px; top: 18px; z-index: 4;
-      background: rgba(7, 22, 36, 0.92);
-      border: 1px solid rgba(16, 185, 129, 0.5);
-      color: var(--accent); padding: 6px 14px; border-radius: 20px;
-      font-size: 10px; font-weight: 800; letter-spacing: 1px;
-      box-shadow: 0 0 15px var(--accent-glow);
-    }
-
-    .hero-index {
-      position: absolute; right: 24px; bottom: 18px; z-index: 4;
-      font-size: 20px; font-weight: 700; color: var(--white);
-      background: rgba(7, 22, 36, 0.85); padding: 4px 12px; border-radius: 10px; border: var(--glass-border);
-    }
-    .hero-index span { font-size: 12px; color: var(--muted); }
-
-    .btn {
-      border: 0; border-radius: 14px; padding: 12px 18px;
-      font-weight: 800; font-size: 11px;
-      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer; text-transform: uppercase; letter-spacing: 0.7px;
-      white-space: nowrap; position: relative;
-    }
-    .btn:hover { transform: translateY(-3px) scale(1.02); filter: brightness(1.12); }
-    .btn:active { transform: translateY(2px) scale(0.97); }
-
-    .btn-light {
-      background: linear-gradient(180deg, #34d399 0%, #10b981 50%, #059669 100%);
-      color: #041019;
-      box-shadow: 0 5px 0 #064e3b, 0 10px 25px var(--accent-glow);
-    }
-    .btn-light:active { box-shadow: 0 2px 0 #064e3b; }
-
-    .btn-primary {
-      background: linear-gradient(180deg, #22d3ee 0%, #06b6d4 50%, #0284c7 100%);
-      color: #041019;
-      box-shadow: 0 5px 0 #0c4a6e, 0 10px 25px var(--cyan-glow);
-    }
-    .btn-primary:active { box-shadow: 0 2px 0 #0c4a6e; }
-
-    .btn-outline {
-      background: rgba(17, 39, 58, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      color: var(--white);
-      box-shadow: 0 4px 0 rgba(0,0,0,0.5);
-    }
-    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
-    .btn.full { width: 100%; }
-
-    .process-btn-group {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px;
-    }
-
-    .section-heading { display: flex; justify-content: space-between; align-items: flex-end; margin: 30px 0 16px; gap: 10px; flex-wrap: wrap; }
-    .section-heading h2 { font-size: 22px; margin: 4px 0 0; color: var(--white); }
-    .updated-label { font-size: 11px; color: var(--muted); }
-
-    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    .stat-card, .panel {
+    /* Cards e Containers */
+    .card {
       background: var(--surface);
-      backdrop-filter: blur(16px);
-      border: var(--glass-border);
-      border-radius: 18px;
-      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-      transition: transform 0.25s ease, border-color 0.25s ease;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 14px;
     }
-    .hud-card:hover { transform: translateY(-4px); border-color: rgba(16, 185, 129, 0.45); }
-    .stat-card { padding: 20px; }
-    .stat-top { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; }
-
-    .stat-icon { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; font-size: 20px; }
-    .green { background: rgba(16, 185, 129, 0.2); }
-    .orange { background: rgba(245, 158, 11, 0.2); }
-    .blue { background: rgba(6, 182, 212, 0.2); }
-    .purple { background: rgba(168, 85, 247, 0.2); }
-
-    .stat-card > strong { display: block; font-size: 28px; margin: 10px 0 4px; color: var(--white); }
-    .stat-card > strong small { font-size: 11px; color: var(--muted); font-family: 'DM Sans', sans-serif; }
-    .stat-foot { font-size: 11px; color: var(--muted); }
-    .stat-foot.positive { color: var(--accent); font-weight: 700; }
-
-    .dashboard-columns { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 18px; margin-top: 18px; }
-    .panel { padding: 24px; }
-    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-    .panel h3 { font-size: 18px; margin: 4px 0 0; color: var(--white); }
-
-    .status-pill {
-      background: rgba(16, 185, 129, 0.22);
-      color: var(--accent);
-      border: 1px solid rgba(16, 185, 129, 0.5);
-      padding: 5px 12px; border-radius: 20px; font-size: 9px; font-weight: 800; letter-spacing: 0.8px;
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-
-    .muted { color: var(--muted); font-size: 13px; line-height: 1.6; margin: 14px 0 18px; }
-    .progress-label { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; margin-bottom: 8px; }
-    .progress-label strong { color: var(--accent); }
-
-    .progress-track { height: 11px; border-radius: 10px; background: rgba(4, 16, 25, 0.9); overflow: hidden; border: var(--glass-border); }
-    .progress-track > span { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--cyan)); border-radius: 10px; transition: width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 0 15px var(--accent-glow); }
-
-    .mission-panel-buttons { display: flex; align-items: center; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
-    .text-button { border: 0; background: none; color: var(--cyan); font-weight: 700; font-size: 12px; cursor: pointer; }
-    .text-button:hover { text-decoration: underline; }
-
-    /* MATERIAL BADGES */
-    .mat-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 4px 10px; border-radius: 10px; font-weight: 700; font-size: 11px;
-      border: 1px solid transparent; white-space: nowrap;
+    
+    /* Botões Padrão */
+    .btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      transition: filter 0.2s;
     }
-    .mat-raw { background: rgba(16, 185, 129, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.45); }
-    .mat-fiber { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border-color: rgba(245, 158, 11, 0.45); }
-    .mat-protein { background: rgba(244, 63, 94, 0.2); color: #fb7185; border-color: rgba(244, 63, 94, 0.45); }
-    .mat-carb { background: rgba(234, 179, 8, 0.2); color: #fde047; border-color: rgba(234, 179, 8, 0.45); }
-    .mat-omega { background: rgba(6, 182, 212, 0.2); color: #22d3ee; border-color: rgba(6, 182, 212, 0.45); }
-    .mat-med { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-color: rgba(59, 130, 246, 0.45); }
-    .mat-dash { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border-color: rgba(139, 92, 246, 0.45); }
-    .mat-deficit { background: rgba(20, 184, 166, 0.2); color: #2dd4bf; border-color: rgba(20, 184, 166, 0.45); }
-    .mat-microbiota { background: rgba(168, 85, 247, 0.22); color: #d8b4fe; border-color: rgba(168, 85, 247, 0.5); }
-    .mat-cbt { background: rgba(236, 72, 153, 0.22); color: #f472b6; border-color: rgba(236, 72, 153, 0.5); }
-    .mat-remission { background: rgba(34, 197, 94, 0.25); color: #86efac; border-color: #22c55e; }
-    .mat-longevity { background: linear-gradient(135deg, #071624, #11273a); color: var(--accent); border-color: var(--accent); }
+    .btn:hover { filter: brightness(1.1); }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+    }
+    .btn-danger { background: var(--danger); }
+    .btn-success { background: var(--success); }
 
-    .stock-list { display: grid; gap: 10px; margin-top: 16px; max-height: 360px; overflow-y: auto; padding-right: 4px; }
-    .stock-row { display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 12px; background: rgba(7, 22, 36, 0.75); padding: 10px 14px; border-radius: 14px; border: var(--glass-border); transition: transform 0.2s; }
-    .stock-row:hover { transform: translateX(4px); border-color: rgba(255,255,255,0.2); }
-    .material-icon { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; font-size: 20px; background: rgba(255,255,255,0.05); }
-    .stock-sub { display: block; color: var(--muted); font-size: 10px; margin-top: 2px; }
-    .stock-qty { font-size: 15px; font-weight: 800; color: var(--white); font-family: 'Chakra Petch', sans-serif; }
-
-    /* CLINICAL EVIDENCE GUIDE CARDS */
-    .evidence-grid {
+    /* Prontuário do Paciente */
+    .patient-vitals {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 16px;
-    }
-    .evidence-card {
-      background: rgba(11, 26, 40, 0.78);
-      border: 1px solid rgba(6, 182, 212, 0.25);
-      border-radius: 16px;
-      padding: 16px;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-    .evidence-card:hover { transform: translateY(-3px); border-color: var(--accent); }
-    .evidence-card h4 { margin: 8px 0 6px; font-size: 14px; color: var(--white); font-family: 'Chakra Petch', sans-serif; }
-    .evidence-card p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.5; }
-    .evidence-tag { font-size: 10px; font-weight: 800; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.8px; }
-
-    .lower-heading { margin-top: 34px; }
-    .chain-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; overflow-x: auto; padding-bottom: 6px; }
-    .chain-step { background: var(--surface); border: var(--glass-border); border-radius: 16px; padding: 14px; min-height: 100px; min-width: 145px; transition: transform 0.2s; }
-    .chain-step:hover { transform: translateY(-3px); }
-    .chain-step .step-no { font-size: 10px; color: var(--muted); font-weight: 700; }
-    .chain-step strong { display: block; font-size: 12px; margin-top: 6px; color: var(--white); }
-    .chain-step.done { border-color: rgba(16, 185, 129, 0.6); background: rgba(16, 185, 129, 0.12); }
-    .chain-step.done .step-no { color: var(--accent); }
-    .chain-step.locked { opacity: 0.45; }
-
-    /* MISSIONS / CLINICAL CASES */
-    .mission-summary {
-      background: linear-gradient(135deg, rgba(11, 26, 40, 0.92), rgba(17, 39, 58, 0.92));
-      border-radius: 18px; padding: 22px 28px;
-      display: flex; align-items: center; gap: 24px; margin-bottom: 20px;
-      border: var(--glass-border); box-shadow: var(--shadow); flex-wrap: wrap;
-    }
-    .mission-summary > div:first-child strong { display: block; font-size: 28px; color: var(--accent); font-family: 'Chakra Petch', sans-serif; }
-    .mission-summary > div:first-child span { font-size: 11px; color: var(--muted); text-transform: uppercase; }
-    .wide-progress { flex: 1; min-width: 220px; }
-    .wide-progress small { display: block; color: var(--muted); font-size: 11px; margin-top: 8px; }
-    .summary-medal { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; background: rgba(16, 185, 129, 0.2); font-size: 28px; border: 1px solid rgba(16, 185, 129, 0.5); }
-
-    .mission-list { display: grid; gap: 14px; }
-    .mission-card {
-      display: grid; grid-template-columns: 112px 50px minmax(0,1fr) auto; align-items: center; gap: 16px;
-      padding: 16px 18px; background: var(--surface); border: var(--glass-border); border-radius: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35); transition: transform 0.2s, border-color 0.2s;
-    }
-    .mission-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.2); }
-    .mission-art {
-      width: 112px; height: 82px; border-radius: 12px;
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      box-shadow: 0 5px 18px rgba(0,0,0,.35);
-      overflow: hidden;
-      display: grid;
-      place-items: center;
-      background: #071624;
-    }
-    .mission-art svg { width: 100%; height: 100%; display: block; }
-    .mission-card.locked .mission-art { filter: grayscale(.75) brightness(.65); }
-    .mission-card.completed .mission-art { border-color: rgba(16, 185, 129, .75); box-shadow: 0 0 18px rgba(16, 185, 129, .2); }
-    .mission-card.locked { opacity: 0.55; }
-    .mission-number {
-      width: 50px; height: 50px; border-radius: 14px; background: rgba(7, 22, 36, 0.85);
-      display: grid; place-items: center; font-size: 18px; font-weight: 800; color: var(--muted); border: var(--glass-border);
-      font-family: 'Chakra Petch', sans-serif;
-    }
-    .mission-card.unlocked .mission-number { background: rgba(16, 185, 129, 0.22); color: var(--accent); border-color: rgba(16, 185, 129, 0.5); }
-    .mission-card.completed .mission-number { background: var(--accent); color: #041019; }
-    .mission-info h3 { font-size: 16px; margin: 0 0 5px; color: var(--white); }
-    .mission-info p { color: var(--muted); font-size: 12px; margin: 0; line-height: 1.5; }
-    .mission-reward { font-size: 12px; color: var(--ink); margin-top: 8px; }
-    .mission-action { text-align: right; min-width: 155px; }
-    .mission-action small { display: block; color: var(--muted); font-size: 10px; margin-bottom: 8px; font-weight: 700; }
-
-    /* CLINICAL PATIENT CASE & DECISION CHOICES */
-    .patient-chart-box {
-      background: rgba(6, 18, 30, 0.85);
-      border: 1px solid rgba(6, 182, 212, 0.3);
-      border-radius: 14px;
-      padding: 14px 16px;
+      gap: 8px;
       margin: 12px 0;
-    }
-    .patient-vitals {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-    .vital-tag {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: var(--cyan);
-      padding: 3px 9px;
-      border-radius: 8px;
+      background: var(--surface-card);
+      padding: 10px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
-      font-weight: 700;
     }
-    .vital-tag.alert {
-      color: #fda4af;
-      border-color: rgba(244, 63, 94, 0.4);
-      background: rgba(244, 63, 94, 0.14);
-    }
-    .clinical-choices {
-      display: grid;
-      gap: 8px;
-      margin-top: 12px;
-    }
-    .choice-btn {
-      width: 100%;
+    .vital-item span { display: block; color: var(--text-muted); font-size: 9px; text-transform: uppercase; }
+
+    .option-list { display: grid; gap: 8px; margin-top: 12px; }
+    .protocol-option {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
       text-align: left;
-      background: rgba(11, 26, 40, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      color: var(--ink);
-      padding: 11px 14px;
-      border-radius: 12px;
-      font-size: 12px;
-      line-height: 1.45;
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      transition: all 0.18s ease;
+      color: var(--text-main);
+      transition: border-color 0.2s;
     }
-    .choice-btn:hover:not(:disabled) {
-      border-color: var(--accent);
-      background: rgba(16, 185, 129, 0.12);
-      transform: translateX(3px);
+    .protocol-option:hover { border-color: var(--primary); }
+    .protocol-option.correct { border-color: var(--success); background: rgba(16, 185, 129, 0.1); }
+    .protocol-option.incorrect { border-color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+
+    /* Estoque e Laboratório de Prescrições */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stock-item, .proc-item {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
     }
-    .choice-btn.selected-correct {
-      border-color: var(--accent);
-      background: rgba(16, 185, 129, 0.22);
-      color: var(--white);
-    }
-    .choice-btn.selected-wrong {
-      border-color: var(--rose);
-      background: rgba(244, 63, 94, 0.18);
-    }
-    .choice-letter {
-      background: rgba(6, 182, 212, 0.2);
-      color: var(--cyan);
-      font-family: 'Chakra Petch', sans-serif;
-      font-weight: 700;
-      min-width: 24px;
-      height: 24px;
-      border-radius: 7px;
-      display: grid;
-      place-items: center;
-      flex: none;
-    }
-    .clinical-feedback {
+
+    /* Modais e Alertas de Punição */
+    .feedback-box {
       margin-top: 10px;
-      padding: 11px 14px;
-      border-radius: 12px;
-      font-size: 12px;
-      line-height: 1.55;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      display: none;
     }
-    .clinical-feedback.ok {
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid rgba(16, 185, 129, 0.45);
-      color: #a7f3d0;
-    }
-    .clinical-feedback.err {
-      background: rgba(244, 63, 94, 0.15);
-      border: 1px solid rgba(244, 63, 94, 0.45);
-      color: #fecdd3;
-    }
-    .mission-card-expanded {
-      display: grid;
-      grid-template-columns: 112px 50px minmax(0, 1fr);
-      align-items: start;
-      gap: 16px;
-      padding: 18px 20px;
-      background: var(--surface);
-      border: var(--glass-border);
-      border-radius: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-      transition: transform 0.2s, border-color 0.2s;
-    }
-    .mission-card-expanded.unlocked {
-      border-color: rgba(16, 185, 129, 0.45);
-    }
-    .mission-card-expanded.locked {
-      opacity: 0.55;
-    }
-
-    /* PRODUCTION / CLINICAL PROTOCOLS */
-    .production-layout { display: grid; grid-template-columns: 1fr 310px; gap: 20px; }
-    .process-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-    .process-card { background: var(--surface); border: var(--glass-border); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; box-shadow: 0 15px 35px rgba(0,0,0,0.35); transition: transform 0.2s; }
-    .process-card:hover { transform: translateY(-3px); border-color: rgba(6, 182, 212, 0.4); }
-    .final-process-card { border: 2px solid var(--accent); background: linear-gradient(135deg, rgba(16,185,129,0.14), rgba(11,26,40,0.94)); }
-    .process-top { display: flex; justify-content: space-between; align-items: center; }
-    .process-icon { width: 46px; height: 46px; border-radius: 14px; background: rgba(16, 185, 129, 0.2); display: grid; place-items: center; font-size: 24px; }
-    .process-card h3 { font-size: 16px; margin: 14px 0 6px; color: var(--white); }
-    .process-card p { font-size: 12px; color: var(--muted); line-height: 1.55; flex: 1; margin: 0 0 14px; }
-    .recipe { background: rgba(7, 22, 36, 0.85); border-radius: 14px; padding: 12px; margin-bottom: 16px; font-size: 12px; color: var(--muted); line-height: 1.85; border: var(--glass-border); }
-    .recipe strong { color: var(--white); }
-
-    .factory-visual {
-      height: 125px; border-radius: 16px;
-      background: linear-gradient(135deg, rgba(7,22,36,0.95), rgba(17,39,58,0.85));
-      display: grid; place-items: center; font-size: 38px; margin: 16px 0;
-      border: 1px solid rgba(6, 182, 212, 0.35);
-    }
-    .crusher-anim { animation: floatSticker 2s ease-in-out infinite; letter-spacing: 6px; }
-    .capacity-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin: 12px 0; }
-    .capacity-row strong { color: var(--white); }
-    .aside-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 16px 0; }
-    .small-note { font-size: 11px; line-height: 1.55; color: var(--muted); margin: 16px 0; }
-
-    /* MARKET / CONSULTATION & PLANS */
-    .market-banner {
-      background: linear-gradient(135deg, rgba(16,185,129,0.18), rgba(11,26,40,0.92));
-      border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 18px; padding: 24px 28px;
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 16px; flex-wrap: wrap;
-    }
-    .market-banner h2 { font-size: 24px; margin: 6px 0; color: var(--white); }
-    .market-banner p { font-size: 12px; color: var(--muted); margin: 0; }
-    .market-symbol { font-size: 46px; }
-
-    .market-grid, .upgrade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .market-card, .upgrade-card { background: var(--surface); border: var(--glass-border); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; box-shadow: 0 15px 35px rgba(0,0,0,0.35); transition: transform 0.2s; }
-    .market-card:hover, .upgrade-card:hover { transform: translateY(-3px); }
-    .chip-market-card { border: 2px solid var(--accent); }
-    .market-card h3, .upgrade-card h3 { font-size: 16px; margin: 14px 0 6px; color: var(--white); }
-    .market-card p, .upgrade-card p { font-size: 12px; line-height: 1.55; color: var(--muted); flex: 1; }
-    .market-price { font-size: 22px; font-weight: 800; margin: 12px 0; color: var(--accent); }
-    .market-price small { font-size: 11px; color: var(--muted); font-family: 'DM Sans', sans-serif; }
-    .sell-row { display: flex; gap: 10px; margin-top: auto; }
-    .sell-row input { width: 78px; background: rgba(4,16,25,0.85); border: var(--glass-border); border-radius: 12px; padding: 10px; font-size: 13px; font-weight: 700; color: var(--white); text-align: center; }
-    .sell-row .btn { flex: 1; padding: 10px; }
-
-    .upgrade-card { position: relative; }
-    .upgrade-card .upgrade-icon { height: 50px; width: 50px; border-radius: 14px; background: rgba(7,22,36,0.85); display: grid; place-items: center; font-size: 26px; border: var(--glass-border); }
-    .upgrade-card .owned { position: absolute; right: 18px; top: 18px; background: rgba(16,185,129,0.22); color: var(--accent); border: 1px solid rgba(16,185,129,0.45); border-radius: 20px; padding: 4px 12px; font-size: 10px; font-weight: 800; }
-    .upgrade-cost { font-size: 20px; font-weight: 800; margin: 14px 0; color: var(--white); font-family: 'Chakra Petch', sans-serif; }
-    .upgrade-cost small { font-size: 11px; color: var(--muted); font-family: 'DM Sans', sans-serif; }
-
-    .audio-bar {
-      display: flex; align-items: center; justify-content: space-between; gap: 14px;
-      padding: 12px 18px; margin: 16px 0 0; background: var(--surface); border: var(--glass-border); border-radius: 16px; flex-wrap: wrap;
-    }
-    .audio-copy { display: flex; align-items: center; gap: 12px; }
-    .audio-symbol { width: 38px; height: 38px; display: grid; place-items: center; background: rgba(6,182,212,0.2); border-radius: 12px; font-size: 20px; }
-    .audio-copy strong { display: block; font-size: 12px; color: var(--white); }
-    .audio-copy small { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; }
-    .audio-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-    .audio-btn { border: var(--glass-border); background: rgba(7, 22, 36, 0.8); color: var(--white); border-radius: 10px; padding: 8px 14px; font-size: 11px; font-weight: 700; transition: 0.2s; }
-    .audio-btn:hover { background: rgba(255,255,255,0.1); }
-    .audio-main { background: rgba(16,185,129,0.22); border-color: rgba(16,185,129,0.45); color: var(--accent); }
-
-    .footer { border-top: 1px solid rgba(255,255,255,0.08); padding: 22px 0 28px; display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; gap: 10px; flex-wrap: wrap; }
+    .feedback-box.error { background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; display: block; }
+    .feedback-box.success { background: rgba(16, 185, 129, 0.15); border: 1px solid var(--success); color: #6ee7b7; display: block; }
 
     .toast {
-      position: fixed; right: 24px; bottom: 24px; background: rgba(11, 26, 40, 0.95); color: var(--white);
-      padding: 14px 22px; border-radius: 16px; font-size: 13px; z-index: 1000;
-      opacity: 0; transform: translateY(15px); transition: all 0.3s ease; pointer-events: none;
-      border: 1px solid rgba(16, 185, 129, 0.6); font-weight: 700; max-width: 90%;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 25px var(--accent-glow);
+      position: fixed;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12px;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      pointer-events: none;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
-    .toast.show { opacity: 1; transform: translateY(0); }
-
-    /* CINEMATIC PROCESS OVERLAY */
-    .process-overlay { position: fixed; inset: 0; z-index: 150; display: none; place-items: center; padding: 18px; background: rgba(2, 10, 18, 0.88); backdrop-filter: blur(12px); }
-    .process-overlay.show { display: grid; }
-    .process-window { position: relative; width: min(620px, 100%); padding: 24px; overflow: hidden; text-align: center; border: 1px solid rgba(16, 185, 129, 0.55); border-radius: 24px; background: linear-gradient(145deg, rgba(11, 30, 46, 0.98), rgba(4, 16, 25, 0.98)); box-shadow: 0 25px 90px rgba(0,0,0,.7), 0 0 45px rgba(16, 185, 129, .2); animation: processPop .35s ease both; }
-    .process-window h2 { margin: 14px 0 8px; color: var(--white); font-size: clamp(20px, 4vw, 28px); }
-    .process-window p { color: var(--muted); font-size: 13px; line-height: 1.6; }
-    .process-scene { width: 100%; height: clamp(180px, 32vw, 250px); margin: 14px 0; border-radius: 16px; border: 1px solid rgba(16, 185, 129, .35); background: #061523; overflow: hidden; box-shadow: inset 0 0 35px rgba(0,0,0,.25), 0 10px 30px rgba(0,0,0,.25); animation: scenePulse 1.5s ease-in-out infinite alternate; }
-    .process-scene svg { width: 100%; height: 100%; display: block; }
-    .process-machine-icon { position: absolute; top: 58px; right: 34px; display: grid; place-items: center; width: 54px; height: 54px; border-radius: 16px; background: rgba(4, 18, 32, .88); border: 1px solid rgba(16, 185, 129, .5); font-size: 28px; box-shadow: 0 0 25px rgba(16, 185, 129, .2); }
-    .process-consumption { display: grid; gap: 8px; margin: 16px 0; padding: 13px; border-radius: 12px; background: rgba(255,255,255,.045); color: var(--muted); font-size: 12px; }
-    .process-consumption strong { color: var(--white); }
-    .process-progress { height: 9px; overflow: hidden; border-radius: 20px; background: rgba(255,255,255,.1); }
-    .process-progress span { display: block; width: 0; height: 100%; border-radius: 20px; background: linear-gradient(90deg, #10b981, #06b6d4); box-shadow: 0 0 15px rgba(16, 185, 129, .55); animation: processFill 3.2s linear forwards; }
-    .process-window small { display: block; margin-top: 10px; color: var(--muted); }
-
-    .modal-backdrop { position: fixed; inset: 0; background: rgba(4, 16, 25, 0.85); display: none; place-items: center; z-index: 110; padding: 16px; backdrop-filter: blur(10px); }
-    .modal-backdrop.show { display: grid; }
-    .modal { width: min(500px, 100%); background: rgba(11, 26, 40, 0.96); border: 2px solid rgba(16, 185, 129, 0.5); border-radius: 22px; padding: 32px; position: relative; text-align: center; box-shadow: 0 30px 90px rgba(0,0,0,0.85), 0 0 40px var(--accent-glow); max-height: 90vh; overflow-y: auto; }
-    .modal-close { position: absolute; right: 18px; top: 16px; border: 0; background: rgba(255,255,255,0.08); width: 34px; height: 34px; border-radius: 50%; font-size: 20px; color: var(--muted); display: grid; place-items: center; }
-    .modal-symbol { width: 72px; height: 72px; border-radius: 22px; background: rgba(16,185,129,0.22); display: grid; place-items: center; font-size: 38px; margin: 0 auto 18px; border: 1px solid rgba(16,185,129,0.5); box-shadow: 0 0 30px var(--accent-glow); }
-    .modal h2 { font-size: 24px; margin: 8px 0; color: var(--white); }
-    .modal p { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 0 0 24px; }
-
-    .reset-link { display: block; width: 100%; text-align: left; background: rgba(255,255,255,0.03); border: var(--glass-border); border-radius: 12px; padding: 10px 14px; color: var(--muted); font-size: 12px; font-weight: 600; transition: 0.2s; }
-    .reset-link:hover { background: rgba(244, 63, 94, 0.15); border-color: rgba(244, 63, 94, 0.4); color: #fda4af; }
-    .welcome-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .produced-count { font-weight: 800; color: var(--accent); }
-
-    :focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
-
-    @media(max-width: 1200px) {
-      .dashboard-columns, .production-layout { grid-template-columns: 1fr; }
-      .market-grid, .upgrade-grid, .evidence-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media(max-width: 900px) {
-      .sidebar { transform: translateX(-100%); width: 280px; }
-      .sidebar.open { transform: translateX(0); }
-      .main-area { margin-left: 0; padding: 0 16px; }
-      .mobile-menu { display: flex; }
-      .stat-grid { grid-template-columns: repeat(2, 1fr); }
-      .market-grid, .upgrade-grid, .process-grid, .evidence-grid { grid-template-columns: 1fr; }
-      .hero-scene { opacity: 0.45; width: 100%; }
-      .mission-card, .mission-card-expanded { grid-template-columns: 86px 44px minmax(0,1fr); gap: 10px; padding: 13px; }
-      .mission-art { width: 86px; height: 68px; }
-      .mission-action { grid-column: 1 / -1; text-align: left; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px; }
-    }
-
-    @media(max-width: 480px) {
-      .stat-grid { grid-template-columns: 1fr; }
-      .game-chip-btn { display: none; }
-    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.error { border-color: var(--danger); color: #fca5a5; }
+    .toast.success { border-color: var(--success); color: #6ee7b7; }
   </style>
 </head>
 <body>
-  <div id="fxLayer" class="fx-layer" aria-hidden="true"></div>
 
   <div class="app-shell">
-    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
-    <aside class="sidebar" id="sidebar">
-      <a class="brand" href="#inicio" id="brandHome" aria-label="NutriClínica Tycoon início">
-        <span class="brand-mark">🥗</span>
-        <span><strong>NUTRICLÍNICA</strong><small>OBESITY & METABOLIC TYCOON</small></span>
-      </a>
-
-      <div class="company-card game-badge-card">
-        <div class="company-icon sticker-float">🩺</div>
-        <div>
-          <strong id="companyName">Dr(a). Nutri Especialista</strong>
-          <small>Nível <span id="companyLevel" class="lvl-pill">1</span> · <span id="cloudSyncStatus">💾 Save Local Ativo</span></small>
-        </div>
+    <!-- Topbar Clínica -->
+    <header class="topbar">
+      <div class="brand-title">
+        <span>🩺</span> NutriClínica <span>Pro</span>
       </div>
-
-      <nav class="main-nav" aria-label="Navegação principal">
-        <button class="nav-link active" type="button" data-view="dashboard"><span class="nav-sticker">🏥</span> Consultório Central</button>
-        <button class="nav-link" type="button" data-view="missions"><span class="nav-sticker">📋</span> Casos Clínicos <b class="nav-count" id="missionCount">1</b></button>
-        <button class="nav-link" type="button" data-view="production"><span class="nav-sticker">🧪</span> Cozinha & Protocolos</button>
-        <button class="nav-link" type="button" data-view="market"><span class="nav-sticker">💼</span> Consultoria & Planos</button>
-        <button class="nav-link" type="button" data-view="upgrades"><span class="nav-sticker">🔬</span> Equipamentos Clínicos</button>
-      </nav>
-
-      <div class="sidebar-bottom">
-        <div class="help-box mascot-tip">
-          <span class="mascot-avatar">🧬</span>
-          <div>
-            <strong>Diretrizes ABESO / OMS</strong>
-            <p id="mascotTipText">Tratamento da obesidade exige déficit calórico individualizado, preservação de massa magra e suporte comportamental.</p>
-          </div>
-        </div>
-        <button class="reset-link" id="resetGame" type="button">🔄 Reiniciar Carreira Clínica</button>
-        <small class="version">NUTRICLÍNICA TYCOON v1.0 · EVIDENCE-BASED</small>
+      <div class="top-stats">
+        <div class="hud-badge hud-cash" id="topCash">50.000 CR</div>
+        <div class="hud-badge" id="topScore">Caso 01/20</div>
       </div>
-    </aside>
+    </header>
 
-    <main class="main-area">
-      <header class="topbar">
-        <button class="mobile-menu" id="mobileMenu" type="button" aria-label="Abrir menu">☰</button>
-        <div class="breadcrumb"><span>ALA CLÍNICA</span><i>▶</i><strong id="pageTitle">Consultório Central</strong></div>
-        <div class="top-actions">
-          <button class="game-chip-btn" id="forceSyncBtn" type="button" title="Salvar progresso imediatamente">💾 Salvar Agora</button>
-          <button class="game-chip-btn" id="sfxToggleBtn" type="button" title="Ativar/Desativar Efeitos Sonoros">🔊 SFX: ON</button>
-          <button class="game-chip-btn" id="newGame" type="button" title="Começar uma nova carreira">✨ Novo Jogo</button>
-          <div class="top-stat coin-hud" id="coinHud">
-            <span class="coin sticker-spin">🪙</span>
-            <span id="topCoins">500.000</span>
-            <small>CRÉDITOS CRN</small>
-          </div>
-          <div class="user-avatar" title="Nutricionista Especialista">⚕️</div>
-        </div>
-      </header>
+    <!-- Notificação Flutuante -->
+    <div id="toast" class="toast">Mensagem do sistema</div>
 
-      <section class="audio-bar" aria-label="Preceptor Clínico por Voz">
-        <div class="audio-copy">
-          <span class="audio-symbol sticker-pulse">🎙️</span>
-          <div>
-            <strong>Preceptor Clínico & Orientação por Voz</strong>
-            <small id="audioStatus">Clique em "Ouvir Caso Clínico" para narração das condutas nutricionais.</small>
+    <!-- Conteúdo Principal -->
+    <main class="content-area">
+
+      <!-- ABAS: 1. PRONTUÁRIO / CASO ATUAL -->
+      <section class="view active" id="view-cases">
+        <div class="card">
+          <div class="card-title">
+            <span id="caseHeaderEyebrow">PRONTUÁRIO CLÍNICO #01</span>
+            <span id="caseStatusBadge" style="font-size:10px; color:var(--primary);">EM AVALIAÇÃO</span>
           </div>
-        </div>
-        <div class="audio-actions">
-          <button class="audio-btn audio-main" id="audioEnable" type="button">▶ Testar Voz</button>
-          <button class="audio-btn" id="audioRepeat" type="button">↻ Repetir</button>
-          <button class="audio-btn" id="audioToggle" type="button" aria-pressed="true">Voz Ligada</button>
+          <h2 id="patientName" style="font-size:16px; margin:4px 0 8px 0; color:#fff;">Carregando paciente...</h2>
+          <p id="patientComplaint" style="color:var(--text-muted); font-size:12px; margin:0 0 12px 0;"></p>
+          
+          <div class="patient-vitals" id="patientVitals">
+            <!-- Preenchido via JS -->
+          </div>
+
+          <div style="font-weight:600; margin-bottom:8px; font-size:12px; color:var(--text-main);">Selecione a Conduta Terapêutica Adequada:</div>
+          <div class="option-list" id="protocolOptions">
+            <!-- Opções geradas via JS -->
+          </div>
+
+          <div id="caseFeedback" class="feedback-box"></div>
+
+          <div style="margin-top: 14px;" id="nextCaseActionContainer">
+            <button class="btn btn-success" id="nextCaseBtn" style="display:none;" onclick="advanceCase()">Avançar para Próximo Paciente ➔</button>
+          </div>
         </div>
       </section>
 
-      <!-- VIEW: DASHBOARD (CONSULTÓRIO CENTRAL) -->
-      <section class="view active" id="view-dashboard">
-        <div class="welcome-row">
-          <div>
-            <div class="eyebrow"><span class="live-dot"></span> ATENDIMENTO ATIVO · SAÚDE METABÓLICA & OBESIDADE</div>
-            <h1>Consultório <span>Nutricional</span></h1>
-            <p>Transforme alimentos in natura e nutrientes bioativos em protocolos dietoterápicos baseados em evidências.</p>
+      <!-- ABAS: 2. FARMÁCIA / SUPLEMENTOS E DIETAS -->
+      <section class="view" id="view-pharmacy">
+        <div class="card">
+          <div class="card-title"><span>📋</span> Prescrições e Insumos Metabólicos</div>
+          <p style="color:var(--text-muted); font-size:12px; margin-bottom:12px;">Manipule dietas, suplementos e protocolos de emagrecimento para alta performance clínica.</p>
+          <div id="pharmacyList">
+            <!-- Gerado via JS -->
           </div>
-          <div class="welcome-actions">
-            <div class="date-chip">🛡️ <span id="firebaseUidLabel">Prontuário Local Protegido</span></div>
-            <button class="btn btn-outline" id="mineBonusBtn" type="button">🥦 Abastecer +1.000 In Natura</button>
-          </div>
-        </div>
-
-        <div class="hero-banner">
-          <div class="hero-copy">
-            <span class="hero-kicker" id="heroKicker">FASE 1 · NUTRIÇÃO CLÍNICA & REEDUCAÇÃO (1-10)</span>
-            <h2 id="heroTitle">Dietoterapia Baseada<br><em>em Evidências!</em></h2>
-            <p id="heroDesc">Conclua os 10 casos clínicos iniciais de reeducação alimentar para alcançar o Nível 2 e desbloquear protocolos avançados de remissão metabólica!</p>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;">
-              <button class="btn btn-light" type="button" data-goto="missions">📋 Ver Casos Clínicos <span>▶</span></button>
-              <button class="btn btn-primary" type="button" data-goto="production">🧪 Preparar Protocolos</button>
-            </div>
-          </div>
-          <div class="hero-scene" id="heroScene" aria-hidden="true"></div>
-          <div class="hero-index" id="heroIndex">01 <span>/ 20</span></div>
-        </div>
-
-        <div class="section-heading">
-          <div><span class="eyebrow">INDICADORES DA CLÍNICA</span><h2>Painel do Especialista</h2></div>
-          <span class="updated-label"><span class="live-dot" style="background:#10b981"></span> Prontuário Salvo · 25k Alimentos In Natura</span>
-        </div>
-
-        <div class="stat-grid">
-          <article class="stat-card hud-card">
-            <div class="stat-top"><span>Fundo Clínico / CR</span><span class="stat-icon green sticker-float">💰</span></div>
-            <strong id="statCoins">500.000 <small>CR</small></strong>
-            <div class="stat-foot positive">Orçamento p/ protocolos e clínica</div>
-          </article>
-          <article class="stat-card hud-card">
-            <div class="stat-top"><span>Alimentos In Natura</span><span class="stat-icon orange sticker-float">🥦</span></div>
-            <strong id="statOre">25.000 <small>un.</small></strong>
-            <div class="stat-foot">Base hortifruti e grãos integrais</div>
-          </article>
-          <article class="stat-card hud-card">
-            <div class="stat-top"><span>Protocolos Gerados</span><span class="stat-icon blue sticker-float">📋</span></div>
-            <strong id="statProduction">0 <small>un.</small></strong>
-            <div class="stat-foot">Planos e bioativos formulados</div>
-          </article>
-          <article class="stat-card hud-card">
-            <div class="stat-top"><span>Casos Resolvidos</span><span class="stat-icon purple sticker-float">🏆</span></div>
-            <strong id="statMissions">0 <small>/ 20</small></strong>
-            <div class="stat-foot">Fases 1 & 2</div>
-          </article>
-        </div>
-
-        <div class="dashboard-columns">
-          <article class="panel mission-panel">
-            <div class="panel-head">
-              <div>
-                <span class="eyebrow" id="nextMissionEyebrow">PRONTUÁRIO EM ATENDIMENTO</span>
-                <h3 id="nextMissionTitle">Caso 01 · Mariana, 34 anos</h3>
-              </div>
-              <span class="status-pill" id="nextMissionBadge">AGUARDANDO CONDUTA</span>
-            </div>
-            <div id="dashboardPatientChart" class="patient-chart-box"></div>
-            <div id="dashboardClinicalChoices" class="clinical-choices"></div>
-            <div id="dashboardClinicalFeedback"></div>
-            <div class="progress-label" style="margin-top:14px;"><span>Insumo / Protocolo em estoque</span><strong id="missionProgressText">0%</strong></div>
-            <div class="progress-track"><span id="missionProgressBar" style="width:0%"></span></div>
-            <div class="mission-panel-buttons">
-              <button class="btn btn-light" id="nextMissionActionBtn" type="button">Concluir Atendimento <span>→</span></button>
-              <button class="audio-btn" type="button" id="speakMissionBtn">🔊 Ouvir Prontuário</button>
-            </div>
-          </article>
-
-          <article class="panel stock-panel">
-            <div class="panel-head">
-              <div><span class="eyebrow">DESPENSA & PROTOCOLOS</span><h3>Acervo Nutricional</h3></div>
-              <button class="text-button" type="button" data-goto="market">Atender Pacientes →</button>
-            </div>
-            <div id="stockList" class="stock-list"></div>
-          </article>
-        </div>
-
-        <div class="section-heading lower-heading">
-          <div><span class="eyebrow">EVIDÊNCIAS CIENTÍFICAS NA OBESIDADE</span><h2>Pilares Dietoterápicos (ABESO / OMS)</h2></div>
-          <span class="updated-label">Referência rápida para prescrição clínica</span>
-        </div>
-        <div class="evidence-grid">
-          <div class="evidence-card">
-            <span class="evidence-tag">1. Balanço Energético</span>
-            <h4>Déficit Calórico Sustentável</h4>
-            <p>Redução de 500 a 750 kcal/dia promove perda de 0,5 a 1,0 kg/semana sem disparar adaptação metabólica severa ou perda muscular.</p>
-          </div>
-          <div class="evidence-card">
-            <span class="evidence-tag">2. Saciedade & Massa Magra</span>
-            <h4>Alta Densidade Proteica & Fibras</h4>
-            <p>1,2 a 1,6 g/kg de proteína + 25–35 g/dia de fibras solúveis estimulam GLP-1/PYY, reduzem grelina e preservam taxa metabólica basal.</p>
-          </div>
-          <div class="evidence-card">
-            <span class="evidence-tag">3. Padrões Alimentares</span>
-            <h4>Dieta Mediterrânea & DASH</h4>
-            <p>Reduzem inflamação crônica de baixo grau, gordura visceral, esteatose hepática e risco cardiometabólico com alta adesão a longo prazo.</p>
-          </div>
-        </div>
-
-        <div class="section-heading lower-heading">
-          <div><span class="eyebrow">LINHA DE CUIDADO INTEGRAL</span><h2>Jornada Terapêutica (Fase 1)</h2></div>
-          <button class="text-button" type="button" data-goto="missions">Ver todos os 20 casos →</button>
-        </div>
-        <div class="chain-strip" id="chainStrip"></div>
-      </section>
-
-      <!-- VIEW: MISSIONS (CASOS CLÍNICOS) -->
-      <section class="view" id="view-missions">
-        <div class="page-intro">
-          <span class="eyebrow">PRONTUÁRIOS & DIRETRIZES · 20 CASOS CLÍNICOS</span>
-          <h1>Quadro de <span>Casos Clínicos</span></h1>
-          <p>Formule os nutrientes e protocolos exigidos para cada perfil metabólico e conquiste honorários e reconhecimento científico!</p>
-        </div>
-        <div class="mission-summary">
-          <div><strong id="missionSummaryCount">0/20</strong><span>casos resolvidos</span></div>
-          <div class="wide-progress">
-            <div class="progress-track"><span id="allMissionProgress" style="width:0%"></span></div>
-            <small id="allMissionPercent">0% da especialização</small>
-          </div>
-          <div class="summary-medal sticker-float">🏅</div>
-        </div>
-        <div class="mission-list" id="missionList"></div>
-      </section>
-
-      <!-- VIEW: PRODUCTION (COZINHA EXPERIMENTAL & PROTOCOLOS) -->
-      <section class="view" id="view-production">
-        <div class="page-intro">
-          <span class="eyebrow">LABORATÓRIO DIETOTERÁPICO</span>
-          <h1>Cozinha Experimental & <span>Protocolos</span></h1>
-          <p>Fraccione alimentos in natura em nutrientes-chave e combine-os para elaborar condutas clínicas completas.</p>
-        </div>
-        <div class="production-layout">
-          <div class="production-main">
-            <div class="section-heading compact">
-              <div><span class="eyebrow">CONDUTAS DISPONÍVEIS</span><h2>Protocolos Nutricionais</h2></div>
-              <button class="btn btn-outline" id="factoryMineBtn" type="button">🥦 +1.000 Alimentos In Natura</button>
-            </div>
-            <div class="process-grid" id="processGrid"></div>
-          </div>
-          <aside class="panel production-aside">
-            <span class="eyebrow">INDICADORES DA CLÍNICA</span>
-            <h3>Eficiência Terapêutica</h3>
-            <div class="factory-visual">
-              <div class="crusher-anim">🥗🧬🩺</div>
-            </div>
-            <div class="capacity-row"><span>Precisão diagnóstica</span><strong id="efficiencyValue">100%</strong></div>
-            <div class="progress-track"><span id="efficiencyBar" style="width:100%"></span></div>
-            <div class="aside-divider"></div>
-            <div class="capacity-row"><span>Protocolos formulados</span><strong id="productionTotal">0 un.</strong></div>
-            <div class="capacity-row"><span>Tecnologias clínicas</span><strong id="equipmentTotal">1</strong></div>
-            <p class="small-note">Dica Clínica: Utilize o botão "Executar 5x" para preparar protocolos em lote para programas coletivos e casos complexos!</p>
-            <button class="btn btn-primary full" type="button" data-goto="upgrades">🔬 Adquirir Equipamentos</button>
-          </aside>
         </div>
       </section>
 
-      <!-- VIEW: MARKET (CONSULTORIA & PLANOS) -->
+      <!-- ABAS: 3. ESTOQUE CLÍNICO -->
+      <section class="view" id="view-stock">
+        <div class="card">
+          <div class="card-title"><span>📦</span> Estoque de Insumos & Fórmulas</div>
+          <div id="stockList">
+            <!-- Gerado via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ABAS: 4. MERCADO & RECEITAS -->
       <section class="view" id="view-market">
-        <div class="page-intro">
-          <span class="eyebrow">ATENDIMENTO AMBULATORIAL & PROGRAMAS</span>
-          <h1>Consultoria & <span>Prescrições</span></h1>
-          <p>Disponibilize seus protocolos clínicos, suplementos bioativos e programas de acompanhamento para pacientes e convênios.</p>
-        </div>
-        <div class="market-banner">
-          <div>
-            <span class="eyebrow">DEMANDA POR SAÚDE METABÓLICA</span>
-            <h2>Converta protocolos em Créditos CRN!</h2>
-            <p>Programas completos de Remissão Metabólica e Vida Plena possuem altíssima valorização clínica.</p>
+        <div class="card">
+          <div class="card-title"><span>📈</span> Monetização de Consultas & Projetos</div>
+          <p style="color:var(--text-muted); font-size:12px; margin-bottom:12px;">Comercialize protocolos de emagrecimento para reverter o saldo da clínica.</p>
+          <div id="marketList">
+            <!-- Gerado via JS -->
           </div>
-          <div class="market-symbol sticker-float">📈</div>
         </div>
-        <div class="market-grid" id="marketGrid"></div>
       </section>
 
-      <!-- VIEW: UPGRADES (EQUIPAMENTOS CLÍNICOS) -->
+      <!-- ABAS: 5. DIRETRIZES & UPGRADES -->
       <section class="view" id="view-upgrades">
-        <div class="page-intro">
-          <span class="eyebrow">INFRAESTRUTURA & DIAGNÓSTICO DE PRECISÃO</span>
-          <h1>Equipamentos <span>Clínicos</span></h1>
-          <p>Invista em bioimpedância, calorimetria indireta e telemonitoramento para reduzir custos operacionais dos protocolos.</p>
+        <div class="card">
+          <div class="card-title"><span>⚙️</span> Tecnologia & Equipamentos do Consultório</div>
+          <div id="upgradeList">
+            <!-- Gerado via JS -->
+          </div>
         </div>
-        <div class="upgrade-grid" id="upgradeGrid"></div>
       </section>
 
-      <footer class="footer">
-        <span>© 2026 NUTRICLÍNICA TYCOON · ESPECIALISTA EM OBESIDADE & SAÚDE METABÓLICA</span>
-        <span>Conteúdo educativo baseado em diretrizes científicas (ABESO, OMS, Guia Alimentar).</span>
-      </footer>
     </main>
+
+    <!-- Navegação Inferior -->
+    <nav class="main-nav">
+      <button class="nav-btn active" onclick="switchView('cases', this)"><span class="icon">🩺</span>Prontuário</button>
+      <button class="nav-btn" onclick="switchView('pharmacy', this)"><span class="icon">📋</span>Protocolos</button>
+      <button class="nav-btn" onclick="switchView('stock', this)"><span class="icon">📦</span>Estoque</button>
+      <button class="nav-btn" onclick="switchView('market', this)"><span class="icon">📈</span>Caixa</button>
+      <button class="nav-btn" onclick="switchView('upgrades', this)"><span class="icon">⚙️</span>Clínica</button>
+    </nav>
   </div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+  // Banco de Dados de Insumos Clínicos
+  const ITEMS = {
+    food_in_natura: { name: "Alimentos In Natura", icon: "🥗", price: 100, unit: "un." },
+    fiber: { name: "Fibras Solúveis (Psyllium)", icon: "🌾", price: 250, unit: "un." },
+    lean_protein: { name: "Proteína Magra de Alta Qualidade", icon: "🥩", price: 400, unit: "un." },
+    low_carb: { name: "Insumos Dieta Low-Glicêmica", icon: "🥑", price: 600, unit: "un." },
+    omega3: { name: "Ômega-3 & Polifenóis", icon: "🐟", price: 900, unit: "un." },
+    mediterranean: { name: "Insumos Dieta Mediterrânea", icon: "🫒", price: 1300, unit: "un." },
+    dash: { name: "Protocolo DASH (Hipertensão)", icon: "📉", price: 1800, unit: "un." },
+    deficit: { name: "Módulo Déficit Sustentável", icon: "⚖️", price: 2400, unit: "un." },
+    microbiome: { name: "Probióticos & Modulação Intestinal", icon: "🦠", price: 3200, unit: "un." },
+    cbt: { name: "Módulo TCC (Comportamental)", icon: "🧠", price: 4200, unit: "un." },
+    remission: { name: "Protocolo Remissão Metabólica", icon: "⚡", price: 5500, unit: "un." },
+    longevity: { name: "Programa Vida Plena & Longevidade", icon: "🧬", price: 8000, unit: "un." }
+  };
 
-  <!-- JANELA CINEMATOGRÁFICA DE EXECUÇÃO DE PROTOCOLO -->
-  <div class="process-overlay" id="processOverlay" aria-live="polite" aria-modal="true" role="dialog" aria-hidden="true">
-    <div class="process-window">
-      <span class="eyebrow">FORMULAÇÃO DIETOTERÁPICA EM ANDAMENTO</span>
-      <div class="process-scene" id="processScene" role="img" aria-label="Ilustração do protocolo clínico"></div>
-      <div class="process-machine-icon" id="processMachineIcon">🧪</div>
-      <h2 id="processTitle">Formulando protocolo...</h2>
-      <p id="processDescription">Calculando biodisponibilidade e balanço energético. Aguarde a conclusão.</p>
-      <div class="process-consumption" id="processConsumption"></div>
-      <div class="process-progress"><span></span></div>
-      <small>Processando conduta nutricional · aguarde 3,2 segundos</small>
-    </div>
-  </div>
-
-  <!-- MODAL DE CONQUISTA -->
-  <div class="modal-backdrop" id="modalBackdrop">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <button class="modal-close" id="modalClose" type="button" aria-label="Fechar">×</button>
-      <div class="modal-symbol sticker-bounce" id="modalSymbol">🎉</div>
-      <span class="eyebrow" id="modalEyebrow">EVOLUÇÃO CLÍNICA</span>
-      <h2 id="modalTitle">Conduta Concluída</h2>
-      <p id="modalText"></p>
-      <button class="btn btn-light full" id="modalOk" type="button">Continuar Atendimento ▶</button>
-    </div>
-  </div>
-
-  <script>
-    // =========================================================================
-    // 1. DADOS DE MATERIAIS & CATÁLOGO NUTRICIONAL
-    // =========================================================================
-    const MATERIALS = {
-      raw_ingredients: { name: "Alimentos In Natura", icon: "🥦", unit: "un.", price: 20, cssClass: "mat-raw" },
-      fiber_complex: { name: "Complexo de Fibras", icon: "🌾", unit: "un.", price: 65, cssClass: "mat-fiber" },
-      lean_protein: { name: "Proteína Magra", icon: "🍗", unit: "un.", price: 110, cssClass: "mat-protein" },
-      low_gi_carb: { name: "Carboidratos Baixo IG", icon: "🍠", unit: "un.", price: 180, cssClass: "mat-carb" },
-      omega_lipid: { name: "Ômega-3 & Polifenóis", icon: "🫒", unit: "un.", price: 290, cssClass: "mat-omega" },
-      mediterranean_plan: { name: "Dieta Mediterrânea", icon: "🥗", unit: "un.", price: 480, cssClass: "mat-med" },
-      dash_protocol: { name: "Protocolo DASH", icon: "🫀", unit: "un.", price: 750, cssClass: "mat-dash" },
-      deficit_protocol: { name: "Déficit Calórico Sustentável", icon: "⚖️", unit: "un.", price: 1100, cssClass: "mat-deficit" },
-      microbiota_therapy: { name: "Modulação Intestinal", icon: "🦠", unit: "un.", price: 1700, cssClass: "mat-microbiota" },
-      behavioral_cbt: { name: "Terapia Comportamental (TCC)", icon: "🧠", unit: "un.", price: 2600, cssClass: "mat-cbt" },
-      metabolic_remission: { name: "Remissão Metabólica", icon: "🩺", unit: "un.", price: 4200, cssClass: "mat-remission" },
-      longevity_program: { name: "Programa Vida Plena", icon: "🌟", unit: "un.", price: 7500, cssClass: "mat-longevity" }
-    };
-
-    function matBadge(id) {
-      const m = MATERIALS[id] || { name: id, icon: "📦", cssClass: "mat-raw" };
-      return `<span class="mat-badge ${m.cssClass}">${m.icon} ${m.name}</span>`;
+  // 20 Casos Clínicos Detalhados com Perfis de Pacientes Reais
+  const CASES = [
+    {
+      title: "Caso 01: Sobrepeso e Sedentarismo Inicial",
+      patient: "Carlos Eduardo, 34 anos",
+      complaint: "Ganho de peso progressivo após mudança de emprego para home office.",
+      vitals: { imc: "29.4 kg/m²", glicemia: "98 mg/dL", homa: "2.1" },
+      correctIndex: 0,
+      options: [
+        "Prescrever reeducação alimentar com foco em alimentos in natura e déficit calórico moderado.",
+        "Sugerir dieta altamente restritiva à base de líquidos e jejum prolongado de 36 horas.",
+        "Indicar bariátrica imediata sem tentativa de tratamento conservador."
+      ],
+      explanation: "Correto! Para sobrepeso sem comorbidades graves, a primeira linha é reeducação com alimentos in natura, garantindo adesão sustentável."
+    },
+    {
+      title: "Caso 02: Obesidade Grau I com Resistência Insulínica",
+      patient: "Mariana Souza, 42 anos",
+      complaint: "Cansaço crônico, fadiga vespertina e dificuldade para perder peso.",
+      vitals: { imc: "33.2 kg/m²", glicemia: "109 mg/dL", homa: "3.8" },
+      correctIndex: 1,
+      options: [
+        "Aumentar carboidratos refinados para dar energia rápida nos treinos.",
+        "Aplicar protocolo de restrição de carboidratos de baixo índice glicêmico aliado ao aumento de fibras solúveis.",
+        "Liberar dieta livre em finais de semana para compensar o estresse metabólico."
+      ],
+      explanation: "Correto! O quadro de resistência insulínica exige controle glicêmico estrito com baixo IG e suporte de fibras para modular a absorção de glicose."
+    },
+    {
+      title: "Caso 03: Esteatose Hepática e Dislipidemia",
+      patient: "Roberto Alves, 51 anos",
+      complaint: "Exames de rotina com TGP alterada e triglicerídeos elevados.",
+      vitals: { imc: "35.8 kg/m²", triglic.: "240 mg/dL", tgp: "64 U/L" },
+      correctIndex: 2,
+      options: [
+        "Manter dieta rica em gorduras saturadas para palatabilidade.",
+        "Restringir totalmente qualquer fonte de gordura, incluindo as boas.",
+        "Implementar Protocolo tipo Mediterrâneo enriquecido com Ômega-3 e controle rigoroso de frutose."
+      ],
+      explanation: "Correto! A esteatose hepática não alcoólica responde perfeitamente à dieta mediterrânea e suplementação de ômega-3 para redução da inflamação hepática."
+    },
+    {
+      title: "Caso 04: Obesidade com Hipertensão Arterial Sistêmica",
+      patient: "Luciana Prado, 48 anos",
+      complaint: "Pressão arterial limítrofe e retenção de líquidos acentuada.",
+      vitals: { imc: "34.1 kg/m²", pa: "145/95 mmHg", sodio: "Alto" },
+      correctIndex: 0,
+      options: [
+        "Utilizar o Protocolo DASH com redução drástica de sódio e aporte adequado de potássio e magnésio.",
+        "Aumentar o consumo de embutidos e conservas por praticidade.",
+        "Suspender o consumo de água para evitar inchaço."
+      ],
+      explanation: "Correto! O padrão DASH é o padrão Ouro clínico validado para controle tensional em pacientes com sobrepeso e hipertensão."
+    },
+    {
+      title: "Caso 05: Compulsão Alimentar Noturna",
+      patient: "Fernanda Lima, 29 anos",
+      complaint: "Episódios de ingestão excessiva de doces e carboidratos após as 20h.",
+      vitals: { imc: "31.5 kg/m²", ansiedade: "Moderada", homa: "2.8" },
+      correctIndex: 1,
+      options: [
+        "Proibir totalmente o açúcar em casa sob punição severa.",
+        "Integrar o Módulo de Terapia Cognitivo-Comportamental (TCC) com reestruturação de horários e saciedade proteica.",
+        "Prescrever sedativos pesados sem acompanhamento nutricional."
+      ],
+      explanation: "Correto! Transtornos comportamentais e compulsão exigem abordagem multidisciplinar unindo TCC e ajustes de saciedade nutricional."
+    },
+    {
+      title: "Caso 06: Síndrome Metabólica em Homem de Meia-Idade",
+      patient: "José Carlos, 55 anos",
+      complaint: "Circunferência abdominal de 118cm, hipertensão e pré-diabetes.",
+      vitals: { imc: "37.0 kg/m²", cc: "118 cm", glicemia: "115 mg/dL" },
+      correctIndex: 2,
+      options: [
+        "Recomendar apenas caminhada de 10 minutos por mês.",
+        "Focar exclusivamente em estética corporal sem olhar exames.",
+        "Aplicar Protocolo de Remissão Metabólica intensivo com déficit sustentável e modulação da microbiota."
+      ],
+      explanation: "Correto! A Síndrome Metabólica requer intervenção metabólica profunda visando a remissão dos fatores de risco cardiovascular."
+    },
+    {
+      title: "Caso 07: Obesidade e Disbiose Intestinal Crônica",
+      patient: "Patrícia Mendes, 38 anos",
+      complaint: "Distonias abdominais, gases frequentes e dificuldade crônica de emagrecimento.",
+      vitals: { imc: "32.0 kg/m²", sintomas: "Gastrointestinais", inflamação: "Alta" },
+      correctIndex: 0,
+      options: [
+        "Introduzir Protocolo de Probióticos e Modulação Intestinal associado a fibras prebióticas.",
+        "Ingerir laxantes fortes diariamente sem orientação.",
+        "Consumir ultraprocessados ricos em emulsificantes."
+      ],
+      explanation: "Correto! A modulação intestinal corrige a permeabilidade e reduz a inflamação sistêmica de baixo grau ligada à obesidade."
+    },
+    {
+      title: "Caso 08: Obesidade Grau II com Pré-Diabetes",
+      patient: "Marcos Vinicius, 45 anos",
+      complaint: "Glicemia de jejum em 122 mg/dL e IMC na faixa de obesidade severa.",
+      vitals: { imc: "38.5 kg/m²", glicemia: "122 mg/dL", hba1c: "6.4%" },
+      correctIndex: 1,
+      options: [
+        "Liberar livre consumo de carboidratos complexos sem controle de porções.",
+        "Iniciar Déficit Sustentável com controle glicêmico estrito e carga glicêmica baixa.",
+        "Aguardar virar diabetes tipo 2 para tomar atitude."
+      ],
+      explanation: "Correto! O controle rigoroso da carga glicêmica evita a progressão para diabetes estabelecido."
+    },
+    {
+      title: "Caso 09: Mulher no Climatério com Ganho Ponderal",
+      patient: "Helena Ribeiro, 52 anos",
+      complaint: "Redução de metabolismo após menopausa e ganho de gordura visceral.",
+      vitals: { imc: "31.8 kg/m²", idade: "52 anos", gordura: "Visceral" },
+      correctIndex: 2,
+      options: [
+        "Manter exatamente a mesma dieta da juventude.",
+        "Fazer dietas de fome extrema que destroem a massa magra.",
+        "Ajustar aporte de proteína magra de alta qualidade e treino de força com periodização nutricional."
+      ],
+      explanation: "Correto! No climatério, a preservação de massa magra via aporte proteico adequado é vital para manter o gasto energético basal."
+    },
+    {
+      title: "Caso 10: Adiposidade Infantil / Adolescente Acompanhado",
+      patient: "Matheus (responsável: Márcia), 14 anos",
+      complaint: "Sobrepeso desde os 10 anos, colesterol LDL elevado.",
+      vitals: { imc: "28.9 kg/m²", ldl: "160 mg/dL", idade: "14 anos" },
+      correctIndex: 0,
+      options: [
+        "Reeducação familiar com alimentos in natura, sem restrições severas ou terrorismo nutricional.",
+        "Dieta restritiva de 800 calorias em fase de crescimento.",
+        "Remédios para emagrecimento sem supervisão pediátrica."
+      ],
+      explanation: "Correto! Na adolescência, o foco é a mudança do ambiente familiar e inclusão de alimentos in natura, preservando o desenvolvimento."
+    },
+    {
+      title: "Caso 11: Obesidade Mórbida Pré-Bariátrica",
+      patient: "Julio Cesar, 43 anos",
+      complaint: "Indicado para cirurgia bariátrica, necessita perda de peso pré-operatória.",
+      vitals: { imc: "44.2 kg/m²", risco: "Cirúrgico alto", figado: "Aumentado" },
+      correctIndex: 1,
+      options: [
+        "Comer livremente até o dia da cirurgia.",
+        "Aplicar protocolo de redução hepática com baixo teor de carboidratos e alto valor proteico.",
+        "Fazer jejum absoluto de 5 dias antes da operação."
+      ],
+      explanation: "Correto! A redução do volume hepático pré-operatório é obrigatória para segurança do cirurgião na videocirurgia."
+    },
+    {
+      title: "Caso 12: Recuperação Pós-Bariátrica com Reganha",
+      patient: "Renata Duarte, 39 anos",
+      complaint: "Cirurgia realizada há 4 anos, com reganha de 12kg nos últimos 12 meses.",
+      vitals: { imc: "33.0 kg/m²", cirurgia: "Há 4 anos", capacidade: "Reduzida" },
+      correctIndex: 2,
+      options: [
+        "Culpar exclusivamente a genética e desistir do tratamento.",
+        "Forçar grandes volumes de alimentos de uma só vez.",
+        "Reestruturação comportamental (TCC) combinada com alta densidade proteica e fracionamento."
+      ],
+      explanation: "Correto! A reganha pós-bariátrica decorre de dilatação ou escape comportamental, exigindo TCC e densidade nutricional."
+    },
+    {
+      title: "Caso 13: Atleta Amador com Gordura Visceral Elevada",
+      patient: "Diego Martins, 36 anos",
+      complaint: "Treina musculação mas mantém barriga de chopp e exames alterados.",
+      vitals: { imc: "30.5 kg/m²", massa_magra: "Boa", gordura: "Visceral alta" },
+      correctIndex: 0,
+      options: [
+        "Ajustar o Déficit Sustentável e refinar a qualidade dos macronutrientes, mantendo a proteína alta.",
+        "Parar totalmente de treinar musculação.",
+        "Comer 5000 calorias limpas por dia."
+      ],
+      explanation: "Correto! Mesmo com boa musculatura, o excesso calórico gera gordura visceral, exigindo ajuste fino no déficit."
+    },
+    {
+      title: "Caso 14: Obesidade Associada a Hipotireoidismo Subcontrolado",
+      patient: "Camila Farias, 40 anos",
+      complaint: "Dificuldade extrema em baixar peso mesmo com restrição calórica.",
+      vitals: { imc: "34.6 kg/m²", tsh: "4.8 mUI/L",letargia: "Sim" },
+      correctIndex: 1,
+      options: [
+        "Acarretar culpa na paciente dizendo que ela mente na dieta.",
+        "Otimizar suporte micronutricional (selênio, zinco, iodo) e alinhar dieta anti-inflamatória.",
+        "Eliminar todos os grupos alimentares da dieta."
+      ],
+      explanation: "Correto! O hipotireoidismo reduz o metabolismo basal, exigindo suporte de cofatores e controle inflamatório."
+    },
+    {
+      title: "Caso 15: Síndrome dos Ovários Policísticos (SOP) e Resistência à Insulina",
+      patient: "Beatriz Lima, 27 anos",
+      complaint: "Acne, irregularidade menstrual, dificuldade de emagrecimento e ganho central.",
+      vitals: { imc: "32.4 kg/m²", sop: "Sim", homa: "3.5" },
+      correctIndex: 2,
+      options: [
+        "Apenas receitar cosméticos para a pele.",
+        "Ignorar a resistência insulínica.",
+        "Aplicar protocolo Low-Glicêmico e suporte com Inositol e Fibras para reverter a hiperinsulinemia."
+      ],
+      explanation: "Correto! A SOP na maioria das vezes é impulsionada pela resistência insulínica, respondendo perfeitamente ao controle glicêmico."
+    },
+    {
+      title: "Caso 16: Transtorno da Compulsão Periódica",
+      patient: "Eduardo Siqueira, 46 anos",
+      complaint: "Ataques de comilança voraz seguidos de forte culpa e ganho de peso.",
+      vitals: { imc: "38.0 kg/m²", compulsao: "Severa", triglic.: "280" },
+      correctIndex: 0,
+      options: [
+        "Abordagem combinada de Módulo TCC e reeducação sem restrições proibitivas.",
+        "Isolar o paciente em casa sem acesso a comida.",
+        "Dar broncas severas nas consultas."
+      ],
+      explanation: "Correto! O transtorno de compulsão exige acolhimiento psicológico via TCC e eliminação do ciclo de restrição-compulsão."
+    },
+    {
+      title: "Caso 17: Perfil de Longevidade e Emagrecimento Saudável",
+      patient: "Cláudia Monteiro, 60 anos",
+      complaint: "Deseja emagrecer 10kg com foco em longevidade e prevenção de sarcopenia.",
+      vitals: { imc: "29.8 kg/m²", idade: "60 anos", foco: "Longevidade" },
+      correctIndex: 1,
+      options: [
+        "Fazer dieta drástica que elimine massa muscular.",
+        "Aplicar o Programa Vida Plena com alta densidade de nutrientes, ômega-3 e proteção muscular.",
+        "Não fazer nada por causa da idade avançada."
+      ],
+      explanation: "Correto! Na terceira idade, o emagrecimento deve vir acompanhado de proteção contra a sarcopenia e suporte à longevidade."
+    },
+    {
+      title: "Caso 18: Obesidade Refratária com Múltiplas Falhas Prévias",
+      patient: "Marcelo Antunes, 50 anos",
+      complaint: "Já fez dezenas de dietas malucas (efeito sanfona grave) e está desmotivado.",
+      vitals: { imc: "39.1 kg/m²", sanfona: "Grave", metabolismo: "Lento" },
+      correctIndex: 2,
+      options: [
+        "Dizer que ele não tem força de vontade.",
+        "Colocar em jejum de 7 dias.",
+        "Reconstrução metabólica gradual com déficit sustentável e suporte comportamental sólido."
+      ],
+      explanation: "Correto! O efeito sanfona danifica o metabolismo e o psicológico; a recuperação exige paciência, déficit sustentável e TCC."
+    },
+    {
+      title: "Caso 19: Executivo com Estresse Crônico e Obesidade Abdominal",
+      patient: "Gustavo Henrique, 44 anos",
+      complaint: "Trabalha 14h por dia, dorme 5h, consome muito café e fast-food.",
+      vitals: { imc: "34.5 kg/m²", cortisol: "Elevado", sono: "5h/noite" },
+      correctIndex: 0,
+      options: [
+        "Protocolo integrado de rotina prática, ajuste de crononutrição e controle de cortisol.",
+        "Pedir para ele largar o emprego imediatamente.",
+        "Prescrever energéticos em alta dose."
+      ],
+      explanation: "Correto! O cortisol alto bloqueia a lipólise na região abdominal; ajustar a crononutrição e o estresse é fundamental."
+    },
+    {
+      title: "Caso 20: O Grande Desafio Metabólico Final",
+      patient: "Dra. Carmen Lúcia (Diretoria Clínica), 58 anos",
+      complaint: "Quadro complexo unindo pré-diabetes, artrose nos joelhos e resistência severa.",
+      vitals: { imc: "40.0 kg/m²", hba1c: "6.5%", joelhos: "Dor crônica" },
+      correctIndex: 1,
+      options: [
+        "Sugerir corrida de alta impacto imediatamente.",
+        "Aplicar o Protocolo Mestre de Remissão Metabólica Completa, unindo nutrição clínica avançada e alívio articular.",
+        "Desistir do caso por ser complexo demais."
+      ],
+      explanation: "Correto! O caso final exige a maestria completa de todas as ferramentas e protocolos clínicos integrados para remissão metabólica total."
     }
+  ];
 
-    // =========================================================================
-    // 2. CASOS CLÍNICOS / MISSÕES (20 PRONTUÁRIOS REAIS + DECISÃO CLÍNICA)
-    // =========================================================================
-    const MISSIONS = [
-      {
-        title: "Mariana, 34a — Obesidade Grau I & Ultraprocessados",
-        sticker: "🥦",
-        patient: {
-          vitals: ["IMC: 31,8 kg/m²", "CA: 96 cm", "Glicemia: 94 mg/dL", "Rotina: Delivery e ultraprocessados"],
-          story: "Executiva relata ganho de 11 kg nos últimos 2 anos por falta de tempo para cozinhar, consumindo biscoitos, embutidos e refrigerantes diariamente. Nega comorbidades prévias."
-        },
-        desc: "Qual deve ser a primeira intervenção estrutural segundo o Guia Alimentar e diretrizes ABESO?",
-        options: [
-          { label: "Jejum intermitente 20/4 imediato mantendo ultraprocessados na janela alimentar", correct: false, rationale: "Contraindicado: restrições extremas sem melhora da qualidade nutricional geram compulsão e não reduzem a densidade calórica da dieta." },
-          { label: "Substituição gradual por Alimentos In Natura e minimamente processados (regra de ouro)", correct: true, rationale: "Correto! Aumentar alimentos in natura reduz naturalmente a densidade energética, eleva fibras/micronutrientes e promove saciedade sem contagem rígida inicial." },
-          { label: "Dieta cetogênica estrita (<20g carboidrato/dia) com suplementação de triglicerídeos", correct: false, rationale: "Desnecessário como primeira linha para obesidade grau I sem refratariedade, apresentando baixa adesão a longo prazo nessa rotina." }
-        ],
-        goal: "raw_ingredients",
-        target: 50,
-        reward: 1500,
-        stage: "Fase 1: Base Alimentar"
-      },
-      {
-        title: "Carlos, 42a — Fome Precoce & Constipação Intestinal",
-        sticker: "🌾",
-        patient: {
-          vitals: ["IMC: 33,2 kg/m²", "Ingestão de fibras: 9 g/dia", "Hábito intestinal: 2x/semana", "Queixa: Fome 1h após almoço"],
-          story: "Motorista de aplicativo faz refeições rápidas pobres em vegetais e grãos integrais. Relata pico de fome no meio da tarde e beliscos calóricos."
-        },
-        desc: "Qual protocolo otimiza a saciedade gástrica e o trânsito intestinal deste paciente?",
-        options: [
-          { label: "Aporte de Fibras Solúveis & Prebióticos (25–35 g/dia + hidratação ajustada)", correct: true, rationale: "Excelente! Fibras solúveis (aveia, psyllium, leguminosas) formam gel viscoso, retardam o esvaziamento gástrico, estimulam GLP-1 e regularizam o intestino." },
-          { label: "Substituir o almoço por sucos detox coados de frutas", correct: false, rationale: "Inadequado: coar o suco remove as fibras insolúveis e solúveis, elevando a carga glicêmica e reduzindo a saciedade." },
-          { label: "Dieta líquida hipocalórica de 800 kcal/dia por 30 dias", correct: false, rationale: "Contraindicado: dietas de muito baixas calorias (VLCD) exigem supervisão hospitalar estrita e causam perda de massa magra." }
-        ],
-        goal: "fiber_complex",
-        target: 20,
-        reward: 1800,
-        stage: "Fase 1: Saciedade"
-      },
-      {
-        title: "Fernanda, 48a — Perimenopausa & Risco de Sarcopenia",
-        sticker: "🍗",
-        patient: {
-          vitals: ["IMC: 32,5 kg/m²", "Massa Magra: Limítrofe", "TMB estimada: Baixa", "Histórico: Várias dietas restritivas"],
-          story: "Paciente em climatério relata que, toda vez que faz dieta, perde peso rápido mas fica flácida e recupera tudo em meses."
-        },
-        desc: "Como proteger a massa muscular e a Taxa Metabólica Basal durante o emagrecimento?",
-        options: [
-          { label: "Reduzir proteínas para 0,6 g/kg/dia para poupar função renal preventiva", correct: false, rationale: "Incorreto: sem doença renal crônica avançada, baixa proteína acelera a perda de massa muscular e derruba a taxa metabólica basal." },
-          { label: "Prescrever Proteína Magra Biodisponível (1,2–1,6 g/kg/dia) fracionada nas refeições", correct: true, rationale: "Perfeito! O aporte proteico elevado aumenta a termogênese induzida pela dieta, suprime a grelina e preserva massa magra no déficit calórico." },
-          { label: "Excluir jantar e realizar apenas 1 refeição rica em carboidratos simples", correct: false, rationale: "Inadequado: prejudica a síntese proteica muscular (que depende de pulsos de leucina ao longo do dia)." }
-        ],
-        goal: "lean_protein",
-        target: 12,
-        reward: 2100,
-        stage: "Fase 1: Termogênese"
-      },
-      {
-        title: "Roberto, 39a — Acantose Nigricans & Resistência Insulínica",
-        sticker: "🍠",
-        patient: {
-          vitals: ["IMC: 34,9 kg/m²", "Insulina basal: 24 µUI/mL", "HOMA-IR: 5,6 (Elevado)", "Queixa: Sonolência pós-prandial"],
-          story: "Engenheiro apresenta escurecimento cervical (acantose) e hipoglicemia reativa no fim da tarde após almoços ricos em farinhas refinadas."
-        },
-        desc: "Qual estratégia de carboidratos controla os picos insulínicos sem gerar fadiga?",
-        options: [
-          { label: "Priorizar Carboidratos de Baixo Índice Glicêmico e baixa carga glicêmica associados a fibras", correct: true, rationale: "Correto! Carboidratos complexos de absorção lenta atenuam a excursão glicêmica pós-prandial, reduzem hiperinsulinemia e evitam hipoglicemia reativa." },
-          { label: "Aumentar frutose isolada e maltodextrina antes do trabalho", correct: false, rationale: "Contraindicado: açúcares simples agravam a resistência insulínica e estimulam lipogênese de novo hepática." },
-          { label: "Eliminar totalmente vegetais e leguminosas da alimentação", correct: false, rationale: "Incorreto: leguminosas e vegetais possuem baixíssimo índice glicêmico e melhoram a sensibilidade à insulina." }
-        ],
-        goal: "low_gi_carb",
-        target: 4,
-        reward: 2500,
-        stage: "Fase 1: Glicemia"
-      },
-      {
-        title: "Sônia, 51a — Glicemia de Jejum Alterada (Pré-Diabetes)",
-        sticker: "📉",
-        patient: {
-          vitals: ["IMC: 33,8 kg/m²", "Glicemia jejum: 114 mg/dL", "HbA1c: 6,1%", "Hábito: Pão branco e doces à noite"],
-          story: "Professora com histórico familiar de DM2 busca evitar a progressão para diabetes usando ajuste dietético."
-        },
-        desc: "Qual conduta potencializa o controle glicêmico noturno e matinal?",
-        options: [
-          { label: "Escalar Carboidratos de Baixo IG & Amido Resistente combinados a proteínas no jantar", correct: true, rationale: "Excelente! O amido resistente fermenta no cólon gerando butirato, que melhora a sinalização insulínica e reduz o fenômeno do alvorecer." },
-          { label: "Trocar pão branco por tapioca pura com mel no café da manhã", correct: false, rationale: "Incorreto: tapioca pura com mel possui altíssimo índice glicêmico, provocando pico imediato de glicose e insulina." },
-          { label: "Manter dieta habitual e usar apenas chás amargos sem déficit calórico", correct: false, rationale: "Insuficiente: perda de 5–7% do peso corporal via ajuste calórico e qualidade de carboidratos é o padrão-ouro para prevenir DM2." }
-        ],
-        goal: "low_gi_carb",
-        target: 10,
-        reward: 3000,
-        stage: "Fase 1: Sensibilidade"
-      },
-      {
-        title: "Eduardo, 46a — Hipertrigliceridemia & Inflamação Subclínica",
-        sticker: "🫒",
-        patient: {
-          vitals: ["IMC: 35,4 kg/m²", "Triglicerídeos: 268 mg/dL", "PCR-us: 4,8 mg/L (Alta)", "HDL-c: 34 mg/dL"],
-          story: "Paciente apresenta adiposidade visceral acentuada, dieta rica em gorduras trans/saturadas e baixo consumo de peixes e oleaginosas."
-        },
-        desc: "Qual modulação lipídica combate a inflamação do tecido adiposo e reduz triglicerídeos?",
-        options: [
-          { label: "Dieta zero gordura (<10% VET) rica em carboidratos refinados", correct: false, rationale: "Contraindicado: excesso de carboidratos em dieta muito pobre em gorduras eleva ainda mais os triglicerídeos plasmáticos." },
-          { label: "Protocolo rico em Ômega-3 (EPA/DHA), azeite extravirgem e polifenóis antioxidantes", correct: true, rationale: "Perfeito! Ácidos graxos ômega-3 inibem a síntese hepática de VLDL/triglicerídeos, enquanto polifenóis reduzem citocinas inflamatórias (IL-6, TNF-α)." },
-          { label: "Suplementação de óleo de coco e manteiga ghee no café", correct: false, rationale: "Inadequado: gorduras saturadas em excesso elevam LDL-c e ativam receptores pró-inflamatórios TLR-4." }
-        ],
-        goal: "omega_lipid",
-        target: 8,
-        reward: 3600,
-        stage: "Fase 1: Anti-inflamatório"
-      },
-      {
-        title: "Helena, 55a — Risco Cardiovascular & Dislipidemia Mista",
-        sticker: "🥗",
-        patient: {
-          vitals: ["IMC: 34,1 kg/m²", "LDL-c: 162 mg/dL", "CA: 104 cm", "Preferência: Gosta de comida saborosa"],
-          story: "Advogada com LDL elevado e histórico paterno de infarto precisa de um padrão alimentar cardioprotetor e prazeroso."
-        },
-        desc: "Qual padrão alimentar possui maior evidência científica (estudo PREDIMED) para este caso?",
-        options: [
-          { label: "Protocolo Dieta Mediterrânea (azeite, peixes, leguminosas, oleaginosas e vegetais)", correct: true, rationale: "Correto! A Dieta Mediterrânea reduz eventos cardiovasculares maiores em ~30%, melhora o perfil lipídico e apresenta altíssima adesão." },
-          { label: "Dieta carnívora exclusiva à base de carnes vermelhas e embutidos", correct: false, rationale: "Contraindicado: eleva LDL-c, TMAO e risco aterosclerótico em paciente já dislipidêmica." },
-          { label: "Monodieta da sopa por 21 dias seguidos", correct: false, rationale: "Inadequado: deficiente em ácidos graxos essenciais e proteínas, insustentável para prevenção cardiovascular." }
-        ],
-        goal: "mediterranean_plan",
-        target: 10,
-        reward: 4200,
-        stage: "Fase 1: Cardioproteção"
-      },
-      {
-        title: "Antônio, 58a — Obesidade & Hipertensão Arterial (HAS)",
-        sticker: "🫀",
-        patient: {
-          vitals: ["IMC: 36,0 kg/m²", "PA: 148/94 mmHg", "Sódio urinário: Alto", "Ingestão de potássio: Baixa"],
-          story: "Aposentado hipertenso usa temperos prontos e embutidos diariamente, com retenção hídrica e dificuldade para perder peso."
-        },
-        desc: "Qual protocolo dietoterápico é padrão-ouro para redução pressórica associada ao emagrecimento?",
-        options: [
-          { label: "Protocolo DASH Metabólico (rico em K, Mg, Ca, fibras e restrito em sódio <2g/dia)", correct: true, rationale: "Excelente! A dieta DASH reduz a pressão sistólica em 8–14 mmHg e potencializa a perda ponderal quando combinada ao déficit calórico." },
-          { label: "Aumentar consumo de bebidas isotônicas e embutidos light", correct: false, rationale: "Contraindicado: produtos 'light' em calorias frequentemente mantêm alto teor de sódio e conservantes." },
-          { label: "Restringir ingestão de água para 800 mL/dia para reduzir edema", correct: false, rationale: "Incorreto: a restrição hídrica sem indicação cardiológica/renal específica prejudica a excreção renal de sódio." }
-        ],
-        goal: "dash_protocol",
-        target: 8,
-        reward: 5000,
-        stage: "Fase 1: Controle Pressórico"
-      },
-      {
-        title: "Lucas, 29a — Obesidade Grau II & Frustração com Dietas da Moda",
-        sticker: "⚖️",
-        patient: {
-          vitals: ["IMC: 37,4 kg/m²", "GET estimado: 2.850 kcal", "Histórico: 5 tentativas falhas", "Meta: Perda realista"],
-          story: "Analista de TI tentou dietas de 1.000 kcal por conta própria, desistindo na segunda semana por fadiga extrema e irritabilidade."
-        },
-        desc: "Qual prescrição energética promove perda de 0,5 a 1,0 kg/semana com sustentabilidade?",
-        options: [
-          { label: "Plano de Déficit Calórico Sustentável (redução de 500–750 kcal/dia sobre o GET)", correct: true, rationale: "Correto! Segundo as diretrizes ABESO/OMS, um déficit moderado de 500–750 kcal/dia maximiza a perda de gordura minimizando a adaptação metabólica." },
-          { label: "Cortar 1.800 kcal/dia de imediato para acelerar resultados no primeiro mês", correct: false, rationale: "Contraindicado: déficits agressivos disparam fome compensatória intensa (grelina) e abandono precoce do tratamento." },
-          { label: "Manter dieta isocalórica sem déficit esperando apenas efeito de termogênicos", correct: false, rationale: "Ineficaz: sem balanço energético negativo, suplementos termogênicos não promovem redução significativa de adiposidade." }
-        ],
-        goal: "deficit_protocol",
-        target: 5,
-        reward: 6000,
-        stage: "Fase 1: Balanço Energético"
-      },
-      {
-        title: "Beatriz, 37a — Disbiose, Distensão Abdominal & Platô de Peso",
-        sticker: "🦠",
-        patient: {
-          vitals: ["IMC: 34,6 kg/m²", "Uso recente de antibióticos", "Sintoma: Distensão e fadiga", "Platô: 6 semanas"],
-          story: "Paciente vinha perdendo peso bem, mas após ciclos de antibióticos desenvolveu distensão abdominal, desejo intenso por doces e estagnação."
-        },
-        desc: "Qual abordagem atua no eixo intestino-cérebro e na endotoxemia metabólica?",
-        options: [
-          { label: "Protocolo de Modulação Intestinal (prebióticos, polifenóis e variedade vegetal >30/sem)", correct: true, rationale: "Perfeito! Restaurar a diversidade microbiana eleva ácidos graxos de cadeia curta (butirato/propionato), melhora a barreira intestinal e destrava o platô." },
-          { label: "Uso contínuo de laxantes estimulantes para esvaziar o intestino", correct: false, rationale: "Contraindicado: laxantes irritam a mucosa, causam distúrbios hidroeletrolíticos e não reduzem gordura corporal." },
-          { label: "Dieta estéril baseada apenas em alimentos ultraprocessados industrializados", correct: false, rationale: "Incorreto: emulsificantes e aditivos agravam a permeabilidade intestinal e a disbiose." }
-        ],
-        goal: "microbiota_therapy",
-        target: 3,
-        reward: 15000,
-        stage: "Fase 1: Título de Especialista"
-      },
-      // FASE 2: OBESIDADE COMPLEXA, COMORBIDADES & LONGEVIDADE (11-20)
-      {
-        title: "Camila, 31a — Comer Emocional & Episódios de Compulsão Noturna",
-        sticker: "🧠",
-        patient: {
-          vitals: ["IMC: 36,8 kg/m²", "Gatilho: Estresse no trabalho", "Padrão: Restrição de dia, compulsão à noite", "Culpa alimentar: Alta"],
-          story: "Designer passa o dia em restrição severa e, ao chegar em casa ansiosa, ingere grandes quantidades de comida sem fome física."
-        },
-        desc: "Qual intervenção é indispensável para romper o ciclo restrição-compulsão?",
-        options: [
-          { label: "Proibir todos os alimentos favoritos e aplicar punição calórica no dia seguinte", correct: false, rationale: "Contraindicado: a dicotomia 'alimento proibido vs. permitido' e a compensação restritiva perpetuam os episódios de compulsão alimentar." },
-          { label: "Terapia Cognitivo-Comportamental Nutricional (TCC), Mindful Eating e regularidade de refeições", correct: true, rationale: "Excelente! A TCC nutricional identifica gatilhos emocionais, elimina a restrição cognitiva rígida e restabelece sinais internos de fome e saciedade." },
-          { label: "Jejum de 24 horas após cada episódio de exagero alimentar", correct: false, rationale: "Perigoso: caracteriza comportamento compensatório purgativo/restritivo e agrava transtornos alimentares." }
-        ],
-        goal: "behavioral_cbt",
-        target: 5,
-        reward: 20000,
-        stage: "Fase 2: Comportamento"
-      },
-      {
-        title: "Marcelo, 49a — Esteatose Hepática Grau II (DHGNA) & Obesidade",
-        sticker: "🩺",
-        patient: {
-          vitals: ["IMC: 38,2 kg/m²", "TGP/ALT: 78 U/L", "USG: Esteatose moderada", "Consumo: Refrigerantes e frutose"],
-          story: "Gerente comercial descobriu gordura no fígado em exame de rotina e apresenta enzimas hepáticas elevadas."
-        },
-        desc: "Qual conduta clínica promove regressão da esteatose e fibrose hepática?",
-        options: [
-          { label: "Protocolo de Remissão Metabólica (perda de 7–10% do peso + zero frutose líquida + ômega-3)", correct: true, rationale: "Correto! Perdas de 7% a 10% do peso corporal associadas à eliminação de xarope de frutose e aporte de polifenóis/ômega-3 revertem a esteato-hepatite." },
-          { label: "Suplementação de altas doses de vitamina A e ferro isolados", correct: false, rationale: "Contraindicado: excesso de vitamina A e ferro pode causar hepatotoxicidade e estresse oxidativo hepático." },
-          { label: "Substituir açúcar por sucos concentrados de uva integral 4x ao dia", correct: false, rationale: "Incorreto: excesso de frutose concentrada sofre metabolismo hepático direto em triglicerídeos." }
-        ],
-        goal: "metabolic_remission",
-        target: 4,
-        reward: 25000,
-        stage: "Fase 2: Hepatoproteção"
-      },
-      {
-        title: "Patrícia, 53a — Diabetes Tipo 2 Recente & Obesidade Grau II",
-        sticker: "💉",
-        patient: {
-          vitals: ["IMC: 37,9 kg/m²", "HbA1c: 7,4%", "Diagnóstico DM2: Há 8 meses", "Meta: Remissão glicêmica"],
-          story: "Paciente recém-diagnosticada com DM2 deseja alcançar normoglicemia sem escalonamento medicamentoso (baseado no estudo DiRECT)."
-        },
-        desc: "Qual protocolo clínico maximiza a chance de remissão do Diabetes Tipo 2?",
-        options: [
-          { label: "Protocolo de Remissão Metabólica com redução de gordura ectópica pancreática e hepática", correct: true, rationale: "Perfeito! O estudo DiRECT demonstrou que perdas ponderais estruturadas (>10–15 kg) reduzem a gordura intra-pancreática e restauram a secreção de insulina." },
-          { label: "Aumentar carboidratos simples para evitar hipoglicemia mesmo sem uso de insulina", correct: false, rationale: "Incorreto: paciente não usa insulina exógena; excesso de carboidratos simples piora a glicotoxicidade das células beta." },
-          { label: "Ignorar circunferência abdominal e focar apenas no IMC isolado", correct: false, rationale: "Incompleto: a adiposidade visceral é o principal motor da resistência insulínica e deve ser monitorada." }
-        ],
-        goal: "metabolic_remission",
-        target: 8,
-        reward: 35000,
-        stage: "Fase 2: Endocrinologia"
-      },
-      {
-        title: "Rafael, 41a — Manutenção Pós-Perda de 18 kg (Prevenção de Reganho)",
-        sticker: "🌟",
-        patient: {
-          vitals: ["IMC atual: 27,8 kg/m²", "Perda alcançada: -18 kg", "Grelina: Elevada", "TMB: Adaptada (-180 kcal)"],
-          story: "Após 10 meses de tratamento bem-sucedido, paciente entra na fase crítica de manutenção onde hormônios orexígenos tentam recuperar o peso perdido."
-        },
-        desc: "Qual estratégia sustenta o novo peso a longo prazo e evita o efeito sanfona?",
-        options: [
-          { label: "Dar alta imediata sem retorno e liberar retorno aos hábitos antigos", correct: false, rationale: "Contraindicado: a obesidade é uma doença crônica recidivante; a interrupção abrupta do suporte leva ao reganho em >80% dos casos." },
-          { label: "Programa Vida Plena: transição calórica gradual, alta densidade proteica, automonitoramento e exercício", correct: true, rationale: "Correto! Aumentar gradualmente as calorias (reverse dieting controlada), manter proteína elevada e acompanhamento periódico neutraliza a adaptação metabólica." },
-          { label: "Reduzir ainda mais as calorias para 900 kcal/dia indefinidamente", correct: false, rationale: "Insustentável e prejudicial à saúde óssea, hormonal e psicológica." }
-        ],
-        goal: "longevity_program",
-        target: 2,
-        reward: 50000,
-        stage: "Fase 2: Manutenção"
-      },
-      {
-        title: "Grupo Terapêutico — Pacientes com Histórico de Efeito Sanfona",
-        sticker: "🧘",
-        patient: {
-          vitals: ["12 participantes", "IMC médio: 35,8 kg/m²", "Crença: 'Não tenho força de vontade'", "Adesão: Desafio"],
-          story: "Grupo de pacientes desmotivados por décadas de dietas restritivas acreditam que falham por falta de disciplina."
-        },
-        desc: "Qual abordagem educacional e comportamental promove autonomia duradoura?",
-        options: [
-          { label: "Terapia Comportamental (TCC): psicoeducação sobre neurobiologia da obesidade e metas flexíveis", correct: true, rationale: "Excelente! Compreender que a obesidade envolve regulação neuroendócrina reduz o estigma internalizado e melhora a autoeficácia." },
-          { label: "Expor publicamente o peso semanal de cada participante como forma de pressão", correct: false, rationale: "Antiético e contraindicado: o estigma do peso eleva cortisol, piora a saúde mental e aumenta o abandono." },
-          { label: "Entregar uma lista idêntica de 1.100 kcal impressa para todos", correct: false, rationale: "Inadequado: desconsidera necessidades energéticas individuais, cultura alimentar e contexto socioeconômico." }
-        ],
-        goal: "behavioral_cbt",
-        target: 15,
-        reward: 75000,
-        stage: "Fase 2: Psicologia Nutricional"
-      },
-      {
-        title: "Jorge, 56a — Síndrome Metabólica Grave & Apneia do Sono",
-        sticker: "🏥",
-        patient: {
-          vitals: ["IMC: 41,2 kg/m² (Grau III)", "PA: 150/96 mmHg", "HbA1c: 6,9%", "Apneia obstrutiva: Moderada"],
-          story: "Paciente com obesidade grau III e múltiplas comorbidades inicia preparo nutricional estruturado em equipe interdisciplinar."
-        },
-        desc: "Qual conduta nutricional integra o cuidado interdisciplinar na obesidade grave?",
-        options: [
-          { label: "Protocolo de Remissão Metabólica individualizado integrado à equipe médica e exercício adaptado", correct: true, rationale: "Correto! Na obesidade grau III, o cuidado interdisciplinar (nutrição, endocrinologia, psicologia e educação física) potencializa a segurança e os desfechos." },
-          { label: "Prescrever treino de corrida de alto impacto em jejum prolongado", correct: false, rationale: "Contraindicado: alto risco articular e cardiovascular sem avaliação e adaptação progressiva." },
-          { label: "Aguardar perda de 40 kg antes de tratar hipertensão e apneia", correct: false, rationale: "Incorreto: perdas de 5–10% já melhoram significativamente a apneia do sono e a pressão arterial." }
-        ],
-        goal: "metabolic_remission",
-        target: 14,
-        reward: 110000,
-        stage: "Fase 2: Alta Complexidade"
-      },
-      {
-        title: "Programa Coletivo — Saúde Metabólica na Atenção Primária",
-        sticker: "🌍",
-        patient: {
-          vitals: ["50 pacientes acompanhados", "Renda: Variada", "Foco: Comida de verdade acessível", "Meta: 12 meses"],
-          story: "Implantação de linha de cuidado de sobrepeso e obesidade utilizando alimentos regionais acessíveis (arroz, feijão, legumes, ovos)."
-        },
-        desc: "Como garantir equidade, custo acessível e alta taxa de manutenção em 12 meses?",
-        options: [
-          { label: "Programa Vida Plena valorizando cultura alimentar regional (feijão com arroz, hortaliças) e educação contínua", correct: true, rationale: "Perfeito! O Guia Alimentar demonstra que preparações culinárias tradicionais brasileiras são nutricionalmente completas, acessíveis e sustentáveis." },
-          { label: "Exigir salmão selvagem, aspargos importados e suplementos caros", correct: false, rationale: "Inviável: cria barreira financeira imediata e leva ao abandono do tratamento." },
-          { label: "Suspender o acompanhamento após os primeiros 30 dias", correct: false, rationale: "Ineficaz: o acompanhamento longitudinal é determinante para consolidar novos hábitos." }
-        ],
-        goal: "longevity_program",
-        target: 5,
-        reward: 160000,
-        stage: "Fase 2: Saúde Coletiva"
-      },
-      {
-        title: "Helena, 27a — Ortorexia & Medo de Carboidratos Pós-Dieta",
-        sticker: "📚",
-        patient: {
-          vitals: ["IMC: 26,4 kg/m²", "Ansiedade alimentar: Severa", "Vida social: Isolada", "Risco: Transtorno alimentar"],
-          story: "Após emagrecer com regras rígidas na internet, paciente sente pânico ao comer uma fruta ou arroz em eventos sociais."
-        },
-        desc: "Qual conduta restaura a relação saudável com a comida sem reganho de peso?",
-        options: [
-          { label: "Terapia Comportamental (TCC) com reintrodução gradual de alimentos temidos e flexibilidade cognitiva", correct: true, rationale: "Correto! A abordagem não-punitiva e flexível previne a evolução para transtornos alimentares graves e mantém o peso estável." },
-          { label: "Reforçar que frutas possuem açúcar e devem ser evitadas para sempre", correct: false, rationale: "Contraindicado: alimenta crenças disfuncionais e terrorismo nutricional sem base científica." },
-          { label: "Prescrever pesagem corporal 3 vezes ao dia para controle", correct: false, rationale: "Prejudicial: aumenta hipervigilância, ansiedade e flutuações hídricas mal interpretadas." }
-        ],
-        goal: "behavioral_cbt",
-        target: 30,
-        reward: 250000,
-        stage: "Fase 2: Excelência Clínica"
-      },
-      {
-        title: "Coorte Longitudinal — 2 Anos de Remissão Metabólica",
-        sticker: "🏛️",
-        patient: {
-          vitals: ["Coorte: 100 pacientes", "Seguimento: 24 meses", "Perda média sustentada: 11,4%", "Qualidade de vida: +85%"],
-          story: "Auditoria clínica dos pacientes acompanhados há 2 anos demonstra redução expressiva de medicamentos anti-hipertensivos e hipoglicemiantes."
-        },
-        desc: "Qual pilar consolida os resultados de 24 meses na linha de cuidado da obesidade?",
-        options: [
-          { label: "Programa Vida Plena: monitoramento periódico de composição corporal, sono, estresse e autonomia culinária", correct: true, rationale: "Excelente! O manejo integrado de sono, estresse, atividade física e alimentação personalizada sustenta a saúde metabólica a longo prazo." },
-          { label: "Substituir todas as refeições sólidas por shakes industrializados indefinidamente", correct: false, rationale: "Inadequado: não desenvolve habilidades culinárias nem autonomia social." },
-          { label: "Focar exclusivamente no número da balança ignorando exames laboratoriais e massa magra", correct: false, rationale: "Incompleto: saúde metabólica envolve composição corporal, marcadores bioquímicos e bem-estar integral." }
-        ],
-        goal: "longevity_program",
-        target: 10,
-        reward: 400000,
-        stage: "Fase 2: Legado Científico"
-      },
-      {
-        title: "Consenso Científico — Instituto de Excelência em Obesidade",
-        sticker: "👑",
-        patient: {
-          vitals: ["Banca Científica", "Diretrizes: ABESO / OMS", "Abordagem: Ética, Humana e Baseada em Evidências"],
-          story: "Você apresenta os resultados da sua clínica para certificação máxima em tratamento integral da obesidade."
-        },
-        desc: "Qual síntese define o padrão-ouro contemporâneo do nutricionista no tratamento da obesidade?",
-        options: [
-          { label: "Programa Vida Plena: cuidado centrado na pessoa, déficit sustentável, qualidade nutricional e zero estigma", correct: true, rationale: "Brilhante! Você concluiu toda a jornada clínica unindo rigor científico, empatia e transformação real da saúde metabólica!" },
-          { label: "Prescrição padronizada de dietas da moda extremas para perda rápida a qualquer custo", correct: false, rationale: "Contraria todas as diretrizes científicas nacionais e internacionais de saúde." },
-          { label: "Culpar o paciente sempre que ocorrer um platô fisiológico esperado", correct: false, rationale: "Antiético: platôs fazem parte da adaptação metabólica e exigem ajuste técnico empático do profissional." }
-        ],
-        goal: "longevity_program",
-        target: 20,
-        reward: 1000000,
-        stage: "Fase 2: Autoridade Máxima"
-      }
-    ];
+  // Estado Global do Jogador
+  let gameState = {
+    cash: 50000,
+    currentCaseIndex: 0,
+    stock: {
+      food_in_natura: 25,
+      fiber: 10,
+      lean_protein: 5,
+      low_carb: 2,
+      omega3: 0,
+      mediterranean: 0,
+      dash: 0,
+      deficit: 0,
+      microbiome: 0,
+      cbt: 0,
+      remission: 0,
+      longevity: 0
+    },
+    upgrades: []
+  };
 
-    // =========================================================================
-    // 3. PROTOCOLOS CLÍNICOS / PRODUÇÃO (12 PROCESSOS ENCADEADOS)
-    // =========================================================================
-    const PROCESSES = [
-      { id: "extract_fiber", title: "Fracionamento de Fibras & Prebióticos", icon: "🌾", desc: "Seleciona grãos integrais, sementes e vegetais ricos em fibras solúveis para saciedade.", input: "raw_ingredients", qty: 10, output: "fiber_complex", out: 5, cost: 120, unlock: 0 },
-      { id: "extract_protein", title: "Seleção de Proteínas Magras", icon: "🍗", desc: "Prepara cortes magros, ovos e leguminosas de alto valor biológico para preservação muscular.", input: "fiber_complex", qty: 5, output: "lean_protein", out: 3, cost: 180, unlock: 1 },
-      { id: "select_carb", title: "Curadoria de Carboidratos Baixo IG", icon: "🍠", desc: "Identifica tubérculos e cereais integrais de absorção lenta para controle insulínico.", input: "lean_protein", qty: 4, output: "low_gi_carb", out: 2, cost: 260, unlock: 2 },
-      { id: "refine_carb", title: "Concentração de Amido Resistente", icon: "📉", desc: "Otimiza técnicas de cocção e resfriamento que multiplicam carboidratos de baixo índice glicêmico.", input: "low_gi_carb", qty: 3, output: "low_gi_carb", out: 5, cost: 380, unlock: 4 },
-      { id: "extract_omega", title: "Prensagem de Ômega-3 & Polifenóis", icon: "🫒", desc: "Extrai lipídios anti-inflamatórios de azeite extravirgem, oleaginosas e peixes.", input: "low_gi_carb", qty: 3, output: "omega_lipid", out: 2, cost: 520, unlock: 5 },
-      { id: "build_med", title: "Formulação Dieta Mediterrânea", icon: "🥗", desc: "Integra lipídios cardioprotetores e antioxidantes em cardápios mediterrâneos personalizados.", input: "omega_lipid", qty: 3, output: "mediterranean_plan", out: 2, cost: 700, unlock: 6 },
-      { id: "build_dash", title: "Formulação Protocolo DASH", icon: "🫀", desc: "Ajusta micronutrientes (K, Mg, Ca) e reduz sódio para controle pressórico e metabólico.", input: "mediterranean_plan", qty: 2, output: "dash_protocol", out: 1, cost: 900, unlock: 7 },
-      { id: "build_deficit", title: "Engenharia de Déficit Sustentável", icon: "⚖️", desc: "Calcula déficit de 500–750 kcal/dia preservando micronutrientes e palatabilidade.", input: "dash_protocol", qty: 2, output: "deficit_protocol", out: 1, cost: 1200, unlock: 8 },
-      { id: "build_microbiota", title: "Protocolo de Modulação Intestinal", icon: "🦠", desc: "Associa fibras prebióticas e polifenóis para restaurar a barreira mucosa e reduzir endotoxemia.", input: "deficit_protocol", qty: 1, extraInput: "fiber_complex", extraQty: 3, output: "microbiota_therapy", out: 1, cost: 1600, unlock: 9 },
-      { id: "build_cbt", title: "Terapia Comportamental (TCC)", icon: "🧠", desc: "Combina plano flexível com ferramentas de Mindful Eating e reestruturação cognitiva.", input: "deficit_protocol", qty: 1, extraInput: "low_gi_carb", extraQty: 2, output: "behavioral_cbt", out: 1, cost: 2200, unlock: 10 },
-      { id: "build_remission", title: "Protocolo de Remissão Metabólica", icon: "🩺", desc: "Integra modulação intestinal e bioativos anti-inflamatórios para reverter esteatose e resistência insulínica.", input: "microbiota_therapy", qty: 2, extraInput: "omega_lipid", extraQty: 2, output: "metabolic_remission", out: 1, cost: 3500, unlock: 11 },
-      { id: "build_longevity", title: "Programa Vida Plena (Alta Clínica)", icon: "🌟", desc: "Consolida autonomia alimentar, comportamento e saúde metabólica para prevenir o reganho de peso!", input: "metabolic_remission", qty: 1, extraInput: "behavioral_cbt", extraQty: 2, output: "longevity_program", out: 1, cost: 7500, unlock: 13, isFinalProject: true }
-    ];
-
-    // =========================================================================
-    // 4. EQUIPAMENTOS CLÍNICOS / UPGRADES (7 TECNOLOGIAS)
-    // =========================================================================
-    const UPGRADES = [
-      { id: "bioimpedance", name: "Bioimpedância Tetrapolar Multifrequencial", icon: "📊", desc: "Avalia massa magra, gordura visceral e água corporal com alta precisão.", cost: 1800, eff: 5 },
-      { id: "calorimetry", name: "Calorimetria Indireta Portátil", icon: "🫁", desc: "Mede a Taxa Metabólica Basal real (VO2/VCO2) evitando subestimação calórica.", cost: 2600, eff: 8 },
-      { id: "kitchen_lab", name: "Cozinha Experimental Dietoterápica", icon: "🍳", desc: "Otimiza o preparo de receitas funcionais de baixa densidade energética.", cost: 4200, eff: 12 },
-      { id: "microbiome_seq", name: "Analisador de Microbiota & Metabolômica", icon: "🧬", desc: "Personaliza prebióticos e polifenóis conforme o perfil intestinal do paciente.", cost: 5500, eff: 10 },
-      { id: "telehealth_ai", name: "App de Telemonitoramento & Diário Fotográfico", icon: "📱", desc: "Aumenta a adesão terapêutica entre consultas e reduz custos operacionais.", cost: 8000, eff: 18 },
-      { id: "multidisciplinary", name: "Núcleo Integrado (Endócrino + Psicologia + Ed. Física)", icon: "🏥", desc: "Abordagem interdisciplinar completa para obesidade grave e refratária.", cost: 12000, eff: 25 },
-      { id: "longevity_institute", name: "Instituto de Pesquisa em Saúde Metabólica", icon: "🏛️", desc: "Infraestrutura definitiva de excelência científica para a Fase 2.", cost: 25000, eff: 35 }
-    ];
-
-    // =========================================================================
-    // 5. ESTADO DO JOGO & PERSISTÊNCIA SEGURA (LOCALSTORAGE)
-    // =========================================================================
-    const DEFAULT_STATE = {
-      coins: 500000,
-      stock: {
-        raw_ingredients: 25000,
-        fiber_complex: 0,
-        lean_protein: 0,
-        low_gi_carb: 0,
-        omega_lipid: 0,
-        mediterranean_plan: 0,
-        dash_protocol: 0,
-        deficit_protocol: 0,
-        microbiota_therapy: 0,
-        behavioral_cbt: 0,
-        metabolic_remission: 0,
-        longevity_program: 0
-      },
-      produced: {
-        fiber_complex: 0,
-        lean_protein: 0,
-        low_gi_carb: 0,
-        omega_lipid: 0,
-        mediterranean_plan: 0,
-        dash_protocol: 0,
-        deficit_protocol: 0,
-        microbiota_therapy: 0,
-        behavioral_cbt: 0,
-        metabolic_remission: 0,
-        longevity_program: 0
-      },
-      completed: [],
-      solvedDiagnosis: [],
-      selectedOptions: {},
-      production: 0,
-      upgrades: []
-    };
-
-    let state = structuredClone(DEFAULT_STATE);
-    let isProcessing = false;
-    let sfxEnabled = true;
-    let audioVoiceEnabled = true;
-    let lastSpokenText = "Bem-vindo à NutriClínica! Vamos transformar vidas através da nutrição baseada em evidências.";
-
-    const LOCAL_STORAGE_KEY = "nutriclinica_tycoon_save_v1";
-    const fmt = n => Number(n || 0).toLocaleString("pt-BR");
-    const $ = id => document.getElementById(id);
-
-    function setCloudStatus(text) {
-      const el = $("cloudSyncStatus");
-      if (el) el.textContent = text;
+  // Carregar do localStorage se houver
+  function loadGame() {
+    const saved = localStorage.getItem("nutriclinica_pro_save");
+    if (saved) {
+      try { gameState = JSON.parse(saved); } catch(e) {}
     }
+  }
+  function saveGame() {
+    localStorage.setItem("nutriclinica_pro_save", JSON.stringify(gameState));
+    updateHUD();
+  }
 
-    function normalizeState(raw) {
-      const base = structuredClone(DEFAULT_STATE);
-      if (!raw || typeof raw !== "object") return base;
-      return {
-        coins: typeof raw.coins === "number" ? raw.coins : base.coins,
-        stock: { ...base.stock, ...(raw.stock || {}) },
-        produced: { ...base.produced, ...(raw.produced || {}) },
-        completed: Array.isArray(raw.completed) ? raw.completed : [],
-        solvedDiagnosis: Array.isArray(raw.solvedDiagnosis) ? raw.solvedDiagnosis : [],
-        selectedOptions: raw.selectedOptions && typeof raw.selectedOptions === "object" ? raw.selectedOptions : {},
-        production: typeof raw.production === "number" ? raw.production : 0,
-        upgrades: Array.isArray(raw.upgrades) ? raw.upgrades : []
-      };
-    }
+  function showToast(msg, type = "success") {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.className = `toast show ${type}`;
+    setTimeout(() => { t.className = "toast"; }, 3000);
+  }
 
-    function loadFromLocalStorage() {
-      try {
-        const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          state = normalizeState(parsed.gameState || parsed);
-          setCloudStatus("💾 Prontuário Carregado");
-        }
-      } catch (e) {
-        console.error("Erro ao ler salvamento local:", e);
-        setCloudStatus("⚠️ Erro ao ler save local");
-      }
-    }
+  function updateHUD() {
+    document.getElementById("topCash").textContent = gameState.cash.toLocaleString("pt-BR") + " CR";
+    document.getElementById("topScore").textContent = `Caso ${String(gameState.currentCaseIndex + 1).padStart(2, '0')}/20`;
+  }
 
-    function saveToLocalStorage() {
-      try {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
-          schemaVersion: 1,
-          savedAt: Date.now(),
-          gameState: state
-        }));
-        setCloudStatus("💾 Salvo com Segurança");
-        return true;
-      } catch (e) {
-        console.error("Erro ao gravar localStorage:", e);
-        setCloudStatus("⚠️ Armazenamento cheio");
-        return false;
-      }
-    }
+  function switchView(viewId, btnEl) {
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+    
+    document.getElementById("view-" + viewId).classList.add("active");
+    if(btnEl) btnEl.classList.add("active");
+    
+    if(viewId === 'cases') renderCurrentCase();
+    if(viewId === 'pharmacy') renderPharmacy();
+    if(viewId === 'stock') renderStock();
+    if(viewId === 'market') renderMarket();
+    if(viewId === 'upgrades') renderUpgrades();
+  }
 
-    function save() {
-      renderAll();
-      saveToLocalStorage();
-    }
-
-    // =========================================================================
-    // 6. SÍNTESE DE ÁUDIO (WEB AUDIO API) & TOAST / MODAL / NAVEGAÇÃO
-    // =========================================================================
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    let actx = null;
-
-    function playSfx(type) {
-      if (!sfxEnabled || !AudioCtx) return;
-      try {
-        if (!actx) actx = new AudioCtx();
-        if (actx.state === "suspended") actx.resume();
-        const now = actx.currentTime;
-        const osc = actx.createOscillator();
-        const gain = actx.createGain();
-        osc.connect(gain);
-        gain.connect(actx.destination);
-
-        if (type === "click") {
-          osc.type = "triangle";
-          osc.frequency.setValueAtTime(540, now);
-          osc.frequency.exponentialRampToValueAtTime(220, now + 0.06);
-          gain.gain.setValueAtTime(0.11, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-          osc.start(now);
-          osc.stop(now + 0.06);
-        } else if (type === "prep") {
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(280, now);
-          osc.frequency.linearRampToValueAtTime(420, now + 0.22);
-          gain.gain.setValueAtTime(0.14, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
-          osc.start(now);
-          osc.stop(now + 0.38);
-        } else if (type === "coin") {
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(987.77, now);
-          osc.frequency.setValueAtTime(1318.51, now + 0.08);
-          gain.gain.setValueAtTime(0.15, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-          osc.start(now);
-          osc.stop(now + 0.3);
-        } else if (type === "win") {
-          const notes = [523.25, 659.25, 783.99, 1046.50];
-          notes.forEach((freq, idx) => {
-            const o = actx.createOscillator();
-            const g = actx.createGain();
-            o.type = "triangle";
-            o.connect(g);
-            g.connect(actx.destination);
-            o.frequency.setValueAtTime(freq, now + idx * 0.09);
-            g.gain.setValueAtTime(0.14, now + idx * 0.09);
-            g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.09 + 0.28);
-            o.start(now + idx * 0.09);
-            o.stop(now + idx * 0.09 + 0.28);
-          });
-        }
-      } catch (e) {}
-    }
-
-    function spawnFloatingText(text, color = "#34d399") {
-      const layer = $("fxLayer");
-      if (!layer) return;
-      const el = document.createElement("div");
-      el.className = "fx-popup";
-      el.textContent = text;
-      el.style.color = color;
-      el.style.left = (45 + (Math.random() * 20 - 10)) + "%";
-      el.style.top = (45 + (Math.random() * 14 - 7)) + "%";
-      layer.appendChild(el);
-      setTimeout(() => el.remove(), 1250);
-    }
-
-    function toast(msg) {
-      const t = $("toast");
-      if (!t) return;
-      t.textContent = msg;
-      t.classList.add("show");
-      setTimeout(() => t.classList.remove("show"), 3200);
-    }
-
-    function showModal(title, text, symbol = "🎉", eyebrow = "EVOLUÇÃO CLÍNICA") {
-      if ($("modalTitle")) $("modalTitle").textContent = title;
-      if ($("modalText")) $("modalText").innerHTML = text;
-      if ($("modalSymbol")) $("modalSymbol").textContent = symbol;
-      if ($("modalEyebrow")) $("modalEyebrow").textContent = eyebrow;
-      const backdrop = $("modalBackdrop");
-      if (backdrop) backdrop.classList.add("show");
-    }
-
-    function closeModal() {
-      const backdrop = $("modalBackdrop");
-      if (backdrop) backdrop.classList.remove("show");
-    }
-
-    function speak(text) {
-      lastSpokenText = String(text || "").replace(/<[^>]*>/g, "");
-      if (!audioVoiceEnabled || !lastSpokenText || !("speechSynthesis" in window)) return;
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(lastSpokenText);
-      u.lang = "pt-BR";
-      u.rate = 1.02;
-      window.speechSynthesis.speak(u);
-    }
-
-    function speakCurrentMission() {
-      const i = activeMissionIndex();
-      if (i < 0) {
-        speak("Parabéns Especialista! Todos os vinte casos clínicos foram resolvidos com excelência!");
-        return;
-      }
-      const m = MISSIONS[i];
-      speak(`Prontuário ${i + 1}: ${m.title}. ${m.patient.story} Pergunta clínica: ${m.desc}`);
-    }
-
-    // =========================================================================
-    // 7. ILUSTRAÇÕES SVG DINÂMICAS (100% AUTO-CONTIDAS OFFLINE)
-    // =========================================================================
-    function generateClinicalSvg(index, label = "") {
-      const palettes = [
-        ["#064e3b", "#10b981", "#34d399"],
-        ["#0c4a6e", "#06b6d4", "#22d3ee"],
-        ["#3b0764", "#a855f7", "#d8b4fe"],
-        ["#78350f", "#f59e0b", "#fbbf24"],
-        ["#881337", "#f43f5e", "#fda4af"]
-      ];
-      const [bg, primary, light] = palettes[index % palettes.length];
-      const icons = ["🥦", "🌾", "🍗", "🍠", "📉", "🫒", "🥗", "🫀", "⚖️", "🦠", "🧠", "🩺", "💉", "🌟", "🧘", "🏥", "🌍", "📚", "🏛️", "👑"];
-      const emoji = icons[index % icons.length];
-
-      return `
-        <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="g${index}" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="${bg}" />
-              <stop offset="100%" stop-color="#041019" />
-            </linearGradient>
-            <filter id="glow${index}" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="8" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
-          </defs>
-          <rect width="280" height="200" fill="url(#g${index})" rx="14" />
-          <circle cx="140" cy="100" r="65" fill="${primary}" opacity="0.18" filter="url(#glow${index})" />
-          <circle cx="140" cy="100" r="42" fill="none" stroke="${light}" stroke-width="2" stroke-dasharray="6,4" opacity="0.45" />
-          <text x="140" y="112" font-size="52" text-anchor="middle" dominant-baseline="middle" filter="url(#glow${index})">${emoji}</text>
-          <rect x="16" y="16" width="64" height="22" rx="6" fill="rgba(4,16,25,0.8)" stroke="${primary}" stroke-width="1.2" />
-          <text x="48" y="31" font-size="10" font-weight="700" fill="${light}" text-anchor="middle">CASO ${String(index + 1).padStart(2, "0")}</text>
-          ${label ? `<text x="140" y="178" font-size="10" font-weight="700" fill="${light}" text-anchor="middle" opacity="0.85">${label}</text>` : ""}
-        </svg>
-      `;
-    }
-
-    // =========================================================================
-    // 8. LÓGICA DE NAVEGAÇÃO & HELPERS DE JOGO
-    // =========================================================================
-    function activeMissionIndex() {
-      for (let i = 0; i < MISSIONS.length; i++) {
-        if (!state.completed.includes(i)) return i;
-      }
-      return -1;
-    }
-
-    function missionProgress(i) {
-      const m = MISSIONS[i];
-      if (!m) return 0;
-      const cur = state.stock[m.goal] || 0;
-      return Math.min(100, Math.floor((cur / m.target) * 100));
-    }
-
-    function totalEfficiencyBonus() {
-      return state.upgrades.reduce((acc, uid) => {
-        const u = UPGRADES.find(x => x.id === uid);
-        return acc + (u ? u.eff : 0);
-      }, 0);
-    }
-
-    function effectiveCost(p) {
-      const eff = totalEfficiencyBonus();
-      const discount = 1 - (eff / 100);
-      return Math.max(10, Math.floor(p.cost * Math.max(0.2, discount)));
-    }
-
-    function unlockedProcess(p) {
-      return state.completed.length >= p.unlock;
-    }
-
-    function changeView(viewId) {
-      playSfx("click");
-      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-      document.querySelectorAll(".nav-link").forEach(b => b.classList.remove("active"));
-
-      const targetView = $("view-" + viewId);
-      if (targetView) targetView.classList.add("active");
-
-      const navBtn = document.querySelector(`.nav-link[data-view="${viewId}"]`);
-      if (navBtn) navBtn.classList.add("active");
-
-      const titles = {
-        dashboard: "Consultório Central",
-        missions: "Casos Clínicos & Prontuários",
-        production: "Cozinha Experimental & Protocolos",
-        market: "Consultoria & Planos",
-        upgrades: "Equipamentos Clínicos"
-      };
-      if ($("pageTitle")) $("pageTitle").textContent = titles[viewId] || "Consultório Central";
-
-      // Fecha menu mobile se estiver aberto
-      const sb = $("sidebar");
-      const sbd = $("sidebarBackdrop");
-      if (sb) sb.classList.remove("open");
-      if (sbd) sbd.classList.remove("show");
-
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    // =========================================================================
-    // 9. RENDERIZAÇÃO DE COMPONENTES DO DOM
-    // =========================================================================
-    function renderStock() {
-      const list = $("stockList");
-      if (!list) return;
-      list.innerHTML = Object.entries(state.stock).map(([id, qty]) => {
-        const m = MATERIALS[id] || { name: id, icon: "📦", unit: "un." };
-        return `
-          <div class="stock-row">
-            <span class="material-icon sticker-float">${m.icon}</span>
-            <div>
-              <strong>${m.name}</strong>
-              <small class="stock-sub">${id === "raw_ingredients" ? "Insumo hortifruti" : "Protocolo clínico"}</small>
-            </div>
-            <div class="stock-qty">${fmt(qty)} <small>${m.unit}</small></div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    function renderChain() {
-      const strip = $("chainStrip");
-      if (!strip) return;
-      strip.innerHTML = MISSIONS.slice(0, 5).map((m, i) => {
-        const done = state.completed.includes(i);
-        const unlocked = i === activeMissionIndex() || done;
-        return `
-          <div class="chain-step ${done ? "done" : unlocked ? "" : "locked"}">
-            <span class="step-no">CASO 0${i + 1}</span>
-            <strong>${m.sticker} ${m.title.split("—")[0]}</strong>
-            <small style="display:block;margin-top:4px;color:${done ? "var(--accent)" : "var(--muted)"}">
-              ${done ? "✓ Concluído" : unlocked ? "Em atendimento" : "Bloqueado"}
-            </small>
-          </div>
-        `;
-      }).join("");
-    }
-
-    function selectClinicalOption(missionIdx, optionIdx) {
-      if (missionIdx !== activeMissionIndex()) return;
-      const m = MISSIONS[missionIdx];
-      const opt = m.options[optionIdx];
-      if (!opt) return;
-
-      state.selectedOptions[missionIdx] = optionIdx;
-
-      if (opt.correct) {
-        if (!state.solvedDiagnosis.includes(missionIdx)) {
-          state.solvedDiagnosis.push(missionIdx);
-          state.coins += 500;
-          playSfx("win");
-          spawnFloatingText("+500 CR Diagnóstico Correto!", "#34d399");
-          toast("✅ Conduta clínica aprovada! +500 CR de bônus diagnóstico.");
-        } else {
-          playSfx("click");
-        }
-      } else {
-        playSfx("click");
-        toast("⚠️ Conduta inadequada para este perfil clínico. Leia a justificativa!");
-      }
-
-      save();
-    }
-
-    function renderPatientChartHtml(m, i, isUnlocked, isDone) {
-      const vitalsHtml = m.patient.vitals.map((v, idx) =>
-        `<span class="vital-tag ${idx >= 2 ? "alert" : ""}">${v}</span>`
-      ).join("");
-
-      const chosenIdx = state.selectedOptions[i];
-      const diagnosisSolved = isDone || state.solvedDiagnosis.includes(i);
-      const letters = ["A", "B", "C"];
-
-      const choicesHtml = isUnlocked ? `
-        <div class="clinical-choices">
-          ${m.options.map((opt, optIdx) => {
-            let cls = "";
-            if (isDone && opt.correct) cls = "selected-correct";
-            else if (chosenIdx === optIdx) cls = opt.correct ? "selected-correct" : "selected-wrong";
-            return `
-              <button type="button" class="choice-btn ${cls}" data-case-choice="${i}" data-opt-idx="${optIdx}" ${isDone ? "disabled" : ""}>
-                <span class="choice-letter">${letters[optIdx]}</span>
-                <span>${opt.label}</span>
-              </button>
-            `;
-          }).join("")}
-        </div>
-      ` : "";
-
-      let feedbackHtml = "";
-      if (isDone) {
-        const correctOpt = m.options.find(o => o.correct);
-        feedbackHtml = `<div class="clinical-feedback ok"><strong>✅ Conduta Aplicada:</strong> ${correctOpt.rationale}</div>`;
-      } else if (isUnlocked && chosenIdx !== undefined && m.options[chosenIdx]) {
-        const chosenOpt = m.options[chosenIdx];
-        feedbackHtml = `<div class="clinical-feedback ${chosenOpt.correct ? "ok" : "err"}">
-          <strong>${chosenOpt.correct ? "✅ Prescrição Indicada (+500 CR):" : "❌ Contraindicado / Inadequado:"}</strong> ${chosenOpt.rationale}
-        </div>`;
-      }
-
-      return `
-        <div class="patient-chart-box">
-          <div class="patient-vitals">${vitalsHtml}</div>
-          <p style="margin:0;color:var(--ink);font-size:12.5px;line-height:1.55;"><strong>História Clínica:</strong> ${m.patient.story}</p>
-          <p style="margin:8px 0 0;color:var(--accent);font-weight:700;font-size:12.5px;">🩺 ${m.desc}</p>
-          ${choicesHtml}
-          ${feedbackHtml}
+  // Renderização do Prontuário Clínico Atual
+  function renderCurrentCase() {
+    if (gameState.currentCaseIndex >= CASES.length) {
+      document.getElementById("view-cases").innerHTML = `
+        <div class="card" style="text-align:center; padding:30px;">
+          <div style="font-size:40px; margin-bottom:10px;">🏆</div>
+          <h2 style="color:var(--success);">Residência Médica Concluída!</h2>
+          <p style="color:var(--text-muted);">Você atendeu com excelência todos os 20 pacientes do programa de obesidade e saúde metabólica.</p>
+          <button class="btn btn-success" style="margin-top:16px;" onclick="resetCampaign()">Reiniciar Prontuários (Novo Ciclo)</button>
         </div>
       `;
+      return;
     }
 
-    function bindChoiceButtons() {
-      document.querySelectorAll("[data-case-choice]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          selectClinicalOption(Number(btn.dataset.caseChoice), Number(btn.dataset.optIdx));
-        });
-      });
+    const c = CASES[gameState.currentCaseIndex];
+    document.getElementById("caseHeaderEyebrow").textContent = `PRONTUÁRIO CLÍNICO #${String(gameState.currentCaseIndex + 1).padStart(2, '0')}`;
+    document.getElementById("patientName").textContent = c.patient;
+    document.getElementById("patientComplaint").textContent = c.complaint;
+
+    let vitalsHTML = "";
+    for (let [k, v] of Object.entries(c.vitals)) {
+      vitalsHTML += `<div class="vital-item"><span>${k}</span><strong>${v}</strong></div>`;
     }
+    document.getElementById("patientVitals").innerHTML = vitalsHTML;
 
-    function renderDashboard() {
-      const idx = activeMissionIndex();
-      if ($("statCoins")) $("statCoins").innerHTML = `${fmt(state.coins)} <small>CR</small>`;
-      if ($("topCoins")) $("topCoins").textContent = fmt(state.coins);
-      if ($("statOre")) $("statOre").innerHTML = `${fmt(state.stock.raw_ingredients)} <small>un.</small>`;
-      if ($("statProduction")) $("statProduction").innerHTML = `${fmt(state.production)} <small>un.</small>`;
-      if ($("statMissions")) $("statMissions").innerHTML = `${state.completed.length} <small>/ 20</small>`;
-      if ($("companyLevel")) $("companyLevel").textContent = state.completed.length >= 10 ? 2 : 1;
-      if ($("missionCount")) $("missionCount").textContent = idx < 0 ? "★" : idx + 1;
-      if ($("heroIndex")) $("heroIndex").innerHTML = `${idx < 0 ? "20" : String(idx + 1).padStart(2, "0")} <span>/ 20</span>`;
-
-      const isPhase2 = state.completed.length >= 10;
-      const stageLabel = isPhase2 ? "FASE 2 · REMISSÃO METABÓLICA & TCC" : "FASE 1 · DIETOTERAPIA & SACIEDADE";
-      if ($("heroScene")) {
-        const artIndex = idx < 0 ? 19 : idx;
-        $("heroScene").innerHTML = `${generateClinicalSvg(artIndex)}<span class="hero-stage-tag">${stageLabel}</span>`;
-      }
-
-      if ($("heroKicker")) $("heroKicker").textContent = isPhase2 ? "FASE 2 · OBESIDADE COMPLEXA & LONGEVIDADE (11-20)" : "FASE 1 · NUTRIÇÃO CLÍNICA & REEDUCAÇÃO (1-10)";
-      if ($("heroTitle")) $("heroTitle").innerHTML = isPhase2 ? "Remissão Metabólica<br><em>& Vida Plena!</em>" : "Dietoterapia Baseada<br><em>em Evidências!</em>";
-
-      if (idx < 0) {
-        if ($("nextMissionEyebrow")) $("nextMissionEyebrow").textContent = "ESPECIALIZAÇÃO CONCLUÍDA!";
-        if ($("nextMissionTitle")) $("nextMissionTitle").textContent = "👑 Instituto de Excelência em Obesidade!";
-        if ($("dashboardPatientChart")) $("dashboardPatientChart").innerHTML = `<p style="margin:0;color:var(--ink);">Parabéns! Todos os 20 prontuários clínicos foram diagnosticados e tratados com base em evidências científicas!</p>`;
-        if ($("nextMissionBadge")) $("nextMissionBadge").textContent = "ALTA CLÍNICA";
-        if ($("missionProgressText")) $("missionProgressText").textContent = "100%";
-        if ($("missionProgressBar")) $("missionProgressBar").style.width = "100%";
-        if ($("nextMissionActionBtn")) $("nextMissionActionBtn").style.display = "none";
-      } else {
-        const m = MISSIONS[idx];
-        const prog = missionProgress(idx);
-        const diagnosisOk = state.solvedDiagnosis.includes(idx);
-        const hasStock = (state.stock[m.goal] || 0) >= m.target;
-        const ready = diagnosisOk && hasStock;
-
-        if ($("nextMissionEyebrow")) $("nextMissionEyebrow").textContent = `${m.sticker} ${m.stage}`;
-        if ($("nextMissionTitle")) $("nextMissionTitle").textContent = `Caso ${String(idx + 1).padStart(2, "0")} · ${m.title}`;
-        if ($("dashboardPatientChart")) {
-          $("dashboardPatientChart").innerHTML = renderPatientChartHtml(m, idx, true, false) +
-            `<div style="margin-top:10px;font-size:12px;color:var(--muted);">
-              <strong>Protocolo exigido para alta:</strong> ${m.target} un. de ${matBadge(m.goal)} (Disponível: <strong>${fmt(state.stock[m.goal] || 0)} un.</strong>)
-            </div>`;
-        }
-        if ($("nextMissionBadge")) $("nextMissionBadge").textContent = ready ? "🎉 PRONTO P/ ALTA!" : diagnosisOk ? "FORMULAR PROTOCOLO" : "ESCOLHER CONDUTA";
-        if ($("missionProgressText")) $("missionProgressText").textContent = `${prog}% (${fmt(state.stock[m.goal] || 0)}/${m.target})`;
-        if ($("missionProgressBar")) $("missionProgressBar").style.width = prog + "%";
-        if ($("nextMissionActionBtn")) {
-          $("nextMissionActionBtn").style.display = "inline-flex";
-          $("nextMissionActionBtn").innerHTML = ready ? `🎉 Dar Alta ao Paciente (+${fmt(m.reward)} CR)` : !diagnosisOk ? "1º Escolha a Conduta Acima" : "🧪 Ir Formular Protocolo →";
-          $("nextMissionActionBtn").onclick = () => {
-            if (ready) completeMission(idx);
-            else if (!diagnosisOk) toast("🩺 Selecione primeiro a opção correta de conduta clínica no prontuário!");
-            else changeView("production");
-          };
-        }
-      }
-
-      bindChoiceButtons();
-      renderStock();
-      renderChain();
-    }
-
-    function renderMissions() {
-      const pct = Math.round(state.completed.length / 20 * 100);
-      if ($("missionSummaryCount")) $("missionSummaryCount").textContent = `${state.completed.length}/20`;
-      if ($("allMissionProgress")) $("allMissionProgress").style.width = pct + "%";
-      if ($("allMissionPercent")) $("allMissionPercent").textContent = `${pct}% concluído`;
-
-      const mList = $("missionList");
-      if (!mList) return;
-      mList.innerHTML = MISSIONS.map((m, i) => {
-        const done = state.completed.includes(i);
-        const unlocked = i === activeMissionIndex() || done;
-        const progress = done ? 100 : unlocked ? missionProgress(i) : 0;
-        const diagnosisOk = done || state.solvedDiagnosis.includes(i);
-        const hasStock = (state.stock[m.goal] || 0) >= m.target;
-        const readyToClaim = unlocked && !done && diagnosisOk && hasStock;
-
-        return `
-          <article class="mission-card-expanded ${done ? "completed" : unlocked ? "unlocked" : "locked"}">
-            <div class="mission-art" role="img" aria-label="Ilustração do caso ${i + 1}: ${m.title}">
-              ${generateClinicalSvg(i)}
-            </div>
-            <div class="mission-number">${done ? "✅" : m.sticker}</div>
-            <div class="mission-info">
-              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
-                <h3>Caso ${String(i + 1).padStart(2, "0")}: ${m.title}</h3>
-                <span class="status-pill">${done ? "ALTA CONCLUÍDA" : unlocked ? m.stage : "🔒 BLOQUEADO"}</span>
-              </div>
-              ${unlocked ? renderPatientChartHtml(m, i, unlocked, done) : `<p style="margin-top:6px;">Conclua o caso clínico anterior para liberar este prontuário.</p>`}
-              <div class="mission-reward" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:12px;">
-                <div>
-                  Prescrição necessária: <strong>${m.target} un.</strong> de ${matBadge(m.goal)} · Honorários: 🪙 <strong>+${fmt(m.reward)} CR</strong>
-                  <div class="progress-track" style="margin-top:8px;max-width:300px"><span style="width:${progress}%"></span></div>
-                </div>
-                <div>
-                  ${unlocked && !done ? `
-                    <button class="btn ${readyToClaim ? "btn-light" : "btn-outline"} mission-claim-btn" data-mission="${i}" type="button">
-                      ${readyToClaim ? "🎉 Concluir Caso & Receber" : !diagnosisOk ? "1º Escolha a Conduta" : `Faltam ${Math.max(0, m.target - (state.stock[m.goal] || 0))} un.`}
-                    </button>
-                  ` : ""}
-                </div>
-              </div>
-            </div>
-          </article>
-        `;
-      }).join("");
-
-      bindChoiceButtons();
-      document.querySelectorAll(".mission-claim-btn").forEach(btn => {
-        btn.addEventListener("click", () => completeMission(Number(btn.dataset.mission)));
-      });
-    }
-
-    function canRunTimes(p, times) {
-      const cost = effectiveCost(p) * times;
-      const hasMain = (state.stock[p.input] || 0) >= p.qty * times;
-      const hasExtra = !p.extraInput || (state.stock[p.extraInput] || 0) >= p.extraQty * times;
-      return hasMain && hasExtra && state.coins >= cost;
-    }
-
-    function renderProcesses() {
-      const grid = $("processGrid");
-      if (!grid) return;
-      grid.innerHTML = PROCESSES.map(p => {
-        const open = unlockedProcess(p);
-        const cost = effectiveCost(p);
-        const can1 = open && canRunTimes(p, 1);
-        const can5 = open && canRunTimes(p, 5);
-        return `
-          <article class="process-card ${p.isFinalProject ? "final-process-card" : ""}">
-            <div class="process-top">
-              <span class="process-icon sticker-float">${p.icon}</span>
-              <span class="status-pill">${open ? "PROTOCOLO ATIVO" : `🔒 REQUER CASO ${p.unlock}`}</span>
-            </div>
-            <h3>${p.title}</h3>
-            <p>${p.desc}</p>
-            <div class="recipe">
-              <strong>Utiliza:</strong> ${p.qty} ${matBadge(p.input)}${p.extraInput ? ` + ${p.extraQty} ${matBadge(p.extraInput)}` : ""}<br>
-              <strong>Formula:</strong> ${p.out} ${matBadge(p.output)}<br>
-              <strong>Disponível:</strong> ${fmt(state.stock[p.input] || 0)} ${MATERIALS[p.input].unit} de ${MATERIALS[p.input].name}${p.extraInput ? ` · ${fmt(state.stock[p.extraInput] || 0)} de ${MATERIALS[p.extraInput].name}` : ""}<br>
-              <strong>Total formulado:</strong> <span class="produced-count">${fmt(state.produced[p.output] || 0)} un.</span><br>
-              <strong>Custo operacional:</strong> 🪙 ${fmt(cost)} CR
-            </div>
-            <div class="process-btn-group">
-              <button class="btn ${can1 ? "btn-light" : "btn-outline"} process-run-btn" data-process="${p.id}" data-times="1" type="button" ${can1 && !isProcessing ? "" : "disabled"}>
-                ${isProcessing ? "⏳ Formulando..." : !open ? "🔒 Bloqueado" : !can1 ? "Faltam insumos" : `⚡ Executar 1x (+${p.out})`}
-              </button>
-              <button class="btn ${can5 ? "btn-primary" : "btn-outline"} process-run-btn" data-process="${p.id}" data-times="5" type="button" ${can5 && !isProcessing ? "" : "disabled"} title="Formular 5 lotes de uma vez">
-                ⚡ 5x
-              </button>
-            </div>
-          </article>
-        `;
-      }).join("");
-
-      document.querySelectorAll(".process-run-btn").forEach(btn => {
-        btn.addEventListener("click", () => runProcess(btn.dataset.process, Number(btn.dataset.times || 1)));
-      });
-
-      const eff = 100 + totalEfficiencyBonus();
-      if ($("productionTotal")) $("productionTotal").textContent = `${fmt(state.production)} un.`;
-      if ($("equipmentTotal")) $("equipmentTotal").textContent = 1 + state.upgrades.length;
-      if ($("efficiencyValue")) $("efficiencyValue").textContent = `${eff}%`;
-    }
-
-    function renderMarket() {
-      const marketGrid = $("marketGrid");
-      if (!marketGrid) return;
-      marketGrid.innerHTML = Object.entries(MATERIALS).map(([id, m]) => {
-        const qtyAvailable = state.stock[id] || 0;
-        const disabled = qtyAvailable <= 0;
-        return `
-          <article class="market-card ${id === "mediterranean_plan" || id === "metabolic_remission" || id === "longevity_program" ? "chip-market-card" : ""}">
-            <span class="material-icon sticker-float">${m.icon}</span>
-            <div style="margin-top:10px">${matBadge(id)}</div>
-            <p style="margin-top:8px">Disponível na clínica: <strong>${fmt(qtyAvailable)} ${m.unit}</strong></p>
-            <div class="market-price">🪙 ${fmt(m.price)} <small>CR / un.</small></div>
-            <div class="sell-row">
-              <input type="number" min="1" max="${Math.max(1, qtyAvailable)}" value="${qtyAvailable > 0 ? Math.min(5, qtyAvailable) : 0}" id="sell-${id}" ${disabled ? "disabled" : ""}>
-              <button class="btn btn-light market-sell-btn" data-mat="${id}" type="button" ${disabled ? "disabled" : ""}>Prescrever</button>
-            </div>
-          </article>
-        `;
-      }).join("");
-
-      document.querySelectorAll(".market-sell-btn").forEach(btn => {
-        btn.addEventListener("click", () => sellMaterial(btn.dataset.mat));
-      });
-    }
-
-    function renderUpgrades() {
-      const upgradeGrid = $("upgradeGrid");
-      if (!upgradeGrid) return;
-      upgradeGrid.innerHTML = UPGRADES.map(u => {
-        const owned = state.upgrades.includes(u.id);
-        const canAfford = state.coins >= u.cost;
-        return `
-          <article class="upgrade-card">
-            <span class="upgrade-icon sticker-float">${u.icon}</span>
-            ${owned ? '<span class="owned">✅ INSTALADO</span>' : ""}
-            <h3>${u.name}</h3>
-            <p>${u.desc}</p>
-            <div class="upgrade-cost">🪙 ${fmt(u.cost)} <small>CRÉDITOS CRN</small></div>
-            <div class="stat-foot positive">Redução de custo & precisão: +${u.eff}%</div>
-            <button class="btn ${owned ? "btn-outline" : "btn-primary"} full upgrade-buy-btn" data-upgrade="${u.id}" type="button" style="margin-top:16px" ${owned || !canAfford ? "disabled" : ""}>
-              ${owned ? "Equipamento Ativo" : !canAfford ? "Créditos Insuficientes" : "🔬 Adquirir Tecnologia"}
-            </button>
-          </article>
-        `;
-      }).join("");
-
-      document.querySelectorAll(".upgrade-buy-btn").forEach(btn => {
-        btn.addEventListener("click", () => buyUpgrade(btn.dataset.upgrade));
-      });
-    }
-
-    function renderAll() {
-      renderDashboard();
-      renderMissions();
-      renderProcesses();
-      renderMarket();
-      renderUpgrades();
-    }
-
-    // =========================================================================
-    // 10. ANIMAÇÃO CINEMATOGRÁFICA DE EXECUÇÃO DE PROTOCOLO (3,2 SEGUNDOS)
-    // =========================================================================
-    const PROCESS_ART_INDEX = {
-      extract_fiber: 1, extract_protein: 2, select_carb: 3, refine_carb: 4,
-      extract_omega: 5, build_med: 6, build_dash: 7, build_deficit: 8,
-      build_microbiota: 9, build_cbt: 10, build_remission: 11, build_longevity: 13
-    };
-
-    function showProcessAnimation(p, times) {
-      const overlay = $("processOverlay");
-      const art = $("processScene");
-      const index = PROCESS_ART_INDEX[p.id] ?? 0;
-      art.innerHTML = generateClinicalSvg(index, p.title.toUpperCase());
-      $("processMachineIcon").textContent = p.icon;
-      $("processTitle").textContent = p.title;
-      $("processDescription").textContent = `${p.desc} Formulando ${times} ${times === 1 ? "protocolo individual" : "protocolos em lote"}.`;
-      const inputText = `${fmt(p.qty * times)} ${MATERIALS[p.input].name}`;
-      const extraText = p.extraInput ? ` + ${fmt(p.extraQty * times)} ${MATERIALS[p.extraInput].name}` : "";
-      $("processConsumption").innerHTML = `<span>🔻 Insumos utilizados: <strong>${inputText}${extraText}</strong></span><span>🔺 Resultado clínico: <strong>${fmt(p.out * times)} ${MATERIALS[p.output].name}</strong></span>`;
-      
-      const bar = overlay.querySelector(".process-progress span");
-      if (bar) {
-        bar.style.animation = "none";
-        bar.offsetHeight;
-        bar.style.animation = "processFill 3.2s linear forwards";
-      }
-
-      overlay.classList.add("show");
-      overlay.setAttribute("aria-hidden", "false");
-    }
-
-    function hideProcessAnimation() {
-      const overlay = $("processOverlay");
-      overlay.classList.remove("show");
-      overlay.setAttribute("aria-hidden", "true");
-    }
-
-    function runProcess(id, times = 1) {
-      const p = PROCESSES.find(x => x.id === id);
-      if (!p || isProcessing || !unlockedProcess(p)) return;
-      if (!canRunTimes(p, times)) {
-        toast("⚠️ Insumos nutricionais ou créditos insuficientes!");
-        return;
-      }
-
-      isProcessing = true;
-      renderProcesses();
-      playSfx("prep");
-      showProcessAnimation(p, times);
-
-      window.setTimeout(() => {
-        const cost = effectiveCost(p) * times;
-        const requiredMain = p.qty * times;
-        const requiredExtra = p.extraInput ? p.extraQty * times : 0;
-
-        if (!canRunTimes(p, times)) {
-          hideProcessAnimation();
-          isProcessing = false;
-          renderAll();
-          toast("⚠️ A formulação foi cancelada: os insumos mudaram durante o processo.");
-          return;
-        }
-
-        state.stock[p.input] = Math.max(0, (state.stock[p.input] || 0) - requiredMain);
-        if (p.extraInput) state.stock[p.extraInput] = Math.max(0, (state.stock[p.extraInput] || 0) - requiredExtra);
-        const totalOut = p.out * times;
-        state.stock[p.output] = (state.stock[p.output] || 0) + totalOut;
-        state.produced[p.output] = (state.produced[p.output] || 0) + totalOut;
-        state.coins -= cost;
-        state.production += totalOut;
-
-        hideProcessAnimation();
-        isProcessing = false;
-        playSfx("win");
-        spawnFloatingText(`+${totalOut} ${MATERIALS[p.output].icon} ${MATERIALS[p.output].name}`, "#22d3ee");
-        save();
-        toast(`✅ ${p.title}: +${totalOut} ${MATERIALS[p.output].name} formulado!`);
-      }, 3200);
-    }
-
-    // =========================================================================
-    // 11. CONCLUSÃO DE CASOS CLÍNICOS, PRESCRIÇÃO E EQUIPAMENTOS
-    // =========================================================================
-    function completeMission(i) {
-      if (i !== activeMissionIndex()) return;
-      const m = MISSIONS[i];
-      if (!state.solvedDiagnosis.includes(i)) {
-        playSfx("click");
-        toast("🩺 Primeiro leia o prontuário e escolha a conduta clínica correta!");
-        return;
-      }
-      if ((state.stock[m.goal] || 0) < m.target) {
-        playSfx("click");
-        toast(`⚠️ Você precisa formular ${m.target} un. de ${MATERIALS[m.goal].name} na Cozinha Experimental.`);
-        return;
-      }
-      state.completed.push(i);
-      state.coins += m.reward;
-      playSfx("win");
-      spawnFloatingText(`+🪙 ${fmt(m.reward)} CR!`, "#fbbf24");
-      save();
-
-      const justUnlockedPhase2 = state.completed.length === 10;
-      const isAllDone = state.completed.length >= MISSIONS.length;
-
-      const titleModal = isAllDone
-        ? "👑 AUTORIDADE MÁXIMA EM OBESIDADE!"
-        : justUnlockedPhase2
-        ? "🏆 NÍVEL 2 · ESPECIALIZAÇÃO AVANÇADA!"
-        : `${m.sticker} Caso Clínico Resolvido!`;
-
-      const htmlResult = isAllDone
-        ? `Parabéns Especialista! Você solucionou todos os 20 casos clínicos com nutrição baseada em evidências e transformou a saúde metabólica de milhares de pacientes!`
-        : justUnlockedPhase2
-        ? `⭐ <strong>Título de Especialista em Nutrição Clínica!</strong><br><br>Você concluiu os 10 casos fundamentais e avançou para o <strong>Nível 2</strong>!<br>🧬 A <strong>Fase 2 (TCC Nutricional, Remissão Metabólica & Vida Plena)</strong> foi desbloqueada!`
-        : `Excelente conduta! Você concluiu o caso <strong>${m.title}</strong> e recebeu 🪙 <strong>+${fmt(m.reward)} Créditos CRN</strong>!`;
-
-      showModal(titleModal, htmlResult, isAllDone ? "👑" : justUnlockedPhase2 ? "🏆" : m.sticker, "EVOLUÇÃO CLÍNICA");
-    }
-
-    function sellMaterial(id) {
-      const input = $("sell-" + id);
-      if (!input) return;
-      const qty = Math.floor(Number(input.value));
-      if (!Number.isFinite(qty) || qty <= 0 || qty > state.stock[id]) {
-        toast("⚠️ Quantidade inválida.");
-        return;
-      }
-      const revenue = qty * MATERIALS[id].price;
-      state.stock[id] -= qty;
-      state.coins += revenue;
-      playSfx("coin");
-      spawnFloatingText(`+🪙 ${fmt(revenue)} CR`, "#34d399");
-      save();
-      toast(`💼 Atendimento/Prescrição faturada: +${fmt(revenue)} CR!`);
-    }
-
-    function buyUpgrade(id) {
-      const u = UPGRADES.find(x => x.id === id);
-      if (!u || state.upgrades.includes(id) || state.coins < u.cost) return;
-      state.coins -= u.cost;
-      state.upgrades.push(id);
-      playSfx("win");
-      spawnFloatingText(`+${u.eff}% Precisão Clínica!`, "#a855f7");
-      save();
-      showModal("Tecnologia Adquirida!", `<strong>${u.name}</strong> agora integra sua clínica (+${u.eff}% precisão e economia operacional)!`, u.icon, "INFRAESTRUTURA");
-    }
-
-    function startNewGame() {
-      playSfx("click");
-      showModal(
-        "Reiniciar Carreira Clínica?",
-        `Isso reiniciará seu prontuário com <strong>25.000 Alimentos In Natura</strong> e <strong>500.000 Créditos CRN</strong>.<br><br><button class="btn btn-primary full" id="confirmResetAction" type="button">Confirmar Reinício</button>`,
-        "🔄",
-        "CONFIRMAÇÃO"
-      );
-      setTimeout(() => {
-        const btn = $("confirmResetAction");
-        if (btn) {
-          btn.addEventListener("click", () => {
-            closeModal();
-            state = structuredClone(DEFAULT_STATE);
-            save();
-            changeView("dashboard");
-            toast("✨ Nova carreira iniciada com 25.000 Alimentos In Natura e 500.000 CR!");
-          });
-        }
-      }, 50);
-    }
-
-    function harvestIngredientsBonus() {
-      state.stock.raw_ingredients += 1000;
-      playSfx("prep");
-      spawnFloatingText("+1.000 🥦 Alimentos In Natura", "#34d399");
-      save();
-      toast("🥦 Abastecimento realizado: +1.000 unidades de Alimentos In Natura!");
-    }
-
-    // =========================================================================
-    // 12. EVENT LISTENERS & INICIALIZAÇÃO SEGURA
-    // =========================================================================
-    document.addEventListener("DOMContentLoaded", () => {
-      document.querySelectorAll(".nav-link").forEach(b => {
-        b.addEventListener("click", () => changeView(b.dataset.view));
-      });
-      document.querySelectorAll("[data-goto]").forEach(b => {
-        b.addEventListener("click", () => changeView(b.dataset.goto));
-      });
-
-      if ($("brandHome")) $("brandHome").addEventListener("click", e => { e.preventDefault(); changeView("dashboard"); });
-
-      if ($("mobileMenu") && $("sidebar") && $("sidebarBackdrop")) {
-        $("mobileMenu").addEventListener("click", () => {
-          $("sidebar").classList.toggle("open");
-          $("sidebarBackdrop").classList.toggle("show");
-        });
-        $("sidebarBackdrop").addEventListener("click", () => {
-          $("sidebar").classList.remove("open");
-          $("sidebarBackdrop").classList.remove("show");
-        });
-      }
-
-      ["newGame", "resetGame"].forEach(id => {
-        if ($(id)) $(id).addEventListener("click", startNewGame);
-      });
-
-      if ($("forceSyncBtn")) {
-        $("forceSyncBtn").addEventListener("click", () => {
-          playSfx("click");
-          saveToLocalStorage();
-          toast("💾 Prontuário clínico salvo com segurança no navegador!");
-        });
-      }
-
-      if ($("mineBonusBtn")) $("mineBonusBtn").addEventListener("click", harvestIngredientsBonus);
-      if ($("factoryMineBtn")) $("factoryMineBtn").addEventListener("click", harvestIngredientsBonus);
-
-      if ($("sfxToggleBtn")) {
-        $("sfxToggleBtn").addEventListener("click", () => {
-          sfxEnabled = !sfxEnabled;
-          $("sfxToggleBtn").textContent = sfxEnabled ? "🔊 SFX: ON" : "🔇 SFX: OFF";
-          if (sfxEnabled) playSfx("coin");
-        });
-      }
-
-      if ($("modalClose")) $("modalClose").addEventListener("click", closeModal);
-      if ($("modalOk")) $("modalOk").addEventListener("click", closeModal);
-      if ($("modalBackdrop")) $("modalBackdrop").addEventListener("click", e => { if (e.target === $("modalBackdrop")) closeModal(); });
-      if ($("speakMissionBtn")) $("speakMissionBtn").addEventListener("click", speakCurrentMission);
-
-      if ($("audioEnable")) $("audioEnable").addEventListener("click", () => { audioVoiceEnabled = true; speak("Preceptor clínico ativado! Pronto para orientar suas prescrições nutricionais."); });
-      if ($("audioRepeat")) $("audioRepeat").addEventListener("click", () => speak(lastSpokenText));
-      if ($("audioToggle")) {
-        $("audioToggle").addEventListener("click", () => {
-          audioVoiceEnabled = !audioVoiceEnabled;
-          $("audioToggle").textContent = audioVoiceEnabled ? "Voz Ligada" : "Voz Desligada";
-        });
-      }
-
-      loadFromLocalStorage();
-      renderAll();
+    let optionsHTML = "";
+    c.options.forEach((opt, idx) => {
+      optionsHTML += `<button class="protocol-option" onclick="selectProtocol(${idx})">${idx + 1}. ${opt}</button>`;
     });
-  </script>
+    document.getElementById("protocolOptions").innerHTML = optionsHTML;
+    
+    document.getElementById("caseFeedback").className = "feedback-box";
+    document.getElementById("caseFeedback").textContent = "";
+    document.getElementById("nextCaseBtn").style.display = "none";
+  }
+
+  // Escolha do Protocolo Clínico com Punição por Erro
+  function selectProtocol(idx) {
+    const c = CASES[gameState.currentCaseIndex];
+    const feedbackBox = document.getElementById("caseFeedback");
+    const optionBtns = document.querySelectorAll(".protocol-option");
+
+    // Travar botões após escolha
+    optionBtns.forEach((b, i) => {
+      b.style.pointerEvents = "none";
+      if(i === c.correctIndex) b.classList.add("correct");
+      if(i === idx && idx !== c.correctIndex) b.classList.add("incorrect");
+    });
+
+    if (idx === c.correctIndex) {
+      gameState.cash += 5000;
+      feedbackBox.className = "feedback-box success";
+      feedbackBox.innerHTML = `<strong>✅ Conduta Aprovada (+5.000 CR):</strong> ${c.explanation}`;
+      showToast("+5.000 CR · Diagnóstico Correto!", "success");
+      document.getElementById("nextCaseBtn").style.display = "block";
+    } else {
+      gameState.cash = Math.max(0, gameState.cash - 5000);
+      feedbackBox.className = "feedback-box error";
+      feedbackBox.innerHTML = `<strong>❌ Erro de Conduta (-5.000 CR):</strong> Escolha inadequada para este perfil clínico. A correta era a opção ${c.correctIndex + 1}.`;
+      showToast("-5.000 CR · Conduta Incorreta!", "error");
+      document.getElementById("nextCaseBtn").style.display = "block";
+    }
+    saveGame();
+  }
+
+  function advanceCase() {
+    gameState.currentCaseIndex++;
+    saveGame();
+    renderCurrentCase();
+  }
+
+  // Farmácia / Manipulação de Insumos
+  function renderPharmacy() {
+    let html = "";
+    for (let [id, item] of Object.entries(ITEMS)) {
+      html += `
+        <div class="proc-item">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong>${item.icon} ${item.name}</strong>
+            <span style="font-family:'JetBrains Mono'; color:var(--primary);">${item.price.toLocaleString("pt-BR")} CR</span>
+          </div>
+          <div style="margin-top:10px;">
+            <button class="btn" onclick="buyItem('${id}')">Adquirir Insumo Clínico</button>
+          </div>
+        </div>
+      `;
+    }
+    document.getElementById("pharmacyList").innerHTML = html;
+  }
+
+  function buyItem(id) {
+    const item = ITEMS[id];
+    if (gameState.cash < item.price) {
+      showToast("Saldo insuficiente em caixa!", "error");
+      return;
+    }
+    gameState.cash -= item.price;
+    gameState.stock[id] = (gameState.stock[id] || 0) + 1;
+    saveGame();
+    showToast(`Adquirido: ${item.name}`);
+    renderStock();
+  }
+
+  // Estoque Clínico
+  function renderStock() {
+    let html = "";
+    for (let [id, qty] of Object.entries(gameState.stock)) {
+      if(qty > 0 || ['food_in_natura','fiber','lean_protein'].includes(id)) {
+        const item = ITEMS[id];
+        html += `
+          <div class="stock-item" style="display:flex; justify-content:space-between; align-items:center;">
+            <div><strong>${item.icon} ${item.name}</strong></div>
+            <div style="font-family:'JetBrains Mono'; font-weight:700;">${qty} ${item.unit}</div>
+          </div>
+        `;
+      }
+    }
+    document.getElementById("stockList").innerHTML = html || "<p style='color:var(--text-muted);'>Nenhum insumo em estoque.</p>";
+  }
+
+  // Mercado / Monetização
+  function renderMarket() {
+    let html = "";
+    for (let [id, qty] of Object.entries(gameState.stock)) {
+      if (qty > 0) {
+        const item = ITEMS[id];
+        const sellPrice = Math.round(item.price * 1.3);
+        html += `
+          <div class="stock-item">
+            <div style="display:flex; justify-content:space-between;">
+              <strong>${item.icon} ${item.name}</strong>
+              <span style="color:var(--success); font-family:'JetBrains Mono';">+${sellPrice} CR/un</span>
+            </div>
+            <p style="color:var(--text-muted); font-size:11px; margin:4px 0 8px 0;">Disponível: ${qty} un.</p>
+            <button class="btn btn-success" onclick="sellItem('${id}')">Monetizar Protocolo</button>
+          </div>
+        `;
+      }
+    }
+    document.getElementById("marketList").innerHTML = html || "<p style='color:var(--text-muted);'>Adquira insumos na aba Protocolos para poder monetizar.</p>";
+  }
+
+  function sellItem(id) {
+    if (gameState.stock[id] <= 0) return;
+    const item = ITEMS[id];
+    const revenue = Math.round(item.price * 1.3);
+    gameState.stock[id]--;
+    gameState.cash += revenue;
+    saveGame();
+    showToast(`Receita gerada: +${revenue} CR`);
+    renderMarket();
+  }
+
+  // Upgrades e Equipamentos
+  function renderUpgrades() {
+    const upgrades = [
+      { id: "bioimpedancia", name: "Analisador de Bioimpedância Profissional", cost: 15000, desc: "Aumenta a precisão dos diagnósticos." },
+      { id: "ultrassom", name: "Ultrassom de Gordura Visceral", cost: 35000, desc: "Otimiza a fidelização de pacientes complexos." },
+      { id: "metabolografo", name: "Metabolográfo de Repouso", cost: 75000, desc: "Mede o gasto energético real com exatidão científica." }
+    ];
+
+    let html = "";
+    upgrades.forEach(u => {
+      const owned = gameState.upgrades.includes(u.id);
+      html += `
+        <div class="stock-item">
+          <strong>${u.name}</strong>
+          <p style="color:var(--text-muted); font-size:11px; margin:4px 0 8px 0;">${u.desc}</p>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-family:'JetBrains Mono'; color:var(--primary);">${u.cost.toLocaleString("pt-BR")} CR</span>
+            <button class="btn ${owned ? 'btn-outline' : ''}" ${owned ? 'disabled' : ''} onclick="buyUpgrade('${u.id}', ${u.cost})">${owned ? 'Instalado' : 'Adquirir Equipamento'}</button>
+          </div>
+        </div>
+      `;
+    });
+    document.getElementById("upgradeList").innerHTML = html;
+  }
+
+  function buyUpgrade(id, cost) {
+    if (gameState.cash < cost) {
+      showToast("Saldo insuficiente!", "error");
+      return;
+    }
+    gameState.cash -= cost;
+    gameState.upgrades.push(id);
+    saveGame();
+    showToast("Equipamento instalado com sucesso!");
+    renderUpgrades();
+  }
+
+  function resetCampaign() {
+    if (confirm("Deseja reiniciar todos os prontuários e iniciar uma nova residência clínica?")) {
+      localStorage.removeItem("nutriclinica_pro_save");
+      location.reload();
+    }
+  }
+
+  // Inicialização
+  loadGame();
+  updateHUD();
+  renderCurrentCase();
+</script>
 </body>
 </html>
