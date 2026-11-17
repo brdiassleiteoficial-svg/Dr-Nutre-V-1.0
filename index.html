@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#070d1d">
-  <title>NutriClínica Pro | Sistema de Gestão e Decisão em Obesidade</title>
+  <title>NutriClínica Pro | Sistema de Decisão em Obesidade & Nutrição</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Inter:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
@@ -45,7 +45,7 @@
       width: 100%;
     }
     
-    /* Topbar Profissional Expandida para Celular */
+    /* Topbar Profissional */
     .topbar {
       height: 70px;
       background: var(--surface);
@@ -102,7 +102,7 @@
       cursor: pointer;
     }
 
-    /* Navegação Inferior Estilo App Nativo */
+    /* Navegação Inferior */
     .main-nav {
       position: fixed;
       bottom: 0;
@@ -125,15 +125,15 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       gap: 4px;
       cursor: pointer;
     }
-    .nav-btn span.icon { font-size: 20px; }
+    .nav-btn span.icon { font-size: 18px; }
     .nav-btn.active { color: var(--primary); background: rgba(56, 189, 248, 0.08); }
 
-    /* Área de Conteúdo Ocupando Tela Inteira */
+    /* Área de Conteúdo */
     .content-area {
       padding: 16px;
       padding-bottom: 95px;
@@ -145,9 +145,9 @@
 
     .view { display: none; }
     .view.active { display: block; animation: fadeIn 0.2s ease; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Cards Robustos */
+    /* Cards Robustos com Animação de Entrada */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -169,7 +169,7 @@
       text-transform: uppercase;
     }
     
-    /* Botões Encorpados */
+    /* Botões */
     .btn {
       background: var(--primary);
       color: #070d1d;
@@ -219,6 +219,18 @@
       color: #ffffff; 
       font-weight: 700; 
     }
+
+    .educational-box {
+      background: rgba(56, 189, 248, 0.08);
+      border-left: 4px solid var(--primary);
+      padding: 12px 14px;
+      border-radius: 0 10px 10px 0;
+      margin: 12px 0;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .educational-box strong { color: var(--primary); }
 
     .option-list { display: grid; gap: 12px; margin-top: 16px; }
     .protocol-option {
@@ -298,7 +310,7 @@
     <div id="toast" class="toast">Notificação do sistema</div>
 
     <main class="content-area">
-      <!-- PRONTUÁRIO -->
+      <!-- PRONTUÁRIO EXPLICATIVO -->
       <section class="view active" id="view-cases">
         <div class="card">
           <div class="card-title">
@@ -306,9 +318,13 @@
             <span id="caseStatusBadge" style="font-size:11px; color:var(--primary); font-weight:800;">EM AVALIAÇÃO</span>
           </div>
           <h2 id="patientName" style="font-family:'Chakra Petch', sans-serif; font-size:18px; font-weight:700; margin:6px 0 6px 0; color:#fff;">Carregando paciente...</h2>
-          <p id="patientComplaint" style="color:var(--text-muted); font-size:13px; margin:0 0 14px 0; font-weight:500;"></p>
+          <p id="patientComplaint" style="color:var(--text-muted); font-size:13px; margin:0 0 12px 0; font-weight:500;"></p>
           
           <div class="patient-vitals" id="patientVitals"></div>
+
+          <div class="educational-box" id="patientContextBox">
+            <strong>Contexto Científico:</strong> Analise os sintomas e exames laboratoriais apresentados para selecionar a diretriz terapêutica baseada nas recomendações da ABESO e OMS.
+          </div>
 
           <div style="font-weight:700; margin-bottom:10px; font-size:13px; color:var(--text-main); text-transform:uppercase; letter-spacing:0.5px;">Selecione a Conduta Terapêutica Adequada:</div>
           <div class="option-list" id="protocolOptions"></div>
@@ -321,11 +337,11 @@
         </div>
       </section>
 
-      <!-- FARMÁCIA -->
+      <!-- FARMÁCIA / PROTOCOLOS -->
       <section class="view" id="view-pharmacy">
         <div class="card">
           <div class="card-title"><span>📋</span> Prescrições e Insumos Metabólicos</div>
-          <p style="color:var(--text-muted); font-size:13px; margin-bottom:14px;">Adquira insumos para compor seu portfólio clínico.</p>
+          <p style="color:var(--text-muted); font-size:13px; margin-bottom:14px;">Adquira insumos científicos para compor o portfólio clínico da sua clínica especializada em obesidade.</p>
           <div id="pharmacyList"></div>
         </div>
       </section>
@@ -342,7 +358,7 @@
       <section class="view" id="view-market">
         <div class="card">
           <div class="card-title"><span>📈</span> Monetização de Consultas & Protocolos</div>
-          <p style="color:var(--text-muted); font-size:13px; margin-bottom:14px;">Comercialize protocolos de emagrecimento para gerar receita para a clínica.</p>
+          <p style="color:var(--text-muted); font-size:13px; margin-bottom:14px;">Comercialize os protocolos formulados para reverter receita e expandir sua consultoria.</p>
           <div id="marketList"></div>
         </div>
       </section>
@@ -366,7 +382,6 @@
   </div>
 
 <script>
-  // Síntese de Som Sintetizado (Web Audio API) para dar feedback auditivo robusto
   let audioCtx = null;
   let sfxEnabled = true;
 
@@ -384,8 +399,8 @@
 
       if (type === 'success') {
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(587.33, now); // D5
-        osc.frequency.setValueAtTime(880.00, now + 0.1); // A5
+        osc.frequency.setValueAtTime(587.33, now);
+        osc.frequency.setValueAtTime(880.00, now + 0.1);
         gain.gain.setValueAtTime(0.15, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
         osc.start(now);
@@ -438,13 +453,14 @@
       patient: "Carlos Eduardo, 34 anos",
       complaint: "Ganho de peso progressivo após mudança de emprego para home office.",
       vitals: { imc: "29.4 kg/m²", glicemia: "98 mg/dL", homa: "2.1" },
+      context: "Paciente apresenta IMC limítrofe para sobrepeso com glicemia normal. A diretriz da ABESO recomenda intervenção precoce no estilo de vida priorizando alimentos in natura antes de qualquer medida farmacológica.",
       correctIndex: 0,
       options: [
         "Prescrever reeducação alimentar com foco em alimentos in natura e déficit calórico moderado.",
         "Sugerir dieta altamente restritiva à base de líquidos e jejum prolongado de 36 horas.",
         "Indicar bariátrica imediata sem tentativa de tratamento conservador."
       ],
-      explanation: "Correto! Para sobrepeso sem comorbidades graves, a primeira linha é reeducação com alimentos in natura."
+      explanation: "Correto! Para sobrepeso sem comorbidades graves, a primeira linha é reeducação com alimentos in natura, garantindo adesão sustentável a longo prazo."
     },
     {
       title: "Caso 02: Obesidade Grau I com Resistência Insulínica",
@@ -457,7 +473,8 @@
         "Aplicar protocolo de restrição de carboidratos de baixo índice glicêmico aliado ao aumento de fibras solúveis.",
         "Liberar dieta livre em finais de semana para compensar o estresse metabólico."
       ],
-      explanation: "Correto! O quadro de resistência insulínica exige controle glicêmico estrito com baixo IG e fibras."
+      context: "Índice HOMA-IR elevado (3.8) aponta resistência insulínica significativa. O controle da carga glicêmica e a adição de fibras solúveis ajudam a modular a curva de insulina.",
+      explanation: "Correto! O quadro de resistência insulínica exige controle glicêmico estrito com baixo IG e suporte de fibras para modular a absorção de glicose."
     },
     {
       title: "Caso 03: Esteatose Hepática e Dislipidemia",
@@ -470,7 +487,8 @@
         "Restringir totalmente qualquer fonte de gordura, incluindo as boas.",
         "Implementar Protocolo tipo Mediterrâneo enriquecido com Ômega-3 e controle de frutose."
       ],
-      explanation: "Correto! Esteatose hepática responde muito bem à dieta mediterrânea e suplementação de ômega-3."
+      context: "Aumento de TGP e triglicerídeos sugere acúmulo de gordura no fígado (DHNA). A Dieta Mediterrânea associada a ômega-3 reduz a inflamação hepática e melhora o perfil lipídico.",
+      explanation: "Correto! A esteatose hepática não alcoólica responde perfeitamente à dieta mediterrânea e suplementação de ômega-3 para redução da inflamação hepática."
     },
     {
       title: "Caso 04: Obesidade com Hipertensão Arterial Sistêmica",
@@ -483,7 +501,8 @@
         "Aumentar o consumo de embutidos e conservas por praticidade.",
         "Suspender o consumo de água para evitar inchaço."
       ],
-      explanation: "Correto! O padrão DASH é o padrão-ouro clínico validado para controle tensional."
+      context: "Pressão arterial sistólica e diastólica elevadas (145/95 mmHg). O protocolo DASH (Dietary Approaches to Stop Hypertension) é amplamente validado para controle tensional.",
+      explanation: "Correto! O padrão DASH é o padrão-ouro clínico validado para controle tensional em pacientes com sobrepeso e hipertensão."
     },
     {
       title: "Caso 05: Compulsão Alimentar Noturna",
@@ -496,7 +515,8 @@
         "Integrar o Módulo de Terapia Cognitivo-Comportamental (TCC) com reestruturação de horários e saciedade.",
         "Prescrever sedativos pesados sem acompanhamento nutricional."
       ],
-      explanation: "Correto! Transtornos comportamentais e compulsão exigem TCC e ajustes de saciedade."
+      context: "Episódios noturnos de compulsão estão associados a desreguladores de saciedade e gatilhos emocionais. A TCC aliada ao ajuste proteico noturno é indispensável.",
+      explanation: "Correto! Transtornos comportamentais e compulsão exigem abordagem multidisciplinar unindo TCC e ajustes de saciedade nutricional."
     },
     {
       title: "Caso 06: Síndrome Metabólica em Homem de Meia-Idade",
@@ -509,7 +529,8 @@
         "Focar exclusivamente em estética corporal sem olhar exames.",
         "Aplicar Protocolo de Remissão Metabólica intensivo com déficit sustentável e modulação intestinal."
       ],
-      explanation: "Correto! A Síndrome Metabólica requer intervenção metabólica profunda visando a remissão dos fatores de risco."
+      context: "Obesidade central severa associada a múltiplos fatores de risco cardiovascular definem o quadro de Síndrome Metabólica.",
+      explanation: "Correto! A Síndrome Metabólica requer intervenção metabólica profunda visando a remissão dos fatores de risco cardiovascular."
     },
     {
       title: "Caso 07: Obesidade e Disbiose Intestinal Crônica",
@@ -522,7 +543,8 @@
         "Ingerir laxantes fortes diariamente sem orientação.",
         "Consumir ultraprocessados ricos em emulsificantes."
       ],
-      explanation: "Correto! A modulação intestinal corrige a permeabilidade e reduz a inflamação sistêmica."
+      context: "A disbiose altera a barreira intestinal, permitindo a passagem de lipopolissacarídeos que geram inflamação crônica de baixo grau.",
+      explanation: "Correto! A modulação intestinal corrige a permeabilidade e reduz a inflamação sistêmica de baixo grau ligada à obesidade."
     },
     {
       title: "Caso 08: Obesidade Grau II com Pré-Diabetes",
@@ -535,6 +557,7 @@
         "Iniciar Déficit Sustentável com controle glicêmico estrito e carga glicêmica baixa.",
         "Aguardar virar diabetes tipo 2 para tomar atitude."
       ],
+      context: "HbA1c em 6.4% posiciona o paciente no limite superior da pré-diabetes. A ação nutricional imediata evita o desenvolvimento de diabetes tipo 2 manifesto.",
       explanation: "Correto! O controle rigoroso da carga glicêmica evita a progressão para diabetes estabelecido."
     },
     {
@@ -548,7 +571,8 @@
         "Fazer dietas de fome extrema que destroem a massa magra.",
         "Ajustar aporte de proteína magra de alta qualidade e treino de força."
       ],
-      explanation: "Correto! No climatério, a preservação de massa magra via aporte proteico adequado é vital."
+      context: "A queda estrogênica altera a distribuição de gordura para o padrão androide. O aporte proteico elevado protege a massa magra contra a sarcopenia.",
+      explanation: "Correto! No climatério, a preservação de massa magra via aporte proteico adequado é vital para manter o gasto energético basal."
     },
     {
       title: "Caso 10: Adiposidade Infantil / Adolescente Acompanhado",
@@ -561,7 +585,8 @@
         "Dieta restritiva de 800 calorias em fase de crescimento.",
         "Remédios para emagrecimento sem supervisão pediátrica."
       ],
-      explanation: "Correto! Na adolescência, o foco é a mudança do ambiente familiar e inclusão de alimentos in natura."
+      context: "Em pacientes pediátricos/adolescentes, dietas restritivas comprometem o crescimento ósseo e cognitivo. O foco é a reeducação do ambiente familiar.",
+      explanation: "Correto! Na adolescência, o foco é a mudança do ambiente familiar e inclusão de alimentos in natura, preservando o desenvolvimento."
     },
     {
       title: "Caso 11: Obesidade Mórbida Pré-Bariátrica",
@@ -574,7 +599,8 @@
         "Aplicar protocolo de redução hepática com baixo teor de carboidratos e alto valor proteico.",
         "Fazer jejum absoluto de 5 dias antes da operação."
       ],
-      explanation: "Correto! A redução do volume hepático pré-operatório é obrigatória para segurança do cirurgião."
+      context: "Fígados volumosos dificultam a visualização laparoscópica na cirurgia bariátrica. Dietas de redução hepática diminuem o volume do lobo esquerdo.",
+      explanation: "Correto! A redução do volume hepático pré-operatório é obrigatória para segurança do cirurgião na videocirurgia."
     },
     {
       title: "Caso 12: Recuperação Pós-Bariátrica com Reganha",
@@ -587,7 +613,8 @@
         "Forçar grandes volumes de alimentos de uma só vez.",
         "Reestruturação comportamental (TCC) combinada com alta densidade proteica e fracionamento."
       ],
-      explanation: "Correto! A reganha pós-bariátrica exige TCC e densidade nutricional."
+      context: "A reganha de peso após anos da cirurgia bariátrica decorre de adaptações gástricas e lapsos comportamentais que exigem TCC.",
+      explanation: "Correto! A reganha pós-bariátrica decorre de dilatação ou escape comportamental, exigindo TCC e densidade nutricional."
     },
     {
       title: "Caso 13: Atleta Amador com Gordura Visceral Elevada",
@@ -600,7 +627,8 @@
         "Parar totalmente de treinar musculação.",
         "Comer 5000 calorias limpas por dia."
       ],
-      explanation: "Correto! Mesmo com boa musculatura, o excesso calórico gera gordura visceral."
+      context: "Excesso calórico, mesmo com treino intenso de força, resulta em acúmulo de gordura visceral se houver consumo calórico excedente.",
+      explanation: "Correto! Mesmo com boa musculatura, o excesso calórico gera gordura visceral, exigindo ajuste fino no déficit."
     },
     {
       title: "Caso 14: Obesidade Associada a Hipotireoidismo Subcontrolado",
@@ -613,7 +641,8 @@
         "Otimizar suporte micronutricional e alinhar dieta anti-inflamatória.",
         "Eliminar todos os grupos alimentares da dieta."
       ],
-      explanation: "Correto! O hipotireoidismo reduz o metabolismo basal, exigindo suporte de cofatores."
+      context: "O TSH elevado indica hipotireoidismo subclínico ou subcontrolado, desacelerando o metabolismo basal e aumentando a retenção hídrica.",
+      explanation: "Correto! O hipotireoidismo reduz o metabolismo basal, exigindo suporte de cofatores e controle inflamatório."
     },
     {
       title: "Caso 15: Síndrome dos Ovários Policísticos (SOP)",
@@ -626,7 +655,8 @@
         "Ignorar a resistência insulínica.",
         "Aplicar protocolo Low-Glicêmico e suporte com Inositol e Fibras."
       ],
-      explanation: "Correto! A SOP na maioria das vezes é impulsionada pela resistência insulínica."
+      context: "A SOP possui forte eixo metabólico ligado à hiperinsulinemia, que estimula a produção ovariana de Andrógenos.",
+      explanation: "Correto! A SOP na maioria das vezes é impulsionada pela resistência insulínica, respondendo perfeitamente ao controle glicêmico."
     },
     {
       title: "Caso 16: Transtorno da Compulsão Periódica",
@@ -639,7 +669,8 @@
         "Isolar o paciente em casa sem acesso a comida.",
         "Dar broncas severas nas consultas."
       ],
-      explanation: "Correto! O transtorno de compulsão exige acolhimento psicológico via TCC."
+      context: "Dietas restritivas severas agravam os episódios de compulsão através do ciclo privação-compulsão.",
+      explanation: "Correto! O transtorno de compulsão exige acolhimento psicológico via TCC e eliminação do ciclo de restrição-compulsão."
     },
     {
       title: "Caso 17: Perfil de Longevidade e Emagrecimento Saudável",
@@ -652,7 +683,8 @@
         "Aplicar o Programa Vida Plena com alta densidade de nutrientes, ômega-3 e proteção muscular.",
         "Não fazer nada por causa da idade avançada."
       ],
-      explanation: "Correto! Na terceira idade, o emagrecimento deve vir acompanhado de proteção contra sarcopenia."
+      context: "Em idosos, a perda de peso sem suporte proteico e atividade física resulta em perda de funcionalidade e fragilidade.",
+      explanation: "Correto! Na terceira idade, o emagrecimento deve vir acompanhado de proteção contra a sarcopenia e suporte à longevidade."
     },
     {
       title: "Caso 18: Obesidade Refratária com Múltiplas Falhas Prévias",
@@ -665,7 +697,8 @@
         "Colocar em jejum de 7 dias.",
         "Reconstrução metabólica gradual com déficit sustentável e suporte comportamental."
       ],
-      explanation: "Correto! O efeito sanfona danifica o metabolismo; a recuperação exige paciência e déficit sustentável."
+      context: "O efeito sanfona reduz a termogênese adaptativa. A recuperação exige paciência metabólica e reeducação comportamental.",
+      explanation: "Correto! O efeito sanfona danifica o metabolismo e o psicológico; a recuperação exige paciência, déficit sustentável e TCC."
     },
     {
       title: "Caso 19: Executivo com Estresse Crônico e Obesidade Abdominal",
@@ -678,7 +711,8 @@
         "Pedir para ele largar o emprego imediatamente.",
         "Prescrever energéticos em alta dose."
       ],
-      explanation: "Correto! O cortisol alto bloqueia a lipólise na região abdominal."
+      context: "Privação crônica de sono eleva os níveis de cortisol e grelina, estimulando o apetite por alimentos hiperpalatáveis e acúmulo de gordura visceral.",
+      explanation: "Correto! O cortisol alto bloqueia a lipólise na região abdominal; ajustar a crononutrição e o estresse é fundamental."
     },
     {
       title: "Caso 20: O Grande Desafio Metabólico Final",
@@ -691,7 +725,8 @@
         "Aplicar o Protocolo Mestre de Remissão Metabólica Completa, unindo nutrição clínica e alívio articular.",
         "Desistir do caso por ser complexo demais."
       ],
-      explanation: "Correto! O caso final exige a maestria completa de todas as ferramentas e protocolos clínicos integrados."
+      context: "Caso integrando múltiplos sistemas: glicemia limítrofe, sobrecarga articular severa por IMC elevado e inflamação crônica.",
+      explanation: "Correto! O caso final exige a maestria completa de todas as ferramentas e protocolos clínicos integrados para remissão metabólica total."
     }
   ];
 
@@ -771,6 +806,7 @@
     document.getElementById("caseHeaderEyebrow").textContent = `PRONTUÁRIO CLÍNICO #${String(gameState.currentCaseIndex + 1).padStart(2, '0')}`;
     document.getElementById("patientName").textContent = c.patient;
     document.getElementById("patientComplaint").textContent = c.complaint;
+    document.getElementById("patientContextBox").innerHTML = `<strong>Contexto Fisiopatológico & Diretrizes:</strong> ${c.context}`;
 
     let vitalsHTML = "";
     for (let [k, v] of Object.entries(c.vitals)) {
