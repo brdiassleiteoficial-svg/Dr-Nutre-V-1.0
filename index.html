@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" content="#0b132b">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#070d1d">
   <title>NutriClínica Pro | Sistema de Gestão e Decisão em Obesidade</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,59 +21,69 @@
       --success: #22c55e;
       --danger: #ef4444;
       --warning: #f59e0b;
-      --radius: 12px;
+      --radius: 14px;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
       background: var(--bg);
       color: var(--text-main);
       font-family: 'Inter', sans-serif;
       font-size: 14px;
       line-height: 1.6;
+      width: 100vw;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    .app-shell { display: flex; flex-direction: column; min-height: 100vh; }
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      width: 100%;
+    }
     
-    /* Topbar Profissional */
+    /* Topbar Profissional Expandida para Celular */
     .topbar {
-      height: 68px;
+      height: 70px;
       background: var(--surface);
       border-bottom: 2px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 20px;
+      padding: 0 16px;
       position: sticky;
       top: 0;
       z-index: 50;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
     .brand-title {
       font-family: 'Chakra Petch', sans-serif;
       font-weight: 700;
-      font-size: 16px;
+      font-size: 15px;
       letter-spacing: 0.8px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       color: #fff;
     }
     .brand-title span { color: var(--primary); }
+    
     .top-stats {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 10px;
     }
     .hud-badge {
       background: rgba(56, 189, 248, 0.15);
       border: 1px solid rgba(56, 189, 248, 0.4);
-      padding: 6px 12px;
+      padding: 6px 10px;
       border-radius: 8px;
       font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
-      font-size: 13px;
+      font-size: 12px;
       color: var(--primary);
     }
     .hud-cash {
@@ -81,8 +91,18 @@
       border: 1px solid rgba(34, 197, 94, 0.4);
       color: #4ade80;
     }
+    .sfx-toggle-btn {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
 
-    /* Navegação Inferior */
+    /* Navegação Inferior Estilo App Nativo */
     .main-nav {
       position: fixed;
       bottom: 0;
@@ -92,9 +112,10 @@
       border-top: 2px solid var(--border);
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      height: 64px;
+      height: 70px;
       z-index: 50;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+      box-shadow: 0 -4px 25px rgba(0,0,0,0.6);
+      padding-bottom: env(safe-area-inset-bottom);
     }
     .nav-btn {
       background: none;
@@ -106,33 +127,34 @@
       justify-content: center;
       font-size: 11px;
       font-weight: 700;
-      gap: 3px;
+      gap: 4px;
       cursor: pointer;
     }
-    .nav-btn span.icon { font-size: 18px; }
+    .nav-btn span.icon { font-size: 20px; }
     .nav-btn.active { color: var(--primary); background: rgba(56, 189, 248, 0.08); }
 
-    /* Área de Conteúdo */
+    /* Área de Conteúdo Ocupando Tela Inteira */
     .content-area {
-      padding: 20px;
-      padding-bottom: 90px;
-      max-width: 860px;
+      padding: 16px;
+      padding-bottom: 95px;
+      max-width: 900px;
       margin: 0 auto;
       width: 100%;
+      flex: 1;
     }
 
     .view { display: none; }
     .view.active { display: block; animation: fadeIn 0.2s ease; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    /* Cards */
+    /* Cards Robustos */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 24px;
+      padding: 20px;
       margin-bottom: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.5);
     }
     .card-title {
       font-family: 'Chakra Petch', sans-serif;
@@ -140,20 +162,20 @@
       font-weight: 700;
       letter-spacing: 1px;
       color: var(--primary);
-      margin: 0 0 10px 0;
+      margin: 0 0 12px 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
       text-transform: uppercase;
     }
     
-    /* Botões */
+    /* Botões Encorpados */
     .btn {
       background: var(--primary);
       color: #070d1d;
       border: none;
-      border-radius: 8px;
-      padding: 12px 18px;
+      border-radius: 10px;
+      padding: 14px 18px;
       font-weight: 800;
       font-size: 13px;
       cursor: pointer;
@@ -171,16 +193,16 @@
     }
     .btn-success { background: var(--success); color: #070d1d; }
 
-    /* Prontuário & Exames com Letras Bem Visíveis e Robustas */
+    /* Prontuário & Exames */
     .patient-vitals {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 10px;
       margin: 16px 0;
       background: var(--surface-card);
       border: 1px solid var(--border);
       padding: 14px;
-      border-radius: 10px;
+      border-radius: 12px;
     }
     .vital-item span { 
       display: block; 
@@ -193,17 +215,17 @@
     }
     .vital-item strong { 
       font-family: 'JetBrains Mono', monospace; 
-      font-size: 16px; 
+      font-size: 15px; 
       color: #ffffff; 
       font-weight: 700; 
     }
 
-    .option-list { display: grid; gap: 10px; margin-top: 14px; }
+    .option-list { display: grid; gap: 12px; margin-top: 16px; }
     .protocol-option {
       background: var(--surface-card);
       border: 2px solid var(--border);
-      padding: 14px 16px;
-      border-radius: 10px;
+      padding: 16px;
+      border-radius: 12px;
       cursor: pointer;
       font-size: 13px;
       font-weight: 600;
@@ -214,21 +236,21 @@
       line-height: 1.5;
     }
     .protocol-option:hover { border-color: var(--primary); background: rgba(56, 189, 248, 0.08); }
-    .protocol-option.correct { border-color: var(--success); background: rgba(34, 197, 94, 0.15); color: #86efac; }
-    .protocol-option.incorrect { border-color: var(--danger); background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
+    .protocol-option.correct { border-color: var(--success); background: rgba(34, 197, 94, 0.2); color: #86efac; }
+    .protocol-option.incorrect { border-color: var(--danger); background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
 
     .stock-item, .proc-item {
       background: var(--surface-card);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 16px;
       margin-bottom: 12px;
     }
 
     .feedback-box {
-      margin-top: 14px;
-      padding: 14px;
-      border-radius: 8px;
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 10px;
       font-size: 13px;
       font-weight: 600;
       display: none;
@@ -239,7 +261,7 @@
 
     .toast {
       position: fixed;
-      top: 80px;
+      top: 85px;
       left: 50%;
       transform: translateX(-50%) translateY(-20px);
       background: var(--surface);
@@ -267,8 +289,9 @@
         <span>🩺</span> NutriClínica <span>Pro</span>
       </div>
       <div class="top-stats">
+        <button class="sfx-toggle-btn" id="sfxToggleBtn" onclick="toggleAudio()">🔊 SFX</button>
         <div class="hud-badge hud-cash" id="topCash">50.000 CR</div>
-        <div class="hud-badge" id="topScore">Caso 01/20</div>
+        <div class="hud-badge" id="topScore">01/20</div>
       </div>
     </header>
 
@@ -282,7 +305,7 @@
             <span id="caseHeaderEyebrow">PRONTUÁRIO CLÍNICO #01</span>
             <span id="caseStatusBadge" style="font-size:11px; color:var(--primary); font-weight:800;">EM AVALIAÇÃO</span>
           </div>
-          <h2 id="patientName" style="font-family:'Chakra Petch', sans-serif; font-size:20px; font-weight:700; margin:6px 0 6px 0; color:#fff;">Carregando paciente...</h2>
+          <h2 id="patientName" style="font-family:'Chakra Petch', sans-serif; font-size:18px; font-weight:700; margin:6px 0 6px 0; color:#fff;">Carregando paciente...</h2>
           <p id="patientComplaint" style="color:var(--text-muted); font-size:13px; margin:0 0 14px 0; font-weight:500;"></p>
           
           <div class="patient-vitals" id="patientVitals"></div>
@@ -343,6 +366,57 @@
   </div>
 
 <script>
+  // Síntese de Som Sintetizado (Web Audio API) para dar feedback auditivo robusto
+  let audioCtx = null;
+  let sfxEnabled = true;
+
+  function playSound(type) {
+    if (!sfxEnabled) return;
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      const now = audioCtx.currentTime;
+
+      if (type === 'success') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(587.33, now); // D5
+        osc.frequency.setValueAtTime(880.00, now + 0.1); // A5
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+      } else if (type === 'error') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.setValueAtTime(150, now + 0.15);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc.start(now);
+        osc.stop(now + 0.35);
+      } else {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.1);
+      }
+    } catch(e) {}
+  }
+
+  function toggleAudio() {
+    sfxEnabled = !sfxEnabled;
+    const btn = document.getElementById("sfxToggleBtn");
+    btn.textContent = sfxEnabled ? "🔊 SFX" : "🔇 MUTE";
+    showToast(sfxEnabled ? "Efeitos sonoros ativados" : "Som desativado", sfxEnabled ? "success" : "error");
+    playSound('click');
+  }
+
   const ITEMS = {
     food_in_natura: { name: "Alimentos In Natura", icon: "🥗", price: 100, unit: "un." },
     fiber: { name: "Fibras Solúveis (Psyllium)", icon: "🌾", price: 250, unit: "un." },
@@ -662,7 +736,7 @@
 
   function updateHUD() {
     document.getElementById("topCash").textContent = gameState.cash.toLocaleString("pt-BR") + " CR";
-    document.getElementById("topScore").textContent = `Caso ${String(Math.min(gameState.currentCaseIndex + 1, CASES.length)).padStart(2, '0')}/20`;
+    document.getElementById("topScore").textContent = `${String(Math.min(gameState.currentCaseIndex + 1, CASES.length)).padStart(2, '0')}/20`;
   }
 
   function switchView(viewId, btnEl) {
@@ -672,6 +746,7 @@
     document.getElementById("view-" + viewId).classList.add("active");
     if(btnEl) btnEl.classList.add("active");
     
+    playSound('click');
     if(viewId === 'cases') renderCurrentCase();
     if(viewId === 'pharmacy') renderPharmacy();
     if(viewId === 'stock') renderStock();
@@ -683,7 +758,7 @@
     if (gameState.currentCaseIndex >= CASES.length) {
       document.getElementById("view-cases").innerHTML = `
         <div class="card" style="text-align:center; padding:30px;">
-          <div style="font-size:40px; margin-bottom:10px;">🏆</div>
+          <div style="font-size:45px; margin-bottom:12px;">🏆</div>
           <h2 style="color:var(--success); font-family:'Chakra Petch',sans-serif;">Residência Médica Concluída!</h2>
           <p style="color:var(--text-muted); font-size:14px;">Você atendeu com excelência todos os 20 pacientes do programa de obesidade e saúde metabólica.</p>
           <button class="btn btn-success" style="margin-top:20px;" onclick="resetCampaign()">Reiniciar Prontuários (Novo Ciclo)</button>
@@ -729,12 +804,14 @@
       gameState.cash += 5000;
       feedbackBox.className = "feedback-box success";
       feedbackBox.innerHTML = `<strong>✅ Conduta Aprovada (+5.000 CR):</strong> ${c.explanation}`;
+      playSound('success');
       showToast("+5.000 CR · Diagnóstico Correto!", "success");
       document.getElementById("nextCaseBtn").style.display = "block";
     } else {
       gameState.cash = Math.max(0, gameState.cash - 5000);
       feedbackBox.className = "feedback-box error";
       feedbackBox.innerHTML = `<strong>❌ Erro de Conduta (-5.000 CR):</strong> Escolha inadequada para este perfil clínico. A correta era a opção ${c.correctIndex + 1}.`;
+      playSound('error');
       showToast("-5.000 CR · Conduta Incorreta!", "error");
       document.getElementById("nextCaseBtn").style.display = "block";
     }
@@ -768,12 +845,14 @@
   function buyItem(id) {
     const item = ITEMS[id];
     if (gameState.cash < item.price) {
+      playSound('error');
       showToast("Saldo insuficiente em caixa!", "error");
       return;
     }
     gameState.cash -= item.price;
     gameState.stock[id] = (gameState.stock[id] || 0) + 1;
     saveGame();
+    playSound('success');
     showToast(`Adquirido: ${item.name}`);
     renderStock();
   }
@@ -822,6 +901,7 @@
     gameState.stock[id]--;
     gameState.cash += revenue;
     saveGame();
+    playSound('success');
     showToast(`Receita gerada: +${revenue} CR`);
     renderMarket();
   }
@@ -842,7 +922,7 @@
           <p style="color:var(--text-muted); font-size:12px; margin:6px 0 12px 0;">${u.desc}</p>
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <span style="font-family:'JetBrains Mono'; color:var(--primary); font-weight:700; font-size:14px;">${u.cost.toLocaleString("pt-BR")} CR</span>
-            <button class="btn ${owned ? 'btn-outline' : ''}" style="width:auto; padding:10px 16px;" ${owned ? 'disabled' : ''} onclick="buyUpgrade('${u.id}', ${u.cost})">${owned ? 'Instalado' : 'Adquirir Equipamento'}</button>
+            <button class="btn ${owned ? 'btn-outline' : ''}" style="width:auto; padding:10px 16px;" ${owned ? 'disabled' : ''} onclick="buyUpgrade('${u.id}', ${u.cost})">${owned ? 'Instalado' : 'Adicionar Equipamento'}</button>
           </div>
         </div>
       `;
@@ -852,12 +932,14 @@
 
   function buyUpgrade(id, cost) {
     if (gameState.cash < cost) {
+      playSound('error');
       showToast("Saldo insuficiente!", "error");
       return;
     }
     gameState.cash -= cost;
     gameState.upgrades.push(id);
     saveGame();
+    playSound('success');
     showToast("Equipamento instalado com sucesso!");
     renderUpgrades();
   }
