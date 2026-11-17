@@ -1,0 +1,375 @@
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, .brand strong, .hero-index, .stat-card > strong, .market-price {
+  font-family: 'Chakra Petch', sans-serif;
+}
+
+button { font: inherit; cursor: pointer; }
+button:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; filter: none !important; }
+
+@keyframes floatSticker {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-4px) rotate(3deg); }
+}
+
+.sticker-float { display: inline-block; animation: floatSticker 3s ease-in-out infinite; }
+
+.fx-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.fx-popup {
+  position: absolute;
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: #34d399;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+  animation: floatUpFx 1.2s ease-out forwards;
+  white-space: nowrap;
+}
+@keyframes floatUpFx {
+  0% { opacity: 1; transform: translateY(0) scale(0.9); }
+  100% { opacity: 0; transform: translateY(-70px) scale(1.2); }
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-top: env(safe-area-inset-top);
+}
+
+/* TOPBAR FIXA PREMIUM PARA MOBILE */
+.topbar {
+  height: 64px;
+  background: rgba(7, 22, 36, 0.98);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+}
+
+.brand-mobile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--white);
+}
+.brand-mobile-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #10b981, #06b6d4);
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+}
+.brand-mobile strong { display: block; font-size: 14px; font-family: 'Chakra Petch', sans-serif; }
+.brand-mobile small { display: block; font-size: 9px; color: var(--cyan); letter-spacing: 1px; }
+
+.top-actions-mobile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.coin-hud-mobile {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(11, 26, 40, 0.95);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: #f59e0b;
+}
+
+/* NAVEGAÇÃO INFERIOR ESTILO APP NATIVO ANDROID */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: rgba(7, 22, 36, 0.98);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.nav-tab {
+  background: none;
+  border: none;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.nav-tab .tab-icon { font-size: 20px; }
+.nav-tab.active {
+  color: var(--accent);
+  background: rgba(16, 185, 129, 0.08);
+}
+
+/* ÁREA DE CONTEÚDO PRINCIPAL (OCUPA TELA TOTAL) */
+.main-area {
+  flex: 1;
+  padding: 16px;
+  padding-bottom: 84px;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.view { display: none; }
+.view.active { display: block; animation: fadeIn 0.25s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* CARDS E PAINÉIS */
+.panel, .stat-card, .mission-card, .process-card, .market-card, .upgrade-card {
+  background: var(--surface);
+  border: var(--glass-border);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+
+.eyebrow { font-size: 10px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1.2px; }
+h1 { font-size: 24px; font-weight: 700; color: var(--white); margin: 6px 0; }
+h1 span { color: var(--accent); }
+p { color: var(--muted); font-size: 13px; line-height: 1.5; margin: 0 0 14px; }
+
+/* BOTÕES */
+.btn {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 800;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  cursor: pointer;
+  width: 100%;
+  transition: filter 0.2s, transform 0.1s;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: linear-gradient(135deg, #06b6d4, #0284c7); color: #041019; }
+.btn-light { background: linear-gradient(135deg, #34d399, #10b981); color: #041019; }
+.btn-outline { background: rgba(255,255,255,0.05); border: var(--glass-border); color: var(--white); }
+
+/* GRID DE ESTATÍSTICAS */
+.stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
+.stat-card { padding: 14px; margin-bottom: 0; }
+.stat-card strong { display: block; font-size: 20px; color: var(--white); margin: 6px 0 2px; }
+
+/* PRONTUÁRIO & PACIENTES */
+.patient-chart-box {
+  background: rgba(6, 18, 30, 0.9);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 14px;
+  padding: 14px;
+  margin: 12px 0;
+}
+.patient-vitals { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.vital-tag { background: rgba(255,255,255,0.06); border: var(--glass-border); color: var(--cyan); padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+.vital-tag.alert { color: #fda4af; background: rgba(244, 63, 94, 0.15); border-color: rgba(244, 63, 94, 0.4); }
+
+.clinical-choices { display: grid; gap: 8px; margin-top: 12px; }
+.choice-btn {
+  width: 100%;
+  text-align: left;
+  background: rgba(11, 26, 40, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--ink);
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1.45;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.choice-btn.selected-correct { border-color: var(--accent); background: rgba(16, 185, 129, 0.2); color: var(--white); }
+.choice-btn.selected-wrong { border-color: var(--rose); background: rgba(244, 63, 94, 0.2); }
+.choice-letter { background: rgba(6, 182, 212, 0.2); color: var(--cyan); font-family: 'Chakra Petch', sans-serif; font-weight: 700; min-width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; flex: none; }
+.clinical-feedback { margin-top: 10px; padding: 12px; border-radius: 10px; font-size: 12px; line-height: 1.5; }
+.clinical-feedback.ok { background: rgba(16, 185, 129, 0.18); border: 1px solid rgba(16, 185, 129, 0.4); color: #a7f3d0; }
+.clinical-feedback.err { background: rgba(244, 63, 94, 0.18); border: 1px solid rgba(244, 63, 94, 0.4); color: #fecdd3; }
+
+/* BATCH / COZINHA */
+.process-card, .market-card, .upgrade-card { margin-bottom: 14px; }
+.recipe { background: rgba(4,16,25,0.85); border-radius: 10px; padding: 10px; margin: 10px 0; font-size: 12px; color: var(--muted); line-height: 1.6; border: var(--glass-border); }
+.recipe strong { color: var(--white); }
+
+.mat-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 8px; font-weight: 700; font-size: 11px; background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+
+/* TOAST DE AVISO */
+.toast {
+  position: fixed; left: 50%; bottom: 80px; transform: translateX(-50%) translateY(20px);
+  background: rgba(11, 26, 40, 0.98); color: var(--white); padding: 12px 20px;
+  border-radius: 14px; font-size: 12px; z-index: 1000; opacity: 0; transition: all 0.3s ease;
+  pointer-events: none; border: 1px solid rgba(16, 185, 129, 0.6); font-weight: 700;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.8); white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* MODAL */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(4, 16, 25, 0.88); display: none; place-items: center; z-index: 200; padding: 16px; backdrop-filter: blur(8px); }
+.modal-backdrop.show { display: grid; }
+.modal { width: 100%; max-width: 420px; background: rgba(11, 26, 40, 0.98); border: 2px solid rgba(16, 185, 129, 0.5); border-radius: 20px; padding: 24px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.9); }
+.modal h2 { font-size: 22px; margin: 10px 0; color: var(--white); }
+.modal p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+
+
+<!-- ÁREA DE CONTEÚDO MOBILE -->
+<main class="main-area">
+
+  <!-- VIEW 1: CONSULTÓRIO CENTRAL -->
+  <section class="view active" id="view-dashboard">
+    <div style="margin-bottom: 14px;">
+      <span class="eyebrow">ATENDIMENTO CLÍNICO ATIVO</span>
+      <h1>Consultório <span>Central</span></h1>
+      <p>Gerencie sua clínica de obesidade e saúde metabólica com diretrizes baseadas em evidências.</p>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <span class="eyebrow">CRÉDITOS CRN</span>
+        <strong id="statCoins">500.000</strong>
+        <small style="color:var(--muted)">Orçamento clínico</small>
+      </div>
+      <div class="stat-card">
+        <span class="eyebrow">CASOS RESOLVIDOS</span>
+        <strong id="statMissions">0 / 20</strong>
+        <small style="color:var(--muted)">Especialização</small>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span class="eyebrow" id="dashEyebrow">PRONTUÁRIO ATUAL</span>
+        <span class="mat-badge" id="dashBadge">AGUARDANDO CONDUTA</span>
+      </div>
+      <h3 id="dashPatientTitle" style="color:var(--white); margin:4px 0 8px;">Carregando paciente...</h3>
+      <div id="dashPatientBox"></div>
+      <div id="dashChoices"></div>
+      <div id="dashFeedback"></div>
+      <div style="margin-top: 14px;" id="dashActionContainer"></div>
+    </div>
+
+    <div class="panel">
+      <span class="eyebrow">DESPENSA DE INSUMOS</span>
+      <h3 style="color:var(--white); margin:4px 0 10px;">Estoque Hortifruti</h3>
+      <div id="stockSummary"></div>
+      <button class="btn btn-outline" style="margin-top: 10px;" onclick="harvestBonus()">🥦 Abastecer +1.000 In Natura</button>
+    </div>
+  </section>
+
+  <!-- VIEW 2: CASOS CLÍNICOS -->
+  <section class="view" id="view-missions">
+    <div style="margin-bottom: 14px;">
+      <span class="eyebrow">20 PRONTUÁRIOS REAIS</span>
+      <h1>Casos <span>Clínicos</span></h1>
+      <p>Resolva todos os casos da Fase 1 e Fase 2 para se tornar autoridade máxima em obesidade.</p>
+    </div>
+    <div id="missionsList"></div>
+  </section>
+
+  <!-- VIEW 3: COZINHA & PROTOCOLOS -->
+  <section class="view" id="view-production">
+    <div style="margin-bottom: 14px;">
+      <span class="eyebrow">LABORATÓRIO DIETOTERÁPICO</span>
+      <h1>Cozinha & <span>Protocolos</span></h1>
+      <p>Transforme alimentos in natura em protocolos avançados de emagrecimento e remissão.</p>
+    </div>
+    <div id="productionGrid"></div>
+  </section>
+
+  <!-- VIEW 4: CONSULTORIA & PLANOS -->
+  <section class="view" id="view-market">
+    <div style="margin-bottom: 14px;">
+      <span class="eyebrow">MONETIZAÇÃO CLÍNICA</span>
+      <h1>Consultoria & <span>Planos</span></h1>
+      <p>Comercialize seus protocolos e converta em Créditos CRN para expandir o consultório.</p>
+    </div>
+    <div id="marketGrid"></div>
+  </section>
+
+  <!-- VIEW 5: EQUIPAMENTOS -->
+  <section class="view" id="view-upgrades">
+    <div style="margin-bottom: 14px;">
+      <span class="eyebrow">INFRAESTRUTURA DE PRECISÃO</span>
+      <h1>Equipamentos <span>Clínicos</span></h1>
+      <p>Adquira bioimpedância, calorimetria e tecnologia para otimizar seus atendimentos.</p>
+    </div>
+    <div id="upgradesGrid"></div>
+  </section>
+
+</main>
+
+<!-- NAVEGAÇÃO INFERIOR ESTILO APP NATIVO -->
+<nav class="mobile-bottom-nav">
+  <button class="nav-tab active" onclick="changeView('dashboard')" id="nav-dashboard">
+    <span class="tab-icon">🏥</span>
+    <span>Início</span>
+  </button>
+  <button class="nav-tab" onclick="changeView('missions')" id="nav-missions">
+    <span class="tab-icon">📋</span>
+    <span>Casos</span>
+  </button>
+  <button class="nav-tab" onclick="changeView('production')" id="nav-production">
+    <span class="tab-icon">🧪</span>
+    <span>Cozinha</span>
+  </button>
+  <button class="nav-tab" onclick="changeView('market')" id="nav-market">
+    <span class="tab-icon">💼</span>
+    <span>Caixa</span>
+  </button>
+  <button class="nav-tab" onclick="changeView('upgrades')" id="nav-upgrades">
+    <span class="tab-icon">🔬</span>
+    <span>Clínica</span>
+  </button>
+</nav>
