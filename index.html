@@ -3,25 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#0b132b">
   <title>NutriClínica Pro | Sistema de Gestão e Decisão em Obesidade</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Inter:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0b132b;
-      --surface: #111d38;
-      --surface-card: #182647;
-      --border: #22345e;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --primary: #0ea5e9;
-      --primary-hover: #0284c7;
-      --success: #10b981;
+      --bg: #070d1d;
+      --surface: #0f1c3f;
+      --surface-card: #15264e;
+      --border: #2a437e;
+      --text-main: #ffffff;
+      --text-muted: #cbd5e1;
+      --primary: #38bdf8;
+      --primary-hover: #0ea5e9;
+      --success: #22c55e;
       --danger: #ef4444;
       --warning: #f59e0b;
-      --radius: 10px;
+      --radius: 12px;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -30,53 +30,56 @@
       background: var(--bg);
       color: var(--text-main);
       font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      line-height: 1.5;
+      font-size: 14px;
+      line-height: 1.6;
     }
 
     .app-shell { display: flex; flex-direction: column; min-height: 100vh; }
     
     /* Topbar Profissional */
     .topbar {
-      height: 60px;
+      height: 68px;
       background: var(--surface);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 2px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 16px;
+      padding: 0 20px;
       position: sticky;
       top: 0;
       z-index: 50;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     }
     .brand-title {
+      font-family: 'Chakra Petch', sans-serif;
       font-weight: 700;
-      font-size: 14px;
-      letter-spacing: 0.5px;
+      font-size: 16px;
+      letter-spacing: 0.8px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      color: #fff;
     }
     .brand-title span { color: var(--primary); }
     .top-stats {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
     .hud-badge {
-      background: rgba(14, 165, 233, 0.1);
-      border: 1px solid rgba(14, 165, 233, 0.3);
-      padding: 4px 10px;
-      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      padding: 6px 12px;
+      border-radius: 8px;
       font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
-      font-size: 12px;
+      font-size: 13px;
       color: var(--primary);
     }
     .hud-cash {
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      color: var(--success);
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.4);
+      color: #4ade80;
     }
 
     /* Navegação Inferior */
@@ -86,11 +89,12 @@
       left: 0;
       right: 0;
       background: var(--surface);
-      border-top: 1px solid var(--border);
+      border-top: 2px solid var(--border);
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      height: 56px;
+      height: 64px;
       z-index: 50;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
     }
     .nav-btn {
       background: none;
@@ -100,19 +104,19 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 10px;
-      font-weight: 600;
-      gap: 2px;
+      font-size: 11px;
+      font-weight: 700;
+      gap: 3px;
       cursor: pointer;
     }
-    .nav-btn span.icon { font-size: 16px; }
-    .nav-btn.active { color: var(--primary); background: rgba(14, 165, 233, 0.05); }
+    .nav-btn span.icon { font-size: 18px; }
+    .nav-btn.active { color: var(--primary); background: rgba(56, 189, 248, 0.08); }
 
     /* Área de Conteúdo */
     .content-area {
-      padding: 16px;
-      padding-bottom: 76px;
-      max-width: 800px;
+      padding: 20px;
+      padding-bottom: 90px;
+      max-width: 860px;
       margin: 0 auto;
       width: 100%;
     }
@@ -126,109 +130,133 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 16px;
-      margin-bottom: 14px;
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
     .card-title {
-      font-size: 14px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 13px;
       font-weight: 700;
-      margin: 0 0 8px 0;
+      letter-spacing: 1px;
+      color: var(--primary);
+      margin: 0 0 10px 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      text-transform: uppercase;
     }
     
     /* Botões */
     .btn {
       background: var(--primary);
-      color: #fff;
+      color: #070d1d;
       border: none;
-      border-radius: 6px;
-      padding: 10px 14px;
-      font-weight: 600;
-      font-size: 12px;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-weight: 800;
+      font-size: 13px;
       cursor: pointer;
       width: 100%;
       text-align: center;
-      transition: filter 0.2s;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    .btn:hover { filter: brightness(1.1); }
+    .btn:hover { filter: brightness(1.15); transform: translateY(-1px); }
     .btn-outline {
       background: transparent;
       border: 1px solid var(--border);
       color: var(--text-main);
     }
-    .btn-success { background: var(--success); }
+    .btn-success { background: var(--success); color: #070d1d; }
 
-    /* Prontuário */
+    /* Prontuário & Exames com Letras Bem Visíveis e Robustas */
     .patient-vitals {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin: 12px 0;
-      background: var(--surface-card);
-      padding: 10px;
-      border-radius: 6px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-    }
-    .vital-item span { display: block; color: var(--text-muted); font-size: 9px; text-transform: uppercase; }
-
-    .option-list { display: grid; gap: 8px; margin-top: 12px; }
-    .protocol-option {
+      gap: 12px;
+      margin: 16px 0;
       background: var(--surface-card);
       border: 1px solid var(--border);
-      padding: 10px 12px;
-      border-radius: 6px;
+      padding: 14px;
+      border-radius: 10px;
+    }
+    .vital-item span { 
+      display: block; 
+      color: var(--primary); 
+      font-size: 11px; 
+      font-weight: 800; 
+      letter-spacing: 0.8px; 
+      text-transform: uppercase; 
+      margin-bottom: 4px; 
+    }
+    .vital-item strong { 
+      font-family: 'JetBrains Mono', monospace; 
+      font-size: 16px; 
+      color: #ffffff; 
+      font-weight: 700; 
+    }
+
+    .option-list { display: grid; gap: 10px; margin-top: 14px; }
+    .protocol-option {
+      background: var(--surface-card);
+      border: 2px solid var(--border);
+      padding: 14px 16px;
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 12px;
+      font-size: 13px;
+      font-weight: 600;
       text-align: left;
       color: var(--text-main);
-      transition: border-color 0.2s;
+      transition: all 0.2s;
       width: 100%;
+      line-height: 1.5;
     }
-    .protocol-option:hover { border-color: var(--primary); }
-    .protocol-option.correct { border-color: var(--success); background: rgba(16, 185, 129, 0.1); }
-    .protocol-option.incorrect { border-color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+    .protocol-option:hover { border-color: var(--primary); background: rgba(56, 189, 248, 0.08); }
+    .protocol-option.correct { border-color: var(--success); background: rgba(34, 197, 94, 0.15); color: #86efac; }
+    .protocol-option.incorrect { border-color: var(--danger); background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
 
     .stock-item, .proc-item {
       background: var(--surface-card);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 10px;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
     }
 
     .feedback-box {
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 6px;
-      font-size: 11px;
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
       display: none;
+      line-height: 1.6;
     }
-    .feedback-box.error { background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; display: block; }
-    .feedback-box.success { background: rgba(16, 185, 129, 0.15); border: 1px solid var(--success); color: #6ee7b7; display: block; }
+    .feedback-box.error { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--danger); color: #fca5a5; display: block; }
+    .feedback-box.success { background: rgba(34, 197, 94, 0.2); border: 1px solid var(--success); color: #86efac; display: block; }
 
     .toast {
       position: fixed;
-      top: 70px;
+      top: 80px;
       left: 50%;
       transform: translateX(-50%) translateY(-20px);
       background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 10px 16px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 12px;
+      border: 2px solid var(--border);
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13px;
       opacity: 0;
       transition: all 0.3s ease;
       z-index: 1000;
       pointer-events: none;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.6);
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     .toast.error { border-color: var(--danger); color: #fca5a5; }
-    .toast.success { border-color: var(--success); color: #6ee7b7; }
+    .toast.success { border-color: var(--success); color: #86efac; }
   </style>
 </head>
 <body>
@@ -252,19 +280,19 @@
         <div class="card">
           <div class="card-title">
             <span id="caseHeaderEyebrow">PRONTUÁRIO CLÍNICO #01</span>
-            <span id="caseStatusBadge" style="font-size:10px; color:var(--primary);">EM AVALIAÇÃO</span>
+            <span id="caseStatusBadge" style="font-size:11px; color:var(--primary); font-weight:800;">EM AVALIAÇÃO</span>
           </div>
-          <h2 id="patientName" style="font-size:16px; margin:4px 0 8px 0; color:#fff;">Carregando paciente...</h2>
-          <p id="patientComplaint" style="color:var(--text-muted); font-size:12px; margin:0 0 12px 0;"></p>
+          <h2 id="patientName" style="font-family:'Chakra Petch', sans-serif; font-size:20px; font-weight:700; margin:6px 0 6px 0; color:#fff;">Carregando paciente...</h2>
+          <p id="patientComplaint" style="color:var(--text-muted); font-size:13px; margin:0 0 14px 0; font-weight:500;"></p>
           
           <div class="patient-vitals" id="patientVitals"></div>
 
-          <div style="font-weight:600; margin-bottom:8px; font-size:12px; color:var(--text-main);">Selecione a Conduta Terapêutica Adequada:</div>
+          <div style="font-weight:700; margin-bottom:10px; font-size:13px; color:var(--text-main); text-transform:uppercase; letter-spacing:0.5px;">Selecione a Conduta Terapêutica Adequada:</div>
           <div class="option-list" id="protocolOptions"></div>
 
           <div id="caseFeedback" class="feedback-box"></div>
 
-          <div style="margin-top: 14px;" id="nextCaseActionContainer">
+          <div style="margin-top: 18px;" id="nextCaseActionContainer">
             <button class="btn btn-success" id="nextCaseBtn" style="display:none;" onclick="advanceCase()">Avançar para Próximo Paciente ➔</button>
           </div>
         </div>
@@ -274,7 +302,7 @@
       <section class="view" id="view-pharmacy">
         <div class="card">
           <div class="card-title"><span>📋</span> Prescrições e Insumos Metabólicos</div>
-          <p style="color:var(--text-muted); font-size:12px; margin-bottom:12px;">Adquira insumos para compor seu portfólio clínico.</p>
+          <p style="color:var(--text-muted); font-size:13px; margin-bottom:14px;">Adquira insumos para compor seu portfólio clínico.</p>
           <div id="pharmacyList"></div>
         </div>
       </section>
@@ -291,7 +319,7 @@
       <section class="view" id="view-market">
         <div class="card">
           <div class="card-title"><span>📈</span> Monetização de Consultas & Protocolos</div>
-          <p style="color:var(--text-muted); font-size:12px; margin-bottom:12px;">Comercialize protocolos de emagrecimento para gerar receita para a clínica.</p>
+          <p style="color:var(--text-muted); font-size:13px; margin-bottom:14px;">Comercialize protocolos de emagrecimento para gerar receita para a clínica.</p>
           <div id="marketList"></div>
         </div>
       </section>
@@ -656,9 +684,9 @@
       document.getElementById("view-cases").innerHTML = `
         <div class="card" style="text-align:center; padding:30px;">
           <div style="font-size:40px; margin-bottom:10px;">🏆</div>
-          <h2 style="color:var(--success);">Residência Médica Concluída!</h2>
-          <p style="color:var(--text-muted);">Você atendeu com excelência todos os 20 pacientes do programa de obesidade e saúde metabólica.</p>
-          <button class="btn btn-success" style="margin-top:16px;" onclick="resetCampaign()">Reiniciar Prontuários (Novo Ciclo)</button>
+          <h2 style="color:var(--success); font-family:'Chakra Petch',sans-serif;">Residência Médica Concluída!</h2>
+          <p style="color:var(--text-muted); font-size:14px;">Você atendeu com excelência todos os 20 pacientes do programa de obesidade e saúde metabólica.</p>
+          <button class="btn btn-success" style="margin-top:20px;" onclick="resetCampaign()">Reiniciar Prontuários (Novo Ciclo)</button>
         </div>
       `;
       return;
@@ -725,10 +753,10 @@
       html += `
         <div class="proc-item">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <strong>${item.icon} ${item.name}</strong>
-            <span style="font-family:'JetBrains Mono'; color:var(--primary);">${item.price.toLocaleString("pt-BR")} CR</span>
+            <strong style="font-size:14px;">${item.icon} ${item.name}</strong>
+            <span style="font-family:'JetBrains Mono'; color:var(--primary); font-weight:700;">${item.price.toLocaleString("pt-BR")} CR</span>
           </div>
-          <div style="margin-top:10px;">
+          <div style="margin-top:12px;">
             <button class="btn" onclick="buyItem('${id}')">Adquirir Insumo Clínico</button>
           </div>
         </div>
@@ -757,8 +785,8 @@
         const item = ITEMS[id];
         html += `
           <div class="stock-item" style="display:flex; justify-content:space-between; align-items:center;">
-            <div><strong>${item.icon} ${item.name}</strong></div>
-            <div style="font-family:'JetBrains Mono'; font-weight:700;">${qty} ${item.unit}</div>
+            <div><strong style="font-size:14px;">${item.icon} ${item.name}</strong></div>
+            <div style="font-family:'JetBrains Mono'; font-weight:700; font-size:15px; color:var(--primary);">${qty} ${item.unit}</div>
           </div>
         `;
       }
@@ -775,10 +803,10 @@
         html += `
           <div class="stock-item">
             <div style="display:flex; justify-content:space-between;">
-              <strong>${item.icon} ${item.name}</strong>
-              <span style="color:var(--success); font-family:'JetBrains Mono';">+${sellPrice} CR/un</span>
+              <strong style="font-size:14px;">${item.icon} ${item.name}</strong>
+              <span style="color:var(--success); font-family:'JetBrains Mono'; font-weight:700;">+${sellPrice} CR/un</span>
             </div>
-            <p style="color:var(--text-muted); font-size:11px; margin:4px 0 8px 0;">Disponível: ${qty} un.</p>
+            <p style="color:var(--text-muted); font-size:12px; margin:6px 0 10px 0;">Disponível: ${qty} un.</p>
             <button class="btn btn-success" onclick="sellItem('${id}')">Monetizar Protocolo</button>
           </div>
         `;
@@ -810,11 +838,11 @@
       const owned = gameState.upgrades.includes(u.id);
       html += `
         <div class="stock-item">
-          <strong>${u.name}</strong>
-          <p style="color:var(--text-muted); font-size:11px; margin:4px 0 8px 0;">${u.desc}</p>
+          <strong style="font-size:14px;">${u.name}</strong>
+          <p style="color:var(--text-muted); font-size:12px; margin:6px 0 12px 0;">${u.desc}</p>
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-family:'JetBrains Mono'; color:var(--primary);">${u.cost.toLocaleString("pt-BR")} CR</span>
-            <button class="btn ${owned ? 'btn-outline' : ''}" ${owned ? 'disabled' : ''} onclick="buyUpgrade('${u.id}', ${u.cost})">${owned ? 'Instalado' : 'Adquirir Equipamento'}</button>
+            <span style="font-family:'JetBrains Mono'; color:var(--primary); font-weight:700; font-size:14px;">${u.cost.toLocaleString("pt-BR")} CR</span>
+            <button class="btn ${owned ? 'btn-outline' : ''}" style="width:auto; padding:10px 16px;" ${owned ? 'disabled' : ''} onclick="buyUpgrade('${u.id}', ${u.cost})">${owned ? 'Instalado' : 'Adquirir Equipamento'}</button>
           </div>
         </div>
       `;
@@ -841,7 +869,6 @@
     }
   }
 
-  // Inicialização segura
   loadGame();
   updateHUD();
   renderCurrentCase();
